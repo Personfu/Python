@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCC Assignments - Preston Furulie</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #161b22, #1a2332);
+            border-bottom: 1px solid #30363d;
+            padding: 2rem;
+            text-align: center;
+        }
+        header h1 { font-size: 2rem; color: #58a6ff; }
+        header p { color: #8b949e; margin-top: 0.5rem; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .tab-btn {
+            background: #161b22;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: #e6edf3; background: #1a2332; }
+        .tab-btn.active {
+            background: #1a2332;
+            color: #58a6ff;
+            border-bottom-color: #1a2332;
+        }
+
+        /* Card */
+        .card {
+            display: none;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .card.active { display: block; }
+        .card-header {
+            background: #1a2332;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .card-header h2 { font-size: 1.2rem; color: #58a6ff; }
+        .card-header span {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            margin-left: 0.5rem;
+            font-weight: 600;
+        }
+        .badge-python { background: #3572a5; color: #fff; }
+        .badge-sql { background: #e38c00; color: #000; }
+
+        /* Code Block */
+        .code-section { padding: 1.5rem; }
+        .code-section h3 {
+            font-size: 0.85rem;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        pre {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            tab-size: 4;
+        }
+        code {
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            color: #e6edf3;
+        }
+
+        /* Output Block */
+        .output-section { padding: 0 1.5rem 1.5rem; }
+        .output-section h3 {
+            font-size: 0.85rem;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        .output-block {
+            background: #0b0e13;
+            border: 1px solid #238636;
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: #7ee787;
+            white-space: pre-wrap;
+        }
+
+        /* Syntax Highlighting */
+        .kw { color: #ff7b72; }
+        .fn { color: #d2a8ff; }
+        .str { color: #a5d6ff; }
+        .cmt { color: #8b949e; font-style: italic; }
+        .num { color: #79c0ff; }
+        .op { color: #ff7b72; }
+        .sql-kw { color: #ff7b72; font-weight: bold; }
+        .sql-str { color: #a5d6ff; }
+        .sql-cmt { color: #8b949e; font-style: italic; }
+        .sql-fn { color: #d2a8ff; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #484f58;
+            font-size: 0.8rem;
+            border-top: 1px solid #21262d;
+            margin-top: 3rem;
+        }
+        footer a { color: #58a6ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PCC Assignments</h1>
+    <p>Preston Furulie &mdash; Python &amp; MySQL</p>
+</header>
+
+<div class="container">
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('a1')">1 - Hello World</button>
+        <button class="tab-btn" onclick="showTab('a2')">2 - Variables &amp; Types</button>
+        <button class="tab-btn" onclick="showTab('a3')">3 - Strings</button>
+        <button class="tab-btn" onclick="showTab('a4')">4 - Movie Age Check</button>
+        <button class="tab-btn" onclick="showTab('ex4')">MySQL Ex. 4</button>
+        <button class="tab-btn" onclick="showTab('ex5')">MySQL Ex. 5</button>
+    </div>
+
+    <!-- Assignment 1 -->
+    <div id="a1" class="card active">
+        <div class="card-header">
+            <h2>Assignment 1: Hello World &amp; Basic Math <span class="badge-python">Python</span></h2>
+        </div>
+        <div class="code-section">
+            <h3>Source Code</h3>
+<pre><code><span class="cmt"># Prompt the user to enter their name and store it in a variable</span>
+name = <span class="fn">input</span>(<span class="str">"Preston: "</span>)
+
+<span class="cmt"># Prompt the user to enter their yearly salary and convert to float</span>
+yearly_salary = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"50000: "</span>))
+
+<span class="cmt"># Calculate the monthly salary by dividing by 12 months</span>
+monthly_salary = yearly_salary / <span class="num">12</span>
+
+<span class="cmt"># Display the greeting with the monthly salary formatted to 2 decimal places</span>
+<span class="fn">print</span>(<span class="str">"Hello"</span>, name, <span class="str">"your monthly salary is"</span>, <span class="fn">format</span>(monthly_salary, <span class="str">".2f"</span>))</code></pre>
+        </div>
+        <div class="output-section">
+            <h3>Output</h3>
+            <div class="output-block">Enter your name: Preston
+Enter your yearly income: 50000
+Hello Preston your monthly salary is 4166.67</div>
+        </div>
+    </div>
+
+    <!-- Assignment 2 -->
+    <div id="a2" class="card">
+        <div class="card-header">
+            <h2>Assignment 2: Variables &amp; Types <span class="badge-python">Python</span></h2>
+        </div>
+        <div class="code-section">
+            <h3>Source Code</h3>
+<pre><code><span class="cmt"># --- Fahrenheit to Celsius Conversion ---</span>
+
+fahrenheit = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Enter temperature in Fahrenheit: "</span>))
+
+<span class="cmt"># Formula: C = (F - 32) * 5/9</span>
+celsius = (fahrenheit - <span class="num">32</span>) * <span class="num">5</span> / <span class="num">9</span>
+
+<span class="fn">print</span>(<span class="str">"Temperature in Celsius:"</span>, celsius)
+
+<span class="fn">print</span>()
+
+<span class="cmt"># --- Celsius to Fahrenheit Conversion ---</span>
+
+celsius = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Enter temperature in Celsius: "</span>))
+
+<span class="cmt"># Formula: F = (C * 9/5) + 32</span>
+fahrenheit = (celsius * <span class="num">9</span> / <span class="num">5</span>) + <span class="num">32</span>
+
+<span class="fn">print</span>(<span class="str">"Temperature in Fahrenheit:"</span>, fahrenheit)</code></pre>
+        </div>
+        <div class="output-section">
+            <h3>Output</h3>
+            <div class="output-block">Enter temperature in Fahrenheit: 212
+Temperature in Celsius: 100.0
+
+Enter temperature in Celsius: 0
+Temperature in Fahrenheit: 32.0</div>
+        </div>
+    </div>
+
+    <!-- Assignment 3 -->
+    <div id="a3" class="card">
+        <div class="card-header">
+            <h2>Assignment 3: Strings &amp; Things <span class="badge-python">Python</span></h2>
+        </div>
+        <div class="code-section">
+            <h3>Source Code</h3>
+<pre><code>word = <span class="str">"Supercalifragilisticexpialidocious"</span>
+
+<span class="cmt"># 1. Count the letters</span>
+letter_count = <span class="fn">len</span>(word)
+<span class="fn">print</span>(<span class="str">"Number of letters:"</span>, letter_count)
+
+<span class="fn">print</span>()
+
+<span class="cmt"># 2. Print only the first 5 letters</span>
+first_five = word[:<span class="num">5</span>]
+<span class="fn">print</span>(<span class="str">"First five letters:"</span>, first_five)
+
+<span class="fn">print</span>()
+
+<span class="cmt"># 3. Concatenate with another string</span>
+phrase = <span class="str">" is something quite atrocious"</span>
+combined = word + phrase
+<span class="fn">print</span>(<span class="str">"Concatenated phrase:"</span>, combined)
+
+<span class="fn">print</span>()
+
+<span class="cmt"># 4. Break into a list of three elements, rejoin with no spaces</span>
+word_list = [<span class="str">"Supercali"</span>, <span class="str">"fragilistic"</span>, <span class="str">"expialidocious"</span>]
+rejoined_word = <span class="str">""</span>.join(word_list)
+<span class="fn">print</span>(<span class="str">"Rejoined word from list:"</span>, rejoined_word)
+
+<span class="fn">print</span>()
+
+<span class="cmt"># 5. Put your name into a list and print it</span>
+name_list = [<span class="str">"Preston"</span>, <span class="str">"Furulie"</span>]
+<span class="fn">print</span>(<span class="str">"Name list:"</span>, name_list)</code></pre>
+        </div>
+        <div class="output-section">
+            <h3>Output</h3>
+            <div class="output-block">Number of letters: 34
+
+First five letters: Super
+
+Concatenated phrase: Supercalifragilisticexpialidocious is something quite atrocious
+
+Rejoined word from list: Supercalifragilisticexpialidocious
+
+Name list: ['Preston', 'Furulie']</div>
+        </div>
+    </div>
+
+    <!-- Assignment 4 -->
+    <div id="a4" class="card">
+        <div class="card-header">
+            <h2>Assignment 4: Movie Age Check <span class="badge-python">Python</span></h2>
+        </div>
+        <div class="code-section">
+            <h3>Source Code</h3>
+<pre><code>ticket_price = <span class="num">15</span>
+senior_discount = <span class="num">10</span>
+
+<span class="cmt"># --- John (age 15) ---</span>
+john_name = <span class="str">"John"</span>
+john_age = <span class="num">15</span>
+
+<span class="kw">if</span> john_age &lt; <span class="num">18</span>:
+    <span class="fn">print</span>(john_name, <span class="str">"is"</span>, john_age, <span class="str">"years old and cannot see the movie."</span>)
+<span class="kw">elif</span> john_age &gt;= <span class="num">65</span>:
+    john_price = ticket_price - senior_discount
+    <span class="fn">print</span>(john_name, <span class="str">"is"</span>, john_age, <span class="str">"years old and will be charged $"</span> + <span class="fn">str</span>(john_price) + <span class="str">"."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(john_name, <span class="str">"is"</span>, john_age, <span class="str">"years old and will be charged $"</span> + <span class="fn">str</span>(ticket_price) + <span class="str">"."</span>)
+
+<span class="fn">print</span>()
+
+<span class="cmt"># --- Sam (age 18) ---</span>
+sam_name = <span class="str">"Sam"</span>
+sam_age = <span class="num">18</span>
+
+<span class="kw">if</span> sam_age &lt; <span class="num">18</span>:
+    <span class="fn">print</span>(sam_name, <span class="str">"is"</span>, sam_age, <span class="str">"years old and cannot see the movie."</span>)
+<span class="kw">elif</span> sam_age &gt;= <span class="num">65</span>:
+    sam_price = ticket_price - senior_discount
+    <span class="fn">print</span>(sam_name, <span class="str">"is"</span>, sam_age, <span class="str">"years old and will be charged $"</span> + <span class="fn">str</span>(sam_price) + <span class="str">"."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(sam_name, <span class="str">"is"</span>, sam_age, <span class="str">"years old and will be charged $"</span> + <span class="fn">str</span>(ticket_price) + <span class="str">"."</span>)
+
+<span class="fn">print</span>()
+
+<span class="cmt"># --- Bob (age 67) ---</span>
+bob_name = <span class="str">"Bob"</span>
+bob_age = <span class="num">67</span>
+
+<span class="kw">if</span> bob_age &lt; <span class="num">18</span>:
+    <span class="fn">print</span>(bob_name, <span class="str">"is"</span>, bob_age, <span class="str">"years old and cannot see the movie."</span>)
+<span class="kw">elif</span> bob_age &gt;= <span class="num">65</span>:
+    bob_price = ticket_price - senior_discount
+    <span class="fn">print</span>(bob_name, <span class="str">"is"</span>, bob_age, <span class="str">"years old and will be charged $"</span> + <span class="fn">str</span>(bob_price) + <span class="str">"."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(bob_name, <span class="str">"is"</span>, bob_age, <span class="str">"years old and will be charged $"</span> + <span class="fn">str</span>(ticket_price) + <span class="str">"."</span>)</code></pre>
+        </div>
+        <div class="output-section">
+            <h3>Output</h3>
+            <div class="output-block">John is 15 years old and cannot see the movie.
+
+Sam is 18 years old and will be charged $15.
+
+Bob is 67 years old and will be charged $5.</div>
+        </div>
+    </div>
+
+    <!-- MySQL Exercise 4 -->
+    <div id="ex4" class="card">
+        <div class="card-header">
+            <h2>MySQL Exercise 4: Retrieve Data from Two or More Tables <span class="badge-sql">SQL</span></h2>
+        </div>
+        <div class="code-section">
+            <h3>Source Code</h3>
+<pre><code><span class="sql-cmt">-- MySQL Exercise 4 - Preston Furulie</span>
+<span class="sql-cmt">-- Database: my_guitar_shop</span>
+
+<span class="sql-kw">USE</span> my_guitar_shop;
+
+<span class="sql-cmt">-- Step 1: Join Categories to Products</span>
+<span class="sql-kw">SELECT</span> c.category_name, p.product_name, p.list_price
+<span class="sql-kw">FROM</span> categories c
+    <span class="sql-kw">JOIN</span> products p <span class="sql-kw">ON</span> c.category_id = p.category_id
+<span class="sql-kw">ORDER BY</span> c.category_name, p.product_name;
+
+<span class="sql-cmt">-- Step 2: Join Customers to Addresses for allan.sherwood@yahoo.com</span>
+<span class="sql-kw">SELECT</span> c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+<span class="sql-kw">FROM</span> customers c
+    <span class="sql-kw">JOIN</span> addresses a <span class="sql-kw">ON</span> c.customer_id = a.customer_id
+<span class="sql-kw">WHERE</span> c.email_address = <span class="sql-str">'allan.sherwood@yahoo.com'</span>;
+
+<span class="sql-cmt">-- Step 3: Join Customers to Addresses (shipping address only)</span>
+<span class="sql-kw">SELECT</span> c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+<span class="sql-kw">FROM</span> customers c
+    <span class="sql-kw">JOIN</span> addresses a <span class="sql-kw">ON</span> c.shipping_address_id = a.address_id;
+
+<span class="sql-cmt">-- Step 4: Join Customers, Orders, Order_Items, Products with aliases</span>
+<span class="sql-kw">SELECT</span> c.last_name, c.first_name, o.order_date, p.product_name,
+       oi.item_price, oi.discount_amount, oi.quantity
+<span class="sql-kw">FROM</span> customers c
+    <span class="sql-kw">JOIN</span> orders o <span class="sql-kw">ON</span> c.customer_id = o.customer_id
+    <span class="sql-kw">JOIN</span> order_items oi <span class="sql-kw">ON</span> o.order_id = oi.order_id
+    <span class="sql-kw">JOIN</span> products p <span class="sql-kw">ON</span> oi.product_id = p.product_id
+<span class="sql-kw">ORDER BY</span> c.last_name, o.order_date, p.product_name;
+
+<span class="sql-cmt">-- Step 5: Self-join to find products with the same list price</span>
+<span class="sql-kw">SELECT DISTINCT</span> p1.product_name, p1.list_price
+<span class="sql-kw">FROM</span> products p1
+    <span class="sql-kw">JOIN</span> products p2
+        <span class="sql-kw">ON</span> p1.product_id != p2.product_id
+        <span class="sql-kw">AND</span> p1.list_price = p2.list_price
+<span class="sql-kw">ORDER BY</span> p1.product_name;
+
+<span class="sql-cmt">-- Step 6: Outer join to find categories that have never been used</span>
+<span class="sql-kw">SELECT</span> c.category_name, p.product_id
+<span class="sql-kw">FROM</span> categories c
+    <span class="sql-kw">LEFT JOIN</span> products p <span class="sql-kw">ON</span> c.category_id = p.category_id
+<span class="sql-kw">WHERE</span> p.product_id <span class="sql-kw">IS NULL</span>;
+
+<span class="sql-cmt">-- Step 7: Union to show shipped vs not shipped orders</span>
+<span class="sql-kw">SELECT</span> <span class="sql-str">'SHIPPED'</span> <span class="sql-kw">AS</span> ship_status, order_id, order_date
+<span class="sql-kw">FROM</span> orders
+<span class="sql-kw">WHERE</span> ship_date <span class="sql-kw">IS NOT NULL</span>
+<span class="sql-kw">UNION</span>
+<span class="sql-kw">SELECT</span> <span class="sql-str">'NOT SHIPPED'</span> <span class="sql-kw">AS</span> ship_status, order_id, order_date
+<span class="sql-kw">FROM</span> orders
+<span class="sql-kw">WHERE</span> ship_date <span class="sql-kw">IS NULL</span>
+<span class="sql-kw">ORDER BY</span> order_date;</code></pre>
+        </div>
+    </div>
+
+    <!-- MySQL Exercise 5 -->
+    <div id="ex5" class="card">
+        <div class="card-header">
+            <h2>MySQL Exercise 5: Insert, Update, and Delete Data <span class="badge-sql">SQL</span></h2>
+        </div>
+        <div class="code-section">
+            <h3>Source Code</h3>
+<pre><code><span class="sql-cmt">-- MySQL Exercise 5 - Preston Furulie</span>
+<span class="sql-cmt">-- Database: my_guitar_shop</span>
+<span class="sql-cmt">-- Run steps in order (1-9), then run Step 10 to restore.</span>
+
+<span class="sql-kw">USE</span> my_guitar_shop;
+
+<span class="sql-cmt">-- Step 1: Insert a new category</span>
+<span class="sql-kw">INSERT INTO</span> categories (category_name)
+<span class="sql-kw">VALUES</span> (<span class="sql-str">'Brass'</span>);
+
+<span class="sql-cmt">-- Step 2: Update the new category to Woodwinds</span>
+<span class="sql-kw">UPDATE</span> categories
+<span class="sql-kw">SET</span> category_name = <span class="sql-str">'Woodwinds'</span>
+<span class="sql-kw">WHERE</span> category_id = <span class="num">5</span>;
+
+<span class="sql-cmt">-- Step 3: Delete the new category</span>
+<span class="sql-kw">DELETE FROM</span> categories
+<span class="sql-kw">WHERE</span> category_id = <span class="num">5</span>;
+
+<span class="sql-cmt">-- Step 4: Insert a new product using a column list</span>
+<span class="sql-kw">INSERT INTO</span> products
+    (category_id, product_code, product_name, description,
+     list_price, discount_percent, date_added)
+<span class="sql-kw">VALUES</span>
+    (<span class="num">4</span>, <span class="sql-str">'dgx_640'</span>, <span class="sql-str">'Yamaha DGX 640 88-Key Digital Piano'</span>,
+     <span class="sql-str">'Long description to come.'</span>, <span class="num">799.99</span>, <span class="num">0</span>, <span class="sql-fn">NOW()</span>);
+
+<span class="sql-cmt">-- Step 5: Update the new product's discount to 35%</span>
+<span class="sql-kw">UPDATE</span> products
+<span class="sql-kw">SET</span> discount_percent = <span class="num">35</span>
+<span class="sql-kw">WHERE</span> product_code = <span class="sql-str">'dgx_640'</span>;
+
+<span class="sql-cmt">-- Step 6: Delete the Keyboards category (must delete products first)</span>
+<span class="sql-kw">DELETE FROM</span> order_items
+<span class="sql-kw">WHERE</span> product_id <span class="sql-kw">IN</span>
+    (<span class="sql-kw">SELECT</span> product_id <span class="sql-kw">FROM</span> products <span class="sql-kw">WHERE</span> category_id = <span class="num">4</span>);
+
+<span class="sql-kw">DELETE FROM</span> products
+<span class="sql-kw">WHERE</span> category_id = <span class="num">4</span>;
+
+<span class="sql-kw">DELETE FROM</span> categories
+<span class="sql-kw">WHERE</span> category_id = <span class="num">4</span>;
+
+<span class="sql-cmt">-- Step 7: Insert a new customer using a column list</span>
+<span class="sql-kw">INSERT INTO</span> customers
+    (email_address, password, first_name, last_name)
+<span class="sql-kw">VALUES</span>
+    (<span class="sql-str">'rick@raven.com'</span>, <span class="sql-str">''</span>, <span class="sql-str">'Rick'</span>, <span class="sql-str">'Raven'</span>);
+
+<span class="sql-cmt">-- Step 8: Update Rick Raven's password to secret</span>
+<span class="sql-kw">UPDATE</span> customers
+<span class="sql-kw">SET</span> password = <span class="sql-str">'secret'</span>
+<span class="sql-kw">WHERE</span> email_address = <span class="sql-str">'rick@raven.com'</span>;
+
+<span class="sql-cmt">-- Step 9: Update all customer passwords to reset</span>
+<span class="sql-kw">UPDATE</span> customers
+<span class="sql-kw">SET</span> password = <span class="sql-str">'reset'</span>
+<span class="sql-kw">LIMIT</span> <span class="num">100</span>;
+
+<span class="sql-cmt">-- Step 10: Restore the database</span>
+<span class="sql-cmt">-- Open and run create_my_guitar_shop.sql from the mgs_ex_starts directory</span></code></pre>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    Preston Furulie &mdash; PCC 2026 | <a href="https://github.com/Personfu/Python" target="_blank">View on GitHub</a>
+</footer>
+
+<script>
+    function showTab(id) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
