@@ -1,0 +1,44 @@
+/* Responsive Design & Media Queries */
+/* CIS 195 — Web Development | Preston Furulie */
+
+/* Mobile-first base styles */
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.widget {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+/* Tablet: 2-column layout */
+@media (min-width: 600px) {
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop: 3-column with sidebar */
+@media (min-width: 1024px) {
+    .dashboard {
+        grid-template-columns: 250px 1fr 1fr;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .widget-full {
+        grid-column: 2 / -1;
+    }
+}
+
+/* Large screens: enhanced spacing */
+@media (min-width: 1400px) {
+    .dashboard {
+        grid-template-columns: 280px repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+}

@@ -1,0 +1,87 @@
+<!-- HTML/CSS Portfolio Page -->
+<!-- CIS 195 — Web Development | Preston Furulie -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preston Furulie — Portfolio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #e6edf3; }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #161b22, #0d1117);
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .hero .tagline { color: #8b949e; font-size: 1.1rem; }
+
+        .projects {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .card {
+            flex: 1 1 300px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-4px); }
+        .card h3 { margin-bottom: 0.5rem; color: #58a6ff; }
+        .card p { color: #8b949e; font-size: 0.9rem; }
+        .tags { margin-top: 1rem; }
+        .tags span {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: rgba(0, 229, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 0.4rem;
+            color: #58a6ff;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <h1>Preston Furulie</h1>
+        <p class="tagline">Full-Stack Developer & IT Professional</p>
+    </header>
+
+    <section class="projects">
+        <div class="card">
+            <h3>FLLC Enterprise Portal</h3>
+            <p>Full-stack web app with Stripe integration and real-time dashboards.</p>
+            <div class="tags">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Inventory Management System</h3>
+            <p>Cloud-native inventory tracker with multi-warehouse support.</p>
+            <div class="tags">
+                <span>React</span>
+                <span>Node.js</span>
+                <span>MySQL</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Network Security Toolkit</h3>
+            <p>Python-based security tools for hashing, scanning, and reporting.</p>
+            <div class="tags">
+                <span>Python</span>
+                <span>Security</span>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
