@@ -1,97 +1,116 @@
 ============================================================
-CIS 410 — Cloud & DevOps | Complete Coursework
-Author: Preston Furulie
+FLLC Enterprise IT — Phase 08: Cloud & DevOps Engineering
+CIS 410 — Cloud & DevOps | Preston Furulie
 ============================================================
 
-------------------------------------------------------------
-Assignment 1: AWS VPC Design
-------------------------------------------------------------
-File: vpc_design.tf
-
-Terraform configuration for production VPC:
-  - CIDR: 10.0.0.0/16
-  - 2 public subnets (us-west-2a, us-west-2b) for ALB
-  - 2 private subnets for ECS tasks
-  - Internet Gateway for public subnet routing
-  - Security group allowing HTTP/HTTPS inbound
-
-
-------------------------------------------------------------
-Assignment 2: Docker Containerization
-------------------------------------------------------------
-Files: Dockerfile, docker-compose.yml
-
-Dockerfile (Multi-stage):
-  Stage 1 (builder): Node 20 Alpine, npm ci, npm run build
-  Stage 2 (production): Copy dist + node_modules, non-root user,
-    healthcheck every 30s, expose port 3000
-
-Docker Compose (Full Stack):
-  web: Custom build, port 3000, env vars for DB and Redis
-  db: MySQL 8.0 with healthcheck, persistent volume, secrets
-  cache: Redis 7 Alpine
-
-Working Process:
-  1. Multi-stage build reduces image from ~1.2GB to ~180MB
-  2. Non-root user (appuser) for security best practice
-  3. Healthcheck enables container orchestration auto-recovery
-  4. docker-compose depends_on with condition ensures startup order
-
-
-------------------------------------------------------------
-Assignment 3: CI/CD Pipeline
-------------------------------------------------------------
-File: deploy.yml
-
-GitHub Actions workflow:
-  Trigger: push/PR to main branch
-
-  Job 1 — Test:
-    - Checkout code
-    - Setup Node.js 20 with npm cache
-    - Install dependencies (npm ci)
-    - Run linter
-    - Run tests with coverage
-    - Upload coverage report
-
-  Job 2 — Build (needs: test, main branch only):
-    - Build Docker image tagged with commit SHA
-    - Run Docker Scout security scan
-
-  Job 3 — Deploy (needs: build, main branch only):
-    - Deploy to production environment
-
-
-------------------------------------------------------------
-Assignment 4: Terraform Infrastructure as Code
-------------------------------------------------------------
-File: infrastructure.tf
-
-RDS MySQL Instance:
-  - db.t3.medium, 50GB encrypted storage
-  - Multi-AZ for automatic failover
-  - 30-day backup retention
-  - Private subnet group, app-only security group
-
-ECS Cluster & Service:
-  - Fargate launch type (serverless containers)
-  - 512 CPU / 1024 MB memory per task
-  - 2 desired tasks with ALB load balancing
-  - CloudWatch Logs integration
-  - Container Insights enabled
-
-Application Load Balancer:
-  - Public-facing, HTTPS on port 443
-  - TLS 1.3 security policy
-  - Health check on /api/health endpoint
-  - Target group with IP-based routing
-
-Working Process:
-  1. DB subnet group places RDS in private subnets only
-  2. Security groups enforce least-privilege: ALB→App→DB chain
-  3. ECS task definition includes environment variables and logging
-  4. ALB listener terminates TLS and forwards to target group
+PHASE SUMMARY
+─────────────
+Five deliverables automating FLLC's infrastructure provisioning,
+container packaging, and deployment pipeline. Enables
+reproducible, version-controlled infrastructure with
+zero-downtime deployments and automatic rollback.
 
 ============================================================
-END OF CIS 410 COURSEWORK
+Deliverable 1: AWS VPC Infrastructure (Terraform)
+File: vpc_design.tf (325+ lines)
+============================================================
+
+Resources:
+  - VPC: 10.0.0.0/16 with DNS support enabled
+  - Internet Gateway for public subnet internet access
+  - NAT Gateway with Elastic IP (private subnet outbound)
+  - 9 subnets: 3 tiers × 3 Availability Zones
+    - Public: 10.0.0.0/24, 10.0.1.0/24, 10.0.2.0/24
+    - App:    10.0.10.0/24, 10.0.11.0/24, 10.0.12.0/24
+    - Data:   10.0.20.0/24, 10.0.21.0/24, 10.0.22.0/24
+  - 3 route tables (public → IGW, app → NAT, data → local)
+  - 4 security groups:
+    - ALB: TCP 80, 443 from 0.0.0.0/0
+    - ECS: TCP 3000 from ALB SG only
+    - RDS: TCP 3306 from ECS SG only
+    - Redis: TCP 6379 from ECS SG only
+  - VPC Flow Logs → CloudWatch Logs
+  - IAM roles for flow log publishing
+  - Variables for environment, project, CIDR customization
+  - S3 backend with DynamoDB state locking
+
+============================================================
+Deliverable 2: AWS Services (RDS, ECS, ALB)
+File: infrastructure.tf (170+ lines)
+============================================================
+
+Resources:
+  - RDS MySQL 8.0 Multi-AZ (encrypted, 30-day backups)
+  - DB subnet group across 3 data subnets
+  - ECS Fargate cluster with container insights
+  - ECS task definition (CloudWatch logging, CPU/memory)
+  - ECS service (desired count 2, rolling update strategy)
+  - Application Load Balancer (public subnets)
+  - TLS 1.3 HTTPS listener (ACM certificate)
+  - Target group with /health endpoint check
+
+============================================================
+Deliverable 3: Production Dockerfile
+File: Dockerfile (73 lines)
+============================================================
+
+3-Stage Build:
+  Stage 1 (deps): npm ci --omit=dev for production dependencies
+  Stage 2 (builder): TypeScript compilation, Prisma generation
+  Stage 3 (production): Alpine base, minimal final image
+
+Security:
+  - Non-root user (appuser:appgroup, UID 1001)
+  - apk upgrade for latest security patches
+  - No dev dependencies in production image
+  - HEALTHCHECK: wget --spider http://localhost:3000/health
+  - OCI labels for image metadata
+
+Result: 178 MB final image
+
+============================================================
+Deliverable 4: Docker Compose Development Stack
+File: docker-compose.yml (180+ lines)
+============================================================
+
+5 Services:
+  1. api (Node.js): port 3000, depends on db + cache
+  2. db (MySQL 8.0): port 3306, named volume, tuning flags
+  3. cache (Redis 7): port 6379, append-only persistence
+  4. nginx: port 80 reverse proxy, depends on api
+  5. adminer: port 8081, dev profile only (DB GUI)
+
+Features:
+  - Custom bridge network (fllc-network)
+  - Named volumes for data persistence
+  - Secrets management via file mounts
+  - Health checks on all services
+  - Resource limits (CPU + memory)
+  - Environment variables for configuration
+  - MySQL tuning: innodb_buffer_pool_size, log_bin
+
+============================================================
+Deliverable 5: CI/CD Pipeline (GitHub Actions)
+File: deploy.yml (260+ lines)
+============================================================
+
+6-Stage Pipeline:
+  Stage 1 — Lint (ESLint + tsc): 2 minutes
+  Stage 2 — Unit Tests (Jest, 80% coverage gate): 3 minutes
+  Stage 3 — Integration Tests (MySQL + Redis services): 4 minutes
+  Stage 4 — Build (Docker image → Scout scan → ECR push): 2 minutes
+  Stage 5 — Deploy (ECS rolling update, 10-min stability): 1 minute
+  Stage 6 — Verify (smoke test, auto-rollback on failure): 1 minute
+
+Features:
+  - Concurrency control (cancel previous runs)
+  - MySQL and Redis service containers for integration tests
+  - Docker Scout security scanning (zero critical gate)
+  - AWS credential configuration via GitHub secrets
+  - Automatic rollback: if health check fails after deploy,
+    revert to previous ECS task definition
+  - Slack notification on failure
+
+============================================================
+END OF PHASE 08 — CLOUD & DEVOPS ENGINEERING
 ============================================================

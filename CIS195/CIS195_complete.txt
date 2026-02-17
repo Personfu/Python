@@ -1,80 +1,93 @@
 ============================================================
-CIS 195 — Web Development | Complete Coursework
-Author: Preston Furulie
+FLLC Enterprise IT — Phase 03: Web Platform Engineering
+CIS 195 — Web Development | Preston Furulie
 ============================================================
 
-------------------------------------------------------------
-Assignment 1: HTML/CSS Portfolio Page
-------------------------------------------------------------
-File: portfolio.html
-
-Semantic HTML structure with CSS flexbox layout and custom styling.
-Built a responsive portfolio page featuring:
-  - Dark theme with card-based project layout
-  - Flexbox-based responsive grid (wraps on mobile)
-  - Hover animations on project cards
-  - Tag badges for technologies used
-
-Working Process:
-  1. Created semantic HTML with header, section, and div elements
-  2. Applied CSS custom properties for consistent theming
-  3. Used flexbox with flex-wrap for responsive card grid
-  4. Added hover transform for interactive card elevation
-
-
-------------------------------------------------------------
-Assignment 2: JavaScript DOM Manipulation
-------------------------------------------------------------
-File: dom_manipulation.js
-
-Dynamic task list with add/remove functionality:
-  - Array-based task storage with unique IDs (Date.now())
-  - renderTasks() clears and rebuilds DOM on every change
-  - Click events toggle task completion
-  - Form submit event adds new tasks
-
-Working Process:
-  1. Defined tasks array and task object structure {id, text, completed}
-  2. renderTasks() iterates tasks, creates <li> elements dynamically
-  3. toggleTask() finds task by id and flips completed boolean
-  4. Form event listener prevents default submit, validates input
-
-
-------------------------------------------------------------
-Assignment 3: Responsive Design & Media Queries
-------------------------------------------------------------
-File: responsive_design.css
-
-Mobile-first CSS Grid layout with 4 breakpoints:
-  - Base (mobile): single column
-  - 600px (tablet): 2 columns
-  - 1024px (desktop): 3 columns with sidebar
-  - 1400px (large): 4 columns with enhanced spacing
-
-Working Process:
-  1. Started with mobile-first single-column grid
-  2. Added @media (min-width) breakpoints for progressive enhancement
-  3. Used grid-template-columns for layout control at each breakpoint
-  4. Applied grid-column spanning for full-width widgets
-
-
-------------------------------------------------------------
-Assignment 4: REST API Integration
-------------------------------------------------------------
-File: rest_api.js
-
-Fetching and displaying data from JSONPlaceholder API:
-  - async/await pattern for clean asynchronous code
-  - Error handling with try/catch
-  - Dynamic DOM card creation for each user
-  - POST request example with JSON body
-
-Working Process:
-  1. Used fetch() with async/await to GET /users endpoint
-  2. Checked response.ok before parsing JSON
-  3. forEach loop creates card elements for each user
-  4. Separate createPost() function demonstrates POST with headers
+PHASE SUMMARY
+─────────────
+Four deliverables establish FLLC's frontend engineering
+capability: semantic HTML, responsive CSS design systems,
+JavaScript DOM frameworks, and REST API client patterns.
 
 ============================================================
-END OF CIS 195 COURSEWORK
+Deliverable 1: Portfolio SPA
+File: portfolio.html (420+ lines)
+============================================================
+
+Concepts:
+  - Semantic HTML5: header, nav, main, section, footer
+  - CSS custom properties (design tokens)
+  - Flexbox layout for navigation and cards
+  - CSS Grid for skills and projects sections
+  - Sticky navigation with scroll behavior
+  - Hero section with gradient background
+  - Skills grid with animated progress bars
+  - Project cards with hover effects and overlays
+  - Experience timeline component
+  - Contact section with form layout
+  - Responsive breakpoints (mobile → desktop)
+
+============================================================
+Deliverable 2: DOM Manipulation Framework
+File: dom_manipulation.js (320+ lines)
+============================================================
+
+Concepts:
+  - DOM selection: getElementById, querySelector, querySelectorAll
+  - Element creation factory function
+  - Event handling: addEventListener for click, input, submit
+  - Event delegation for dynamic element lists
+  - classList API: add, remove, toggle, contains
+  - localStorage helper functions (get, set, remove)
+  - Complete TaskManager application:
+    - Create, read, update, delete tasks
+    - Filter by status (all, active, completed)
+    - Task counter and statistics
+    - Data persistence with localStorage
+    - Modal dialog for confirmation
+
+============================================================
+Deliverable 3: Responsive Design System
+File: responsive_design.css (330+ lines)
+============================================================
+
+Concepts:
+  - Mobile-first methodology
+  - CSS custom properties for design tokens
+  - Fluid typography with clamp()
+  - 4 breakpoints: 600px, 768px, 1024px, 1400px
+  - CSS Grid dashboard layout (1 → 2 → 3 columns)
+  - Flexbox for component-level layout
+  - Dark/light theme toggle (prefers-color-scheme)
+  - Print styles (@media print)
+  - Accessibility: prefers-reduced-motion
+  - Glassmorphism card effects (backdrop-filter)
+
+============================================================
+Deliverable 4: REST API Client
+File: rest_api.js (270+ lines)
+============================================================
+
+Concepts:
+  - fetch() API for HTTP requests
+  - async/await pattern (replacing .then() chains)
+  - All HTTP verbs: GET, POST, PUT, DELETE
+  - Query parameter construction
+  - AbortController for request timeout/cancellation
+  - Retry logic with exponential backoff
+  - Reusable APIClient class:
+    - Base URL configuration
+    - Default headers (auth, content-type)
+    - Error handling with custom exceptions
+    - Request/response interceptors
+  - Dynamic DOM rendering from API data
+  - Loading states and error UI
+  - Pagination (next/previous page navigation)
+
+Enterprise Application:
+  Phase 09 integrates the API client with the production REST API.
+  Design system CSS feeds the index.html coursework portal.
+
+============================================================
+END OF PHASE 03 — WEB PLATFORM ENGINEERING
 ============================================================

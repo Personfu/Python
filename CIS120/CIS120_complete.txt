@@ -1,93 +1,97 @@
 ============================================================
-CIS 120 — Intro to Computing | Complete Coursework
-Author: Preston Furulie
+FLLC Enterprise IT — Phase 01: IT Foundations
+CIS 120 — Intro to Computing | Preston Furulie
 ============================================================
 
-------------------------------------------------------------
-Assignment 1: Hardware & Software Fundamentals
-------------------------------------------------------------
-
-Computer Architecture Overview:
-Modern computers follow the Von Neumann architecture, consisting of five key components:
-  - CPU (Central Processing Unit) — executes instructions via the ALU and control unit
-  - RAM (Random Access Memory) — volatile storage for active processes
-  - Storage (SSD/HDD) — persistent data storage
-  - I/O Devices — keyboards, monitors, network interfaces
-  - System Bus — data highway connecting all components
-
-Software Layers:
-  - Firmware/BIOS — initializes hardware on boot
-  - Operating System — manages resources (Windows, Linux, macOS)
-  - Applications — user-facing software (browsers, IDEs, databases)
-
-Key Metrics:
-  - CPU speed measured in GHz (billions of cycles/second)
-  - RAM measured in GB (typical: 8-64GB for workstations)
-  - Storage latency: SSD ~0.1ms vs HDD ~10ms
-
-
-------------------------------------------------------------
-Assignment 2: Binary & Number Systems Converter
-------------------------------------------------------------
-
-# Binary & Number Systems Converter
-# CIS 120 — Intro to Computing | Preston Furulie
-
-def convert_number(decimal_num):
-    """Convert a decimal number to binary, octal, and hexadecimal."""
-    binary = bin(decimal_num)
-    octal = oct(decimal_num)
-    hexadecimal = hex(decimal_num)
-    return binary, octal, hexadecimal
-
-# Get input from user
-number = int(input("Enter a decimal number: "))
-
-binary, octal, hexadecimal = convert_number(number)
-
-print("Decimal:", number)
-print("Binary:", binary)
-print("Octal:", octal)
-print("Hexadecimal:", hexadecimal)
-print()
-
-# Reverse: binary string to decimal
-binary_input = input("Enter a binary number: ")
-decimal_result = int(binary_input, 2)
-print("Binary", binary_input, "= Decimal", decimal_result)
-
-Working Process:
-  1. Created a function convert_number() that uses Python built-ins bin(), oct(), hex()
-  2. Prompts user for decimal input, converts and displays all bases
-  3. Reverse direction: takes binary string and converts back to decimal using int(x, 2)
-
-
-------------------------------------------------------------
-Assignment 3: Introduction to Algorithms
-------------------------------------------------------------
-
-Linear Search Algorithm:
-  ALGORITHM LinearSearch(list, target):
-      FOR i = 0 TO length(list) - 1:
-          IF list[i] == target:
-              RETURN i
-      RETURN -1
-
-Bubble Sort Algorithm:
-  ALGORITHM BubbleSort(list):
-      n = length(list)
-      FOR i = 0 TO n - 1:
-          FOR j = 0 TO n - i - 2:
-              IF list[j] > list[j + 1]:
-                  SWAP list[j], list[j + 1]
-      RETURN list
-
-Complexity Analysis:
-  Algorithm        | Time     | Space
-  Linear Search    | O(n)     | O(1)
-  Bubble Sort      | O(n²)   | O(1)
-  Binary Search    | O(log n) | O(1)
+PHASE SUMMARY
+─────────────
+This phase establishes FLLC's theoretical computing foundation.
+Three deliverables cover hardware architecture, number systems,
+and algorithmic thinking — directly informing decisions in
+every subsequent enterprise phase.
 
 ============================================================
-END OF CIS 120 COURSEWORK
+Deliverable 1: Binary & Number Systems Converter
+File: binary_number_systems.py (200+ lines)
+============================================================
+
+Concepts Covered:
+  - Base conversion using Python built-ins: bin(), oct(), hex()
+  - Manual decimal-to-binary algorithm (repeated division by 2)
+  - Arbitrary base conversion function (base 2 through 36)
+  - Bitwise operations: AND, OR, XOR, NOT, left/right shift
+  - Two's complement representation for negative integers
+  - ASCII encoding/decoding table generation
+  - Storage unit calculations (bits → bytes → KB → MB → GB → TB)
+  - Interactive demonstrations with formatted output
+
+Key Functions:
+  - convert_number(decimal) → binary, octal, hex
+  - decimal_to_binary_manual(n) → binary string
+  - convert_base(number, from_base, to_base) → string
+  - demonstrate_bitwise(a, b) → prints AND/OR/XOR/NOT
+  - twos_complement(n, bits) → binary representation
+  - ascii_table() → prints encoding reference
+
+============================================================
+Deliverable 2: Hardware & Software Fundamentals
+File: hardware_software_fundamentals.md (130+ lines)
+============================================================
+
+Sections:
+  1. Computer Architecture Overview
+     - Von Neumann model (1945): shared memory for programs and data
+     - CPU: ALU, Control Unit, Registers, Cache (L1/L2/L3)
+     - Instruction cycle: Fetch → Decode → Execute → Store
+
+  2. Memory Hierarchy
+     - L1 Cache (~1ns) → RAM (~50ns) → SSD (~0.1ms) → HDD (~5ms)
+     - Volatility: RAM loses data on power loss; SSD/HDD persist
+
+  3. Bus Architecture
+     - Data Bus: carries data (32-bit or 64-bit width)
+     - Address Bus: determines addressable memory (64-bit = 16 EB)
+     - Control Bus: read/write signals, interrupts, clock
+
+  4. Software Layers
+     - Firmware/BIOS/UEFI → OS Kernel → System Utilities → Apps
+     - Process management, virtual memory, file systems
+
+  5. Data Representation
+     - Bit → Nibble → Byte → Word
+     - Binary, Octal, Decimal, Hexadecimal
+     - ASCII (7-bit) → Extended ASCII → Unicode/UTF-8
+
+  6. Logic Gates & Boolean Algebra
+     - AND, OR, NOT, NAND, XOR truth tables
+     - De Morgan's Laws
+
+  7. Key Performance Metrics
+     - Clock speed, IPC, core count, RAM bandwidth, IOPS
+
+  8. Emerging Technologies
+     - Quantum computing, neuromorphic chips, ARM architecture
+
+============================================================
+Deliverable 3: Introduction to Algorithms
+File: intro_to_algorithms.md (180+ lines)
+============================================================
+
+Sections:
+  - Algorithm definition and pseudocode conventions
+  - Linear search: O(n) time, O(1) space
+  - Binary search: O(log n) time, O(1) space
+  - Bubble sort: O(n²) worst case
+  - Selection sort: O(n²) all cases
+  - Insertion sort: O(n²) worst, O(n) best (nearly sorted)
+  - Merge sort: O(n log n) guaranteed
+  - Big-O notation: O(1) < O(log n) < O(n) < O(n²) < O(2^n)
+
+Enterprise Application:
+  Phase 05 builds on this theory with production implementations.
+  Phase 07 applies binary/bitwise operations in encryption.
+  Phase 08 uses hardware knowledge for AWS instance sizing.
+
+============================================================
+END OF PHASE 01 — IT FOUNDATIONS
 ============================================================

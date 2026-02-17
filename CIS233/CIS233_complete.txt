@@ -1,299 +1,153 @@
 ============================================================
-CIS 233 — Database Management (MySQL) | Complete Coursework
-Author: Preston Furulie
+FLLC Enterprise IT — Phase 04: Data Architecture
+CIS 233 — Database Management | Preston Furulie
 Database: my_guitar_shop
 ============================================================
 
-------------------------------------------------------------
-Exercise 1: CREATE TABLE & Constraints
-------------------------------------------------------------
-
-USE my_guitar_shop;
-
-CREATE TABLE reviews (
-    review_id       INT            PRIMARY KEY  AUTO_INCREMENT,
-    product_id      INT            NOT NULL,
-    customer_id     INT            NOT NULL,
-    rating          INT            NOT NULL     CHECK (rating BETWEEN 1 AND 5),
-    review_text     VARCHAR(2000)  DEFAULT      '',
-    review_date     DATETIME       DEFAULT      NOW(),
-
-    CONSTRAINT fk_reviews_products
-        FOREIGN KEY (product_id) REFERENCES products (product_id),
-    CONSTRAINT fk_reviews_customers
-        FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
-);
-
-DESCRIBE reviews;
-
-Working Process:
-  1. Created reviews table with AUTO_INCREMENT primary key
-  2. Added CHECK constraint for rating range 1-5
-  3. Defined two FOREIGN KEY constraints referencing existing tables
-  4. Set DEFAULT values for review_text and review_date
-
-
-------------------------------------------------------------
-Exercise 2: SELECT & WHERE Clauses
-------------------------------------------------------------
-
--- Products over $500
-SELECT product_name, list_price, discount_percent
-FROM products
-WHERE list_price > 500
-ORDER BY list_price DESC;
-
--- Products containing 'Guitar' in name
-SELECT product_name, list_price
-FROM products
-WHERE product_name LIKE '%Guitar%';
-
--- Products with discount between 10% and 30%
-SELECT product_name, list_price, discount_percent
-FROM products
-WHERE discount_percent BETWEEN 10 AND 30
-ORDER BY discount_percent DESC;
-
--- Customers from CA, WA, OR
-SELECT first_name, last_name, state
-FROM customers c
-    JOIN addresses a ON c.shipping_address_id = a.address_id
-WHERE state IN ('CA', 'WA', 'OR')
-ORDER BY state, last_name;
-
-Working Process:
-  1. Used comparison operators (>), LIKE with wildcards, BETWEEN, IN
-  2. Applied ORDER BY for sorted output
-  3. Joined customers to addresses for state-based filtering
-
-
-------------------------------------------------------------
-Exercise 3: Aggregate Functions & GROUP BY
-------------------------------------------------------------
-
--- Product count and pricing stats per category
-SELECT c.category_name,
-       COUNT(*) AS product_count,
-       AVG(p.list_price) AS avg_price,
-       MAX(p.list_price) AS max_price
-FROM categories c
-    JOIN products p ON c.category_id = p.category_id
-GROUP BY c.category_name
-ORDER BY product_count DESC;
-
--- Total revenue per customer (HAVING filter)
-SELECT c.last_name, c.first_name,
-       SUM(oi.item_price * oi.quantity) AS total_spent
-FROM customers c
-    JOIN orders o ON c.customer_id = o.customer_id
-    JOIN order_items oi ON o.order_id = oi.order_id
-GROUP BY c.customer_id
-HAVING total_spent > 200
-ORDER BY total_spent DESC;
-
--- Order count by year
-SELECT YEAR(order_date) AS order_year,
-       COUNT(*) AS order_count
-FROM orders
-GROUP BY YEAR(order_date)
-ORDER BY order_year;
-
-Working Process:
-  1. Used COUNT, AVG, MAX aggregate functions with GROUP BY
-  2. Applied HAVING to filter groups (only customers spending > $200)
-  3. Used YEAR() function to extract year from order_date
-
-
-------------------------------------------------------------
-Exercise 4: Joins & Unions (7 Steps)
-------------------------------------------------------------
-
-USE my_guitar_shop;
-
--- Step 1: Join Categories to Products
-SELECT c.category_name, p.product_name, p.list_price
-FROM categories c
-    JOIN products p ON c.category_id = p.category_id
-ORDER BY c.category_name, p.product_name;
-
--- Step 2: Join Customers to Addresses for allan.sherwood@yahoo.com
-SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
-FROM customers c
-    JOIN addresses a ON c.customer_id = a.customer_id
-WHERE c.email_address = 'allan.sherwood@yahoo.com';
-
--- Step 3: Join Customers to Addresses (shipping address only)
-SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
-FROM customers c
-    JOIN addresses a ON c.shipping_address_id = a.address_id;
-
--- Step 4: Join Customers, Orders, Order_Items, and Products with aliases
-SELECT c.last_name, c.first_name, o.order_date, p.product_name,
-       oi.item_price, oi.discount_amount, oi.quantity
-FROM customers c
-    JOIN orders o ON c.customer_id = o.customer_id
-    JOIN order_items oi ON o.order_id = oi.order_id
-    JOIN products p ON oi.product_id = p.product_id
-ORDER BY c.last_name, o.order_date, p.product_name;
-
--- Step 5: Self-join to find products with the same list price
-SELECT DISTINCT p1.product_name, p1.list_price
-FROM products p1
-    JOIN products p2
-        ON p1.product_id != p2.product_id
-        AND p1.list_price = p2.list_price
-ORDER BY p1.product_name;
-
--- Step 6: Outer join to find categories that have never been used
-SELECT c.category_name, p.product_id
-FROM categories c
-    LEFT JOIN products p ON c.category_id = p.category_id
-WHERE p.product_id IS NULL;
-
--- Step 7: Union to show shipped vs not shipped orders
-SELECT 'SHIPPED' AS ship_status, order_id, order_date
-FROM orders
-WHERE ship_date IS NOT NULL
-UNION
-SELECT 'NOT SHIPPED' AS ship_status, order_id, order_date
-FROM orders
-WHERE ship_date IS NULL
-ORDER BY order_date;
-
-
-------------------------------------------------------------
-Exercise 5: Insert, Update, Delete (10 Steps)
-------------------------------------------------------------
-
-USE my_guitar_shop;
-
--- Step 1: Insert a new category
-INSERT INTO categories (category_name) VALUES ('Brass');
-
--- Step 2: Update the new category to Woodwinds
-UPDATE categories SET category_name = 'Woodwinds' WHERE category_id = 5;
-
--- Step 3: Delete the new category
-DELETE FROM categories WHERE category_id = 5;
-
--- Step 4: Insert a new product using a column list
-INSERT INTO products
-    (category_id, product_code, product_name, description,
-     list_price, discount_percent, date_added)
-VALUES
-    (4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano',
-     'Long description to come.', 799.99, 0, NOW());
-
--- Step 5: Update the new product's discount to 35%
-UPDATE products SET discount_percent = 35 WHERE product_code = 'dgx_640';
-
--- Step 6: Delete the Keyboards category (must delete products first)
-DELETE FROM order_items
-WHERE product_id IN (SELECT product_id FROM products WHERE category_id = 4);
-
-DELETE FROM products WHERE category_id = 4;
-
-DELETE FROM categories WHERE category_id = 4;
-
--- Step 7: Insert a new customer using a column list
-INSERT INTO customers (email_address, password, first_name, last_name)
-VALUES ('rick@raven.com', '', 'Rick', 'Raven');
-
--- Step 8: Update Rick Raven's password to secret
-UPDATE customers SET password = 'secret' WHERE email_address = 'rick@raven.com';
-
--- Step 9: Update all customer passwords to reset
-UPDATE customers SET password = 'reset' LIMIT 100;
-
--- Step 10: Restore the database
--- Open and run create_my_guitar_shop.sql from the mgs_ex_starts directory
-
-
-------------------------------------------------------------
-Exercise 6: Subqueries & CTEs
-------------------------------------------------------------
-
--- Products priced above average
-SELECT product_name, list_price
-FROM products
-WHERE list_price > (SELECT AVG(list_price) FROM products)
-ORDER BY list_price DESC;
-
--- Customers who have placed orders (EXISTS)
-SELECT first_name, last_name
-FROM customers c
-WHERE EXISTS (
-    SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id
-);
-
--- CTE: Top spending customers
-WITH customer_totals AS (
-    SELECT c.customer_id, c.first_name, c.last_name,
-           SUM(oi.item_price * oi.quantity) AS total
-    FROM customers c
-        JOIN orders o ON c.customer_id = o.customer_id
-        JOIN order_items oi ON o.order_id = oi.order_id
-    GROUP BY c.customer_id
-)
-SELECT first_name, last_name, total
-FROM customer_totals
-WHERE total > (SELECT AVG(total) FROM customer_totals)
-ORDER BY total DESC;
-
-
-------------------------------------------------------------
-Exercise 7: Views & Stored Procedures
-------------------------------------------------------------
-
--- View: Product summary with category
-CREATE OR REPLACE VIEW v_product_summary AS
-SELECT p.product_id, c.category_name, p.product_name,
-       p.list_price, p.discount_percent,
-       p.list_price * (1 - p.discount_percent / 100) AS sale_price
-FROM products p
-    JOIN categories c ON p.category_id = c.category_id;
-
-SELECT * FROM v_product_summary ORDER BY sale_price DESC;
-
--- Stored Procedure: Get orders by customer email
-DELIMITER //
-CREATE PROCEDURE sp_customer_orders(IN p_email VARCHAR(255))
-BEGIN
-    SELECT o.order_id, o.order_date, o.ship_date,
-           p.product_name, oi.item_price, oi.quantity
-    FROM customers c
-        JOIN orders o ON c.customer_id = o.customer_id
-        JOIN order_items oi ON o.order_id = oi.order_id
-        JOIN products p ON oi.product_id = p.product_id
-    WHERE c.email_address = p_email
-    ORDER BY o.order_date DESC;
-END //
-DELIMITER ;
-
-CALL sp_customer_orders('allan.sherwood@yahoo.com');
-
-
-------------------------------------------------------------
-Exercise 8: Database Design — E-Commerce Schema
-------------------------------------------------------------
-
-Entity-Relationship Design (Normalized to 3NF):
-
-Entities:
-  - customers (customer_id PK, email, password, first_name, last_name)
-  - addresses (address_id PK, customer_id FK, line1, city, state, zip_code)
-  - categories (category_id PK, category_name)
-  - products (product_id PK, category_id FK, product_code, product_name, list_price)
-  - orders (order_id PK, customer_id FK, order_date, ship_date)
-  - order_items (item_id PK, order_id FK, product_id FK, item_price, quantity)
-
-Relationships:
-  - customers 1:M addresses
-  - categories 1:M products
-  - customers 1:M orders
-  - orders 1:M order_items
-  - products 1:M order_items
+PHASE SUMMARY
+─────────────
+8 deliverables covering the full SQL lifecycle: DDL for table
+creation, SELECT queries (filtering, aggregates, joins,
+subqueries), DML (insert/update/delete), views, stored
+procedures, and relational database design (ER diagram, 3NF).
 
 ============================================================
-END OF CIS 233 COURSEWORK
+Exercise 1: CREATE TABLE & Constraints
+File: exercise1_create_table.sql (100+ lines)
+============================================================
+
+Concepts:
+  - CREATE TABLE with column definitions
+  - PRIMARY KEY (AUTO_INCREMENT)
+  - FOREIGN KEY with ON DELETE CASCADE / ON UPDATE CASCADE
+  - NOT NULL, UNIQUE, DEFAULT (NOW())
+  - CHECK constraints (BETWEEN, value ranges)
+  - ENUM data type for restricted values
+  - BOOLEAN columns
+  - DESCRIBE and SHOW CREATE TABLE for verification
+  - Tables created: reviews, wishlists, inventory_log
+
+============================================================
+Exercise 2: SELECT & WHERE
+File: exercise2_select_where.sql (140+ lines)
+============================================================
+
+Concepts (12 sections):
+  - Basic SELECT with WHERE clause
+  - Comparison operators: =, <>, >, <, >=, <=
+  - BETWEEN for range filtering
+  - IN for set membership
+  - LIKE with wildcards: % (any chars), _ (single char)
+  - IS NULL / IS NOT NULL for missing data
+  - Compound conditions: AND, OR, NOT
+  - Calculated columns and column aliases (AS)
+  - DISTINCT for unique values
+  - LIMIT / OFFSET for pagination
+  - String functions: CONCAT, UPPER, LEFT, LENGTH
+
+============================================================
+Exercise 3: Aggregates & GROUP BY
+File: exercise3_aggregates.sql (120+ lines)
+============================================================
+
+Concepts:
+  - COUNT(*), COUNT(column), COUNT(DISTINCT column)
+  - SUM, AVG, MIN, MAX
+  - GROUP BY (single column and multiple columns)
+  - HAVING for filtering aggregated results
+  - ROLLUP for subtotals and grand totals
+  - Conditional aggregation with CASE
+  - Date functions: YEAR(), MONTH(), DATEDIFF()
+
+============================================================
+Exercise 4: JOINs & UNION
+File: exercise4_joins_unions.sql (120+ lines)
+============================================================
+
+Step 1: INNER JOIN Categories → Products
+  - Sorted by category_name, product_name
+
+Step 2: Join Customers → Addresses (specific email)
+  - WHERE email_address = 'allan.sherwood@yahoo.com'
+
+Step 3: Join Customers → Addresses (shipping only)
+  - ON c.shipping_address_id = a.address_id
+
+Step 4: Four-table JOIN with aliases
+  - Customers → Orders → Order_Items → Products
+  - Aliases: c, o, oi, p
+
+Step 5: Self-join for same list prices
+  - p1.product_id != p2.product_id AND p1.list_price = p2.list_price
+  - DISTINCT to eliminate duplicates
+
+Step 6: LEFT OUTER JOIN for unused categories
+  - WHERE p.product_id IS NULL
+
+Step 7: UNION for shipping status
+  - 'SHIPPED' (ship_date IS NOT NULL) UNION 'NOT SHIPPED'
+
+============================================================
+Exercise 5: INSERT, UPDATE, DELETE
+File: exercise5_dml.sql (130+ lines)
+============================================================
+
+Step 1: INSERT INTO categories (category_name) VALUES ('Brass')
+Step 2: UPDATE categories SET category_name = 'Woodwinds'
+Step 3: DELETE FROM categories WHERE category_id = 5
+Step 4: INSERT product with column list, NOW() for date_added
+Step 5: UPDATE product discount_percent to 35
+Step 6: DELETE Keyboards category (cascade: order_items → products → category)
+Step 7: INSERT customer with empty password string
+Step 8: UPDATE password to 'secret' by email
+Step 9: UPDATE all passwords to 'reset' (LIMIT 100 for safe-update mode)
+Step 10: Restore database from create_my_guitar_shop.sql
+
+============================================================
+Exercise 6: Subqueries & CTEs
+File: exercise6_subqueries.sql (160+ lines)
+============================================================
+
+Concepts:
+  - Scalar subqueries (single value in WHERE)
+  - Column subqueries with IN, ANY, ALL
+  - Correlated subqueries (references outer query)
+  - EXISTS / NOT EXISTS for conditional checks
+  - Subqueries in FROM clause (derived tables)
+  - Subqueries in SELECT clause (inline calculations)
+  - Common Table Expressions (WITH ... AS)
+  - Multi-CTE queries for complex analysis
+
+============================================================
+Exercise 7: Views & Stored Procedures
+File: exercise7_views_procedures.sql (210+ lines)
+============================================================
+
+Views:
+  - v_product_summary: product catalog with sale prices
+  - v_customer_orders: customer order history summary
+  - v_order_details: line-item detail for all orders
+
+Stored Procedures:
+  - sp_customer_orders(IN customer_email): order lookup
+  - sp_product_count(OUT total): count all products
+  - sp_apply_discount(IN id, IN pct): conditional discount
+  - sp_safe_insert_category(IN name): with error handler
+  - sp_search_products(IN term, IN sort_col): dynamic search
+
+============================================================
+ER Diagram & Database Design
+File: db_design_er_diagram.md (210+ lines)
+============================================================
+
+Concepts:
+  - Entity-Relationship diagram (ASCII) for 10 tables
+  - Relationship summary with cardinality (1:M, M:M)
+  - Normalization analysis: 1NF, 2NF, 3NF compliance
+  - Intentional denormalization decisions (with reasoning)
+  - Indexing strategy (performance vs storage trade-off)
+  - Data dictionary for key tables
+
+============================================================
+END OF PHASE 04 — DATA ARCHITECTURE
 ============================================================

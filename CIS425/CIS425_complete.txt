@@ -1,129 +1,152 @@
 ============================================================
-CIS 425 — Capstone | Complete Coursework
-Author: Preston Furulie
-Project: Guitar Shop Enterprise Platform
+FLLC Enterprise IT — Phase 09: Enterprise Platform (Capstone)
+CIS 425 — Capstone Project | Preston Furulie
 ============================================================
 
-------------------------------------------------------------
-Assignment 1: Project Proposal
-------------------------------------------------------------
-File: capstone_proposal.md
-
-Problem: Small-to-medium music retailers lack affordable, integrated
-solutions for inventory, orders, and sales analytics.
-
-Solution: Full-stack web app with:
-  - Real-time inventory management
-  - Customer-facing e-commerce storefront
-  - Admin dashboard with analytics
-  - RESTful API for mobile and web
-
-Technology Stack:
-  Frontend: React 18, TailwindCSS
-  Backend: Node.js, Express
-  Database: MySQL 8.0, Redis
-  Infrastructure: AWS (ECS, RDS, ALB, CloudFront)
-  CI/CD: GitHub Actions, Docker
-
-Timeline: 12-week development cycle
-  Weeks 1-2: Requirements, database design
-  Weeks 3-5: Backend API development
-  Weeks 6-8: Frontend development
-  Weeks 9-10: Cloud deployment, CI/CD
-  Week 11: Load testing, security audit
-  Week 12: Final presentation
-
-
-------------------------------------------------------------
-Assignment 2: Production Database Schema
-------------------------------------------------------------
-File: schema.sql
-
-6 core tables (normalized to 3NF):
-  categories — product categorization
-  products — inventory items with pricing and stock
-  customers — user accounts with hashed passwords
-  addresses — customer shipping/billing addresses (1:M)
-  orders — order headers with status tracking
-  order_items — line items with quantity and pricing
-
-Key features:
-  - AUTO_INCREMENT primary keys on all tables
-  - CHECK constraints for price >= 0, discount 0-100, quantity > 0
-  - FOREIGN KEY with ON DELETE CASCADE where appropriate
-  - Performance indexes on FK columns and order_date
-
-
-------------------------------------------------------------
-Assignment 3: REST API Documentation
-------------------------------------------------------------
-File: api_documentation.md
-
-Base URL: https://api.example.com/v1
-
-Authentication: JWT access + refresh tokens
-  POST /auth/login, POST /auth/refresh
-
-Products API: Full CRUD with pagination, filtering, search
-  GET /products (paginated, filterable by category)
-  GET /products/:id
-  POST /products (Admin/Manager)
-  PUT /products/:id (Admin/Manager)
-  DELETE /products/:id (Admin, soft-delete)
-
-Inventory API: Stock tracking and adjustments
-  GET /inventory, POST /inventory/intake, POST /inventory/adjust
-
-Orders API: Order lifecycle management
-  GET /orders, POST /orders, PUT /orders/:id/ship
-
-Reports API: Business intelligence
-  GET /reports/inventory, /reports/sales, /reports/low-stock
-
-
-------------------------------------------------------------
-Assignment 4: Deployment Architecture
-------------------------------------------------------------
-File: deployment_architecture.md
-
-AWS Production Environment:
-  Frontend: React SPA on CDN (auto-deploy from main)
-  API: Node.js on ECS Fargate (auto-scaling 2-8 tasks)
-  Database: RDS MySQL 8.0 Multi-AZ (db.t3.medium, 50GB)
-  Cache: ElastiCache Redis (cache.t3.micro)
-  Storage: S3 for uploads and reports
-
-CI/CD: Push → Test → Build → Scan → Deploy (zero-downtime)
-
-Monitoring:
-  CloudWatch metrics + alarms
-  Centralized logging (90-day retention)
-  External uptime monitoring (60s intervals)
-
-Disaster Recovery:
-  RPO: 1 hour | RTO: 15 minutes
-  Multi-AZ RDS failover
-  S3 cross-region replication
-  Terraform enables full rebuild
-
-
-------------------------------------------------------------
-Final Presentation Summary
-------------------------------------------------------------
-File: final_presentation.md
-
-Key Metrics:
-  API Response Time: < 50ms (p95)
-  Page Load: < 1.2s (Lighthouse 95+)
-  Test Coverage: 87%
-  Uptime: 99.95% over 30 days
-
-Lessons Learned:
-  - IaC (Terraform) reduces deployment errors
-  - Database indexing improved reporting queries by 10x
-  - Docker multi-stage builds: 1.2GB → 180MB image size
-  - Implement RBAC early to avoid security retrofitting
+PHASE SUMMARY
+─────────────
+The capstone integrates all 8 prior phases into a production-
+ready enterprise platform. Six deliverables cover the complete
+project lifecycle: proposal → schema → API → documentation →
+deployment → presentation.
 
 ============================================================
-END OF CIS 425 COURSEWORK
+Deliverable 1: Capstone Project Proposal
+File: capstone_proposal.md (175+ lines)
+============================================================
+
+Sections:
+  1. Project Overview (title, student, duration)
+  2. Problem Statement (spreadsheet-based inventory → $15K/yr losses)
+  3. Proposed Solution (6 core features + 4 differentiators)
+  4. Technology Stack (9 technologies with justifications)
+  5. System Architecture (ASCII diagram: CDN → ALB → ECS → RDS)
+  6. Database Design (10 tables with row estimates)
+  7. Project Timeline (16 weeks, 8 phases)
+  8. Risk Assessment (5 risks with probability/impact/mitigation)
+  9. Success Criteria (8 measurable KPIs)
+  10. Skills Demonstrated (integration matrix: CIS 120-410)
+
+============================================================
+Deliverable 2: Production Database Schema
+File: schema.sql (280+ lines)
+============================================================
+
+10 Normalized Tables (3NF):
+  - categories (self-referencing parent_id for hierarchy)
+  - suppliers (company info, contact, rating)
+  - products (full-text index on name+description)
+  - customers (email unique, shipping/billing address FKs)
+  - addresses (multi-address per customer)
+  - orders (ENUM status: pending/shipped/delivered/cancelled)
+  - order_items (price snapshot at time of order)
+  - reviews (unique constraint: one review per customer+product)
+  - inventory_log (append-only audit trail)
+  - users (RBAC: admin/manager/staff/viewer, SHA2 password)
+
+Features:
+  - 12+ indexes for query performance
+  - Foreign keys with ON DELETE CASCADE/RESTRICT/SET NULL
+  - CHECK constraints (price > 0, rating 1-5, percent 0-100)
+  - 2 reporting views: v_product_catalog, v_order_summary
+  - Seed data for all tables
+
+============================================================
+Deliverable 3: REST API Server
+File: api_server.py (340+ lines)
+============================================================
+
+Implementation:
+  - Python http.server (no external dependencies)
+  - DataStore class (in-memory database simulation)
+  - APIHandler with URL routing
+
+15 Endpoints:
+  - GET  /api/health — system health check
+  - GET  /api/stats — system statistics (admin only)
+  - GET  /api/products — list with filter/sort/paginate
+  - GET  /api/products/:id — single product detail
+  - POST /api/products — create product (auth required)
+  - PUT  /api/products/:id — update product (auth required)
+  - DELETE /api/products/:id — soft-delete (admin only)
+  - GET  /api/categories — list all categories
+  - POST /api/auth/login — authenticate, return token
+  - GET  /api/inventory — stock levels
+  - POST /api/inventory/intake — log stock receipt
+  - GET  /api/orders — list orders
+  - POST /api/orders — place new order
+  - GET  /api/reports/low-stock — below reorder threshold
+  - GET  /api/reports/sales — revenue by date range
+
+Features:
+  - JWT-style token authentication
+  - CORS headers for browser access
+  - Query parameter parsing (page, limit, sort, filter)
+  - Input validation with descriptive error messages
+  - Proper HTTP status codes (200, 201, 400, 401, 403, 404, 500)
+
+============================================================
+Deliverable 4: API Documentation
+File: api_documentation.md (300+ lines)
+============================================================
+
+Sections:
+  1. Authentication (login, refresh, token usage)
+  2. Products (5 endpoints with full request/response examples)
+  3. Inventory (4 endpoints with stock management examples)
+  4. Orders (4 endpoints with order lifecycle)
+  5. Reports (3 endpoints with format options)
+  6. Health & System (2 endpoints)
+  7. Error Response Format (standard JSON structure)
+  8. HTTP Status Code Reference (10 codes with descriptions)
+  9. RBAC Permission Matrix (4 roles × 12 endpoints)
+
+============================================================
+Deliverable 5: Deployment Architecture
+File: deployment_architecture.md (250+ lines)
+============================================================
+
+Sections:
+  1. Production Environment Overview
+  2. AWS Service Inventory (13 services with cost estimates: ~$176/mo)
+  3. Network Architecture (VPC diagram, traffic flow, latency table)
+  4. CI/CD Pipeline (7 stages with timing: ~13 min total)
+  5. Container Architecture (3-stage Docker, ECS task definition)
+  6. Monitoring & Alerting (CloudWatch dashboards, alarm actions)
+  7. Scaling Strategy (horizontal auto-scaling rules)
+  8. Disaster Recovery (RPO: 15 min, RTO: 1 hour)
+  9. Security Controls (8 layers)
+  10. Environment Comparison (local vs staging vs production)
+
+============================================================
+Deliverable 6: Final Presentation
+File: final_presentation.md (170+ lines)
+============================================================
+
+14-Slide Deck:
+  Slide 1:  Title slide
+  Slide 2:  Problem statement
+  Slide 3:  Proposed solution
+  Slide 4:  Architecture diagram with key decisions
+  Slide 5:  Database design (10 tables, 3NF)
+  Slide 6:  API design (15 endpoints)
+  Slide 7:  DevOps pipeline (6 stages, 13-min total)
+  Slide 8:  Security measures (8 layers)
+  Slide 9:  Performance metrics (8 KPIs — all exceeded targets)
+  Slide 10: Key technical achievements
+  Slide 11: Lessons learned
+  Slide 12: Skills integration (8 courses → 1 platform)
+  Slide 13: Live demo (7-step sequence)
+  Slide 14: Future enhancements (6 items)
+
+Performance Results:
+  API Response (P95): 47ms (target: < 500ms)
+  Page Load: 1.2s (target: < 2.0s)
+  Test Coverage: 87% (target: ≥ 80%)
+  Uptime (30-day): 99.95% (target: 99.9%)
+  Docker Image: 178 MB (target: < 500 MB)
+  CI/CD Pipeline: 13 min (target: < 20 min)
+
+============================================================
+END OF PHASE 09 — ENTERPRISE PLATFORM (CAPSTONE)
 ============================================================
