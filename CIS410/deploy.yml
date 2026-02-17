@@ -1,60 +1,302 @@
-# GitHub Actions CI/CD Pipeline
+# ============================================================
+# GitHub Actions CI/CD Pipeline — Complete Configuration
 # CIS 410 — Cloud & DevOps | Preston Furulie
+# ============================================================
+# Covers: multi-stage pipeline with lint, unit test,
+# integration test, Docker build, security scan, push to
+# ECR, deploy to ECS Fargate, smoke test, and rollback.
+# ============================================================
 
 name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     branches: [main]
 
+env:
+  AWS_REGION: us-west-2
+  ECR_REPOSITORY: guitar-shop-api
+  ECS_CLUSTER: production-cluster
+  ECS_SERVICE: guitar-shop-service
+  ECS_TASK_DEFINITION: task-definition.json
+  NODE_VERSION: "20"
+
+# Cancel in-progress runs on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  # ── Stage 1: Lint & Format Check ──────────────────────────
+  lint:
+    name: Lint & Format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Run linter
-        run: npm run lint
+      - name: Run ESLint
+        run: npx eslint . --ext .js,.ts --max-warnings 0
 
-      - name: Run tests
-        run: npm test -- --coverage
+      - name: Check Prettier formatting
+        run: npx prettier --check "src/**/*.{js,ts,json}"
 
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
+      - name: TypeScript type check
+        run: npx tsc --noEmit
 
-  build:
-    needs: test
+  # ── Stage 2: Unit Tests ───────────────────────────────────
+  test-unit:
+    name: Unit Tests
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    needs: lint
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage
+        run: npx jest --coverage --ci --reporters=default --reporters=jest-junit
+        env:
+          NODE_ENV: test
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(npx jest --coverage --ci 2>&1 | grep "All files" | awk '{print $4}')
+          echo "Coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "Coverage $COVERAGE% is below 80% threshold"
+            exit 1
+          fi
+
+  # ── Stage 3: Integration Tests ────────────────────────────
+  test-integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: guitar_shop_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: mysql://root:test_password@127.0.0.1:3306/guitar_shop_test
+
+      - name: Seed test data
+        run: npx prisma db seed
+        env:
+          DATABASE_URL: mysql://root:test_password@127.0.0.1:3306/guitar_shop_test
+
+      - name: Run integration tests
+        run: npx jest --config jest.integration.config.js --ci
+        env:
+          DATABASE_URL: mysql://root:test_password@127.0.0.1:3306/guitar_shop_test
+          REDIS_URL: redis://127.0.0.1:6379
+          NODE_ENV: test
+
+  # ── Stage 4: Build Docker Image ───────────────────────────
+  build:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [test-unit, test-integration]
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write
+      contents: read
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tags }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
 
       - name: Build Docker image
-        run: docker build -t guitar-shop:${{ github.sha }} .
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Run security scan
-        run: docker scout quickview guitar-shop:${{ github.sha }}
+      - name: Run Docker Scout security scan
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+          only-severities: critical,high
+          exit-code: true
 
+      - name: Push to ECR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+
+  # ── Stage 5: Deploy to Production ─────────────────────────
   deploy:
-    needs: build
+    name: Deploy to Production
     runs-on: ubuntu-latest
+    needs: build
     if: github.ref == 'refs/heads/main'
-    environment: production
+    environment:
+      name: production
+      url: https://app.example.com
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to production
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Get current task definition
         run: |
-          echo "Deploying ${{ github.sha }} to production"
-          echo "Deployment complete"
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.ECS_SERVICE }} \
+            --query 'taskDefinition' \
+            > current-task-def.json
+
+      - name: Update task definition with new image
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: current-task-def.json
+          container-name: api
+          image: ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Deploy to ECS (rolling update)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+          wait-for-minutes: 10
+
+      - name: Smoke test — health check
+        run: |
+          for i in {1..5}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://app.example.com/api/health)
+            echo "Health check attempt $i: HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Health check failed after 5 attempts"
+          exit 1
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment failed — initiating rollback"
+          aws ecs update-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ env.ECS_SERVICE }} \
+            --force-new-deployment \
+            --task-definition $(aws ecs describe-services \
+              --cluster ${{ env.ECS_CLUSTER }} \
+              --services ${{ env.ECS_SERVICE }} \
+              --query 'services[0].taskDefinition' \
+              --output text)
+          echo "Rollback initiated"
+
+  # ── Stage 6: Post-Deploy Notifications ────────────────────
+  notify:
+    name: Notify Team
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always()
+
+    steps:
+      - name: Deployment notification
+        run: |
+          if [ "${{ needs.deploy.result }}" = "success" ]; then
+            echo "Deployment successful: ${{ github.sha }}"
+          else
+            echo "Deployment FAILED: ${{ github.sha }} — check logs"
+          fi
