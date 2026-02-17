@@ -1,87 +1,442 @@
-<!-- HTML/CSS Portfolio Page -->
-<!-- CIS 195 — Web Development | Preston Furulie -->
+<!-- ============================================================
+     HTML/CSS Portfolio Page — Complete Implementation
+     CIS 195 — Web Development | Preston Furulie
+     ============================================================
+     Covers: semantic HTML5, meta tags, favicon, Google Fonts,
+     CSS custom properties, flexbox, grid, transitions, hover
+     effects, responsive images, and accessible markup.
+     ============================================================ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Preston Furulie — Full-Stack Developer & IT Professional">
+    <meta name="author" content="Preston Furulie">
     <title>Preston Furulie — Portfolio</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #e6edf3; }
+        /* ── CSS Reset & Custom Properties ── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+        :root {
+            --bg-primary:   #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card:      #1c2333;
+            --border:       #30363d;
+            --text-primary: #e6edf3;
+            --text-muted:   #8b949e;
+            --accent:       #58a6ff;
+            --accent-glow:  rgba(88, 166, 255, 0.15);
+            --success:      #3fb950;
+            --warning:      #d29922;
+            --font-body:    'Segoe UI', system-ui, -apple-system, sans-serif;
+            --font-mono:    'Cascadia Code', 'Fira Code', monospace;
+            --radius:       8px;
+            --shadow:       0 4px 24px rgba(0, 0, 0, 0.3);
+            --transition:   0.25s ease;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── Navigation Bar ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13, 17, 23, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        nav .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+        nav .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color var(--transition);
+        }
+        nav .nav-links a:hover { color: var(--accent); }
+
+        /* ── Hero Section ── */
         .hero {
             text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #161b22, #0d1117);
+            padding: 6rem 2rem 4rem;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
         }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .hero .tagline { color: #8b949e; font-size: 1.1rem; }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero .tagline {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .hero .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        .hero .stat { text-align: center; }
+        .hero .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .hero .stat-label { font-size: 0.8rem; color: var(--text-muted); }
 
+        /* ── Section Headings ── */
+        .section-title {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+        .section-title h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .section-title p { color: var(--text-muted); }
+
+        /* ── Skills Grid ── */
+        .skills {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            padding: 0 2rem 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .skill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.2rem;
+            text-align: center;
+            transition: transform var(--transition), border-color var(--transition);
+        }
+        .skill:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+        .skill-name { font-weight: 600; font-size: 0.9rem; }
+        .skill-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 0.6rem;
+            overflow: hidden;
+        }
+        .skill-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* ── Project Cards (Flexbox) ── */
         .projects {
             display: flex;
             gap: 1.5rem;
             flex-wrap: wrap;
-            padding: 2rem;
-            max-width: 1000px;
+            padding: 0 2rem 3rem;
+            max-width: 1100px;
             margin: 0 auto;
         }
         .card {
-            flex: 1 1 300px;
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 8px;
+            flex: 1 1 320px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             padding: 1.5rem;
-            transition: transform 0.2s;
+            transition: transform var(--transition), box-shadow var(--transition);
+            display: flex;
+            flex-direction: column;
         }
-        .card:hover { transform: translateY(-4px); }
-        .card h3 { margin-bottom: 0.5rem; color: #58a6ff; }
-        .card p { color: #8b949e; font-size: 0.9rem; }
-        .tags { margin-top: 1rem; }
-        .tags span {
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow), 0 0 30px var(--accent-glow);
+        }
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            flex: 1;
+        }
+        .card .tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .card .tag {
             display: inline-block;
             padding: 0.2rem 0.6rem;
-            background: rgba(0, 229, 255, 0.1);
+            background: var(--accent-glow);
             border-radius: 12px;
             font-size: 0.75rem;
-            margin-right: 0.4rem;
-            color: #58a6ff;
+            color: var(--accent);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+        }
+
+        /* ── Experience Timeline ── */
+        .timeline {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+        .timeline-item {
+            padding-left: 50px;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 14px;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid var(--bg-primary);
+        }
+        .timeline-date { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+        .timeline-title { font-weight: 600; margin: 0.2rem 0; }
+        .timeline-desc { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* ── Contact Section ── */
+        .contact {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+        .contact a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        .contact a:hover { text-decoration: underline; }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            nav { padding: 0.75rem 1rem; }
+            .hero { padding: 4rem 1rem 2rem; }
+            .hero .stats { gap: 1.5rem; }
+            .projects { padding: 0 1rem 2rem; }
+            .card { flex: 1 1 100%; }
         }
     </style>
 </head>
 <body>
+    <!-- Sticky Navigation -->
+    <nav>
+        <a class="logo" href="#">PF</a>
+        <ul class="nav-links">
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
     <header class="hero">
         <h1>Preston Furulie</h1>
-        <p class="tagline">Full-Stack Developer & IT Professional</p>
+        <p class="tagline">Full-Stack Developer &amp; IT Professional</p>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">9</div>
+                <div class="stat-label">Courses Completed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">40+</div>
+                <div class="stat-label">Projects Built</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Languages</div>
+            </div>
+        </div>
     </header>
 
-    <section class="projects">
-        <div class="card">
-            <h3>FLLC Enterprise Portal</h3>
-            <p>Full-stack web app with Stripe integration and real-time dashboards.</p>
-            <div class="tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-            </div>
+    <!-- Skills -->
+    <section id="skills">
+        <div class="section-title">
+            <h2>Technical Skills</h2>
+            <p>Languages, frameworks, and tools</p>
         </div>
-        <div class="card">
-            <h3>Inventory Management System</h3>
-            <p>Cloud-native inventory tracker with multi-warehouse support.</p>
-            <div class="tags">
-                <span>React</span>
-                <span>Node.js</span>
-                <span>MySQL</span>
+        <div class="skills">
+            <div class="skill">
+                <div class="skill-name">Python</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
             </div>
-        </div>
-        <div class="card">
-            <h3>Network Security Toolkit</h3>
-            <p>Python-based security tools for hashing, scanning, and reporting.</p>
-            <div class="tags">
-                <span>Python</span>
-                <span>Security</span>
+            <div class="skill">
+                <div class="skill-name">JavaScript</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">MySQL</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">HTML/CSS</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Docker</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">AWS</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Terraform</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+            </div>
+            <div class="skill">
+                <div class="skill-name">Git</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
             </div>
         </div>
     </section>
+
+    <!-- Projects -->
+    <section id="projects">
+        <div class="section-title">
+            <h2>Featured Projects</h2>
+            <p>Selected coursework and personal projects</p>
+        </div>
+        <div class="projects">
+            <article class="card">
+                <h3>Guitar Shop Enterprise Platform</h3>
+                <p>Full-stack e-commerce application with inventory management, REST API, and cloud deployment. Features real-time stock tracking and role-based access control.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">REST API</span>
+                    <span class="tag">Docker</span>
+                    <span class="tag">AWS</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>Data Structures Library</h3>
+                <p>Comprehensive Python implementations of linked lists, binary search trees, sorting algorithms, and graph traversal with performance benchmarking.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Algorithms</span>
+                    <span class="tag">Big-O</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>Network Security Toolkit</h3>
+                <p>Security tools including password strength analysis, encryption demos (Caesar, XOR, SHA/HMAC), vulnerability assessment reports, and firewall rule configurations.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Cryptography</span>
+                    <span class="tag">Networking</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>Cloud Infrastructure (IaC)</h3>
+                <p>Terraform-managed AWS infrastructure with VPC, ECS Fargate, RDS Multi-AZ, ALB, and a GitHub Actions CI/CD pipeline for automated deployments.</p>
+                <div class="tags">
+                    <span class="tag">Terraform</span>
+                    <span class="tag">AWS</span>
+                    <span class="tag">Docker</span>
+                    <span class="tag">CI/CD</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>PCC Coursework Portal</h3>
+                <p>Single-page application displaying all CIS 120-425 coursework with animated starfield, glassmorphism UI, and syntax-highlighted code previews.</p>
+                <div class="tags">
+                    <span class="tag">HTML5</span>
+                    <span class="tag">CSS3</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>Database Management Suite</h3>
+                <p>Eight MySQL exercises covering DDL, DML, JOINs, subqueries, CTEs, views, stored procedures, and a normalized E-R schema design.</p>
+                <div class="tags">
+                    <span class="tag">MySQL</span>
+                    <span class="tag">SQL</span>
+                    <span class="tag">Database Design</span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience">
+        <div class="section-title">
+            <h2>Education &amp; Experience</h2>
+            <p>Academic and professional journey</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">2024 – 2026</div>
+                <div class="timeline-title">Portland Community College — CIS Program</div>
+                <div class="timeline-desc">Completing CIS 120 through CIS 425 covering computing fundamentals, programming, web development, databases, data structures, systems analysis, cybersecurity, cloud/DevOps, and capstone project.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2025 – Present</div>
+                <div class="timeline-title">FLLC — IT & Development</div>
+                <div class="timeline-desc">Full-stack development, cloud infrastructure management, and system administration for enterprise web applications.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Ongoing</div>
+                <div class="timeline-title">Self-Directed Learning</div>
+                <div class="timeline-desc">Continuous learning in cloud certifications (AWS), containerization (Docker/Kubernetes), and modern web frameworks.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact">
+        <h2>Get In Touch</h2>
+        <p style="margin: 1rem 0; color: var(--text-muted);">
+            <a href="https://github.com/Personfu">GitHub</a>
+            <a href="mailto:preston@example.com">Email</a>
+        </p>
+    </section>
+
+    <footer>
+        &copy; 2026 Preston Furulie. Built with semantic HTML5 &amp; CSS3.
+    </footer>
 </body>
 </html>

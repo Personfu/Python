@@ -1,44 +1,403 @@
-/* Responsive Design & Media Queries */
-/* CIS 195 — Web Development | Preston Furulie */
+/* ============================================================
+   Responsive Design & Media Queries — Complete Implementation
+   CIS 195 — Web Development | Preston Furulie
+   ============================================================
+   Covers: mobile-first approach, CSS custom properties,
+   CSS Grid + Flexbox layouts, breakpoint strategy, fluid
+   typography, responsive images, container queries,
+   print styles, accessibility, and dark/light themes.
+   ============================================================ */
 
-/* Mobile-first base styles */
+
+/* ── CSS Custom Properties (Design Tokens) ── */
+
+:root {
+    /* Colors */
+    --color-bg:        #0d1117;
+    --color-surface:   #161b22;
+    --color-card:      #1c2333;
+    --color-border:    #30363d;
+    --color-text:      #e6edf3;
+    --color-muted:     #8b949e;
+    --color-accent:    #58a6ff;
+    --color-success:   #3fb950;
+    --color-warning:   #d29922;
+    --color-error:     #f85149;
+
+    /* Typography — Fluid scaling with clamp() */
+    --font-body:       'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono:       'Cascadia Code', 'Fira Code', monospace;
+    --fs-xs:           clamp(0.7rem,  0.65rem + 0.25vw, 0.8rem);
+    --fs-sm:           clamp(0.8rem,  0.75rem + 0.25vw, 0.9rem);
+    --fs-base:         clamp(0.9rem,  0.85rem + 0.25vw, 1rem);
+    --fs-lg:           clamp(1.1rem,  1rem + 0.5vw,     1.3rem);
+    --fs-xl:           clamp(1.5rem,  1.2rem + 1vw,     2rem);
+    --fs-2xl:          clamp(2rem,    1.5rem + 2vw,     3rem);
+    --fs-3xl:          clamp(2.5rem,  2rem + 2.5vw,     4rem);
+
+    /* Spacing */
+    --space-xs:        0.25rem;
+    --space-sm:        0.5rem;
+    --space-md:        1rem;
+    --space-lg:        1.5rem;
+    --space-xl:        2rem;
+    --space-2xl:       3rem;
+    --space-3xl:       4rem;
+
+    /* Layout */
+    --container-max:   1200px;
+    --sidebar-width:   280px;
+    --radius:          8px;
+    --shadow:          0 4px 24px rgba(0, 0, 0, 0.3);
+    --transition:      0.25s ease;
+}
+
+
+/* ── CSS Reset ── */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    color: var(--color-text);
+    background: var(--color-bg);
+    min-height: 100vh;
+}
+
+img, video, svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+
+/* ── Mobile-First Base Layout ── */
+
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+/* ── Dashboard Grid: Mobile (1 column) ── */
 .dashboard {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 1rem;
+    grid-template-areas:
+        "header"
+        "main"
+        "sidebar"
+        "footer";
+    gap: var(--space-md);
+    padding: var(--space-md);
 }
+
+.dashboard-header  { grid-area: header; }
+.dashboard-main    { grid-area: main; }
+.dashboard-sidebar { grid-area: sidebar; }
+.dashboard-footer  { grid-area: footer; }
+
+
+/* ── Widget / Card Component ── */
 
 .widget {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 1.5rem;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    transition: box-shadow var(--transition);
 }
 
-/* Tablet: 2-column layout */
+.widget:hover {
+    box-shadow: var(--shadow);
+}
+
+.widget-title {
+    font-size: var(--fs-lg);
+    margin-bottom: var(--space-sm);
+    color: var(--color-accent);
+}
+
+.widget-full {
+    grid-column: 1 / -1;
+}
+
+
+/* ── Navigation: Mobile (hamburger-ready) ── */
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    color: var(--color-accent);
+}
+
+.nav-links {
+    display: none; /* hidden on mobile, shown on tablet+ */
+    list-style: none;
+    gap: var(--space-lg);
+}
+
+.nav-links a {
+    color: var(--color-muted);
+    transition: color var(--transition);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.nav-toggle {
+    display: block; /* visible on mobile */
+    background: none;
+    border: none;
+    color: var(--color-text);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+
+/* ── Card Grid (auto-fit responsive) ── */
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+}
+
+.card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+}
+
+
+/* ── Table (responsive with horizontal scroll on mobile) ── */
+
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+}
+
+.table th, .table td {
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.table th {
+    background: var(--color-surface);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   BREAKPOINT 1: Tablet (≥ 600px) — 2 columns
+   ═══════════════════════════════════════════════════════════ */
+
 @media (min-width: 600px) {
     .dashboard {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "header  header"
+            "main    main"
+            "sidebar sidebar"
+            "footer  footer";
+    }
+
+    .nav-links {
+        display: flex;  /* show nav links */
+    }
+
+    .nav-toggle {
+        display: none;  /* hide hamburger */
     }
 }
 
-/* Desktop: 3-column with sidebar */
+
+/* ═══════════════════════════════════════════════════════════
+   BREAKPOINT 2: Desktop (≥ 1024px) — sidebar layout
+   ═══════════════════════════════════════════════════════════ */
+
 @media (min-width: 1024px) {
     .dashboard {
-        grid-template-columns: 250px 1fr 1fr;
-        max-width: 1200px;
-        margin: 0 auto;
+        grid-template-columns: var(--sidebar-width) 1fr;
+        grid-template-areas:
+            "sidebar header"
+            "sidebar main"
+            "sidebar footer";
     }
-    .widget-full {
-        grid-column: 2 / -1;
+
+    .dashboard-sidebar {
+        position: sticky;
+        top: 60px;
+        align-self: start;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
     }
 }
 
-/* Large screens: enhanced spacing */
+
+/* ═══════════════════════════════════════════════════════════
+   BREAKPOINT 3: Wide Desktop (≥ 1400px) — enhanced
+   ═══════════════════════════════════════════════════════════ */
+
 @media (min-width: 1400px) {
     .dashboard {
-        grid-template-columns: 280px repeat(3, 1fr);
-        gap: 1.5rem;
+        grid-template-columns: var(--sidebar-width) 1fr 300px;
+        grid-template-areas:
+            "sidebar header header"
+            "sidebar main   aside"
+            "sidebar footer footer";
+        gap: var(--space-xl);
+    }
+
+    .container {
+        max-width: 1400px;
     }
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   Accessibility: Reduced Motion
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   Print Styles
+   ═══════════════════════════════════════════════════════════ */
+
+@media print {
+    body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+    }
+
+    .nav, .nav-toggle, .dashboard-sidebar, button {
+        display: none !important;
+    }
+
+    .dashboard {
+        display: block;
+    }
+
+    .widget {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+
+    a { color: black; text-decoration: underline; }
+    a::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   Light Theme (via prefers-color-scheme or .theme-light class)
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --color-bg:      #ffffff;
+        --color-surface: #f6f8fa;
+        --color-card:    #ffffff;
+        --color-border:  #d0d7de;
+        --color-text:    #1f2328;
+        --color-muted:   #656d76;
+        --color-accent:  #0969da;
+        --shadow:        0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.theme-light {
+    --color-bg:      #ffffff;
+    --color-surface: #f6f8fa;
+    --color-card:    #ffffff;
+    --color-border:  #d0d7de;
+    --color-text:    #1f2328;
+    --color-muted:   #656d76;
+    --color-accent:  #0969da;
+    --shadow:        0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ── Utility Classes ── */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.flex       { display: flex; }
+.flex-wrap  { flex-wrap: wrap; }
+.gap-sm     { gap: var(--space-sm); }
+.gap-md     { gap: var(--space-md); }
+.gap-lg     { gap: var(--space-lg); }
+.text-center { text-align: center; }
+.text-muted  { color: var(--color-muted); }
+.mt-md      { margin-top: var(--space-md); }
+.mb-md      { margin-bottom: var(--space-md); }
