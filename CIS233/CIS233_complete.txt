@@ -1,0 +1,299 @@
+============================================================
+CIS 233 — Database Management (MySQL) | Complete Coursework
+Author: Preston Furulie
+Database: my_guitar_shop
+============================================================
+
+------------------------------------------------------------
+Exercise 1: CREATE TABLE & Constraints
+------------------------------------------------------------
+
+USE my_guitar_shop;
+
+CREATE TABLE reviews (
+    review_id       INT            PRIMARY KEY  AUTO_INCREMENT,
+    product_id      INT            NOT NULL,
+    customer_id     INT            NOT NULL,
+    rating          INT            NOT NULL     CHECK (rating BETWEEN 1 AND 5),
+    review_text     VARCHAR(2000)  DEFAULT      '',
+    review_date     DATETIME       DEFAULT      NOW(),
+
+    CONSTRAINT fk_reviews_products
+        FOREIGN KEY (product_id) REFERENCES products (product_id),
+    CONSTRAINT fk_reviews_customers
+        FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
+);
+
+DESCRIBE reviews;
+
+Working Process:
+  1. Created reviews table with AUTO_INCREMENT primary key
+  2. Added CHECK constraint for rating range 1-5
+  3. Defined two FOREIGN KEY constraints referencing existing tables
+  4. Set DEFAULT values for review_text and review_date
+
+
+------------------------------------------------------------
+Exercise 2: SELECT & WHERE Clauses
+------------------------------------------------------------
+
+-- Products over $500
+SELECT product_name, list_price, discount_percent
+FROM products
+WHERE list_price > 500
+ORDER BY list_price DESC;
+
+-- Products containing 'Guitar' in name
+SELECT product_name, list_price
+FROM products
+WHERE product_name LIKE '%Guitar%';
+
+-- Products with discount between 10% and 30%
+SELECT product_name, list_price, discount_percent
+FROM products
+WHERE discount_percent BETWEEN 10 AND 30
+ORDER BY discount_percent DESC;
+
+-- Customers from CA, WA, OR
+SELECT first_name, last_name, state
+FROM customers c
+    JOIN addresses a ON c.shipping_address_id = a.address_id
+WHERE state IN ('CA', 'WA', 'OR')
+ORDER BY state, last_name;
+
+Working Process:
+  1. Used comparison operators (>), LIKE with wildcards, BETWEEN, IN
+  2. Applied ORDER BY for sorted output
+  3. Joined customers to addresses for state-based filtering
+
+
+------------------------------------------------------------
+Exercise 3: Aggregate Functions & GROUP BY
+------------------------------------------------------------
+
+-- Product count and pricing stats per category
+SELECT c.category_name,
+       COUNT(*) AS product_count,
+       AVG(p.list_price) AS avg_price,
+       MAX(p.list_price) AS max_price
+FROM categories c
+    JOIN products p ON c.category_id = p.category_id
+GROUP BY c.category_name
+ORDER BY product_count DESC;
+
+-- Total revenue per customer (HAVING filter)
+SELECT c.last_name, c.first_name,
+       SUM(oi.item_price * oi.quantity) AS total_spent
+FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id
+    JOIN order_items oi ON o.order_id = oi.order_id
+GROUP BY c.customer_id
+HAVING total_spent > 200
+ORDER BY total_spent DESC;
+
+-- Order count by year
+SELECT YEAR(order_date) AS order_year,
+       COUNT(*) AS order_count
+FROM orders
+GROUP BY YEAR(order_date)
+ORDER BY order_year;
+
+Working Process:
+  1. Used COUNT, AVG, MAX aggregate functions with GROUP BY
+  2. Applied HAVING to filter groups (only customers spending > $200)
+  3. Used YEAR() function to extract year from order_date
+
+
+------------------------------------------------------------
+Exercise 4: Joins & Unions (7 Steps)
+------------------------------------------------------------
+
+USE my_guitar_shop;
+
+-- Step 1: Join Categories to Products
+SELECT c.category_name, p.product_name, p.list_price
+FROM categories c
+    JOIN products p ON c.category_id = p.category_id
+ORDER BY c.category_name, p.product_name;
+
+-- Step 2: Join Customers to Addresses for allan.sherwood@yahoo.com
+SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+FROM customers c
+    JOIN addresses a ON c.customer_id = a.customer_id
+WHERE c.email_address = 'allan.sherwood@yahoo.com';
+
+-- Step 3: Join Customers to Addresses (shipping address only)
+SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+FROM customers c
+    JOIN addresses a ON c.shipping_address_id = a.address_id;
+
+-- Step 4: Join Customers, Orders, Order_Items, and Products with aliases
+SELECT c.last_name, c.first_name, o.order_date, p.product_name,
+       oi.item_price, oi.discount_amount, oi.quantity
+FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id
+    JOIN order_items oi ON o.order_id = oi.order_id
+    JOIN products p ON oi.product_id = p.product_id
+ORDER BY c.last_name, o.order_date, p.product_name;
+
+-- Step 5: Self-join to find products with the same list price
+SELECT DISTINCT p1.product_name, p1.list_price
+FROM products p1
+    JOIN products p2
+        ON p1.product_id != p2.product_id
+        AND p1.list_price = p2.list_price
+ORDER BY p1.product_name;
+
+-- Step 6: Outer join to find categories that have never been used
+SELECT c.category_name, p.product_id
+FROM categories c
+    LEFT JOIN products p ON c.category_id = p.category_id
+WHERE p.product_id IS NULL;
+
+-- Step 7: Union to show shipped vs not shipped orders
+SELECT 'SHIPPED' AS ship_status, order_id, order_date
+FROM orders
+WHERE ship_date IS NOT NULL
+UNION
+SELECT 'NOT SHIPPED' AS ship_status, order_id, order_date
+FROM orders
+WHERE ship_date IS NULL
+ORDER BY order_date;
+
+
+------------------------------------------------------------
+Exercise 5: Insert, Update, Delete (10 Steps)
+------------------------------------------------------------
+
+USE my_guitar_shop;
+
+-- Step 1: Insert a new category
+INSERT INTO categories (category_name) VALUES ('Brass');
+
+-- Step 2: Update the new category to Woodwinds
+UPDATE categories SET category_name = 'Woodwinds' WHERE category_id = 5;
+
+-- Step 3: Delete the new category
+DELETE FROM categories WHERE category_id = 5;
+
+-- Step 4: Insert a new product using a column list
+INSERT INTO products
+    (category_id, product_code, product_name, description,
+     list_price, discount_percent, date_added)
+VALUES
+    (4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano',
+     'Long description to come.', 799.99, 0, NOW());
+
+-- Step 5: Update the new product's discount to 35%
+UPDATE products SET discount_percent = 35 WHERE product_code = 'dgx_640';
+
+-- Step 6: Delete the Keyboards category (must delete products first)
+DELETE FROM order_items
+WHERE product_id IN (SELECT product_id FROM products WHERE category_id = 4);
+
+DELETE FROM products WHERE category_id = 4;
+
+DELETE FROM categories WHERE category_id = 4;
+
+-- Step 7: Insert a new customer using a column list
+INSERT INTO customers (email_address, password, first_name, last_name)
+VALUES ('rick@raven.com', '', 'Rick', 'Raven');
+
+-- Step 8: Update Rick Raven's password to secret
+UPDATE customers SET password = 'secret' WHERE email_address = 'rick@raven.com';
+
+-- Step 9: Update all customer passwords to reset
+UPDATE customers SET password = 'reset' LIMIT 100;
+
+-- Step 10: Restore the database
+-- Open and run create_my_guitar_shop.sql from the mgs_ex_starts directory
+
+
+------------------------------------------------------------
+Exercise 6: Subqueries & CTEs
+------------------------------------------------------------
+
+-- Products priced above average
+SELECT product_name, list_price
+FROM products
+WHERE list_price > (SELECT AVG(list_price) FROM products)
+ORDER BY list_price DESC;
+
+-- Customers who have placed orders (EXISTS)
+SELECT first_name, last_name
+FROM customers c
+WHERE EXISTS (
+    SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id
+);
+
+-- CTE: Top spending customers
+WITH customer_totals AS (
+    SELECT c.customer_id, c.first_name, c.last_name,
+           SUM(oi.item_price * oi.quantity) AS total
+    FROM customers c
+        JOIN orders o ON c.customer_id = o.customer_id
+        JOIN order_items oi ON o.order_id = oi.order_id
+    GROUP BY c.customer_id
+)
+SELECT first_name, last_name, total
+FROM customer_totals
+WHERE total > (SELECT AVG(total) FROM customer_totals)
+ORDER BY total DESC;
+
+
+------------------------------------------------------------
+Exercise 7: Views & Stored Procedures
+------------------------------------------------------------
+
+-- View: Product summary with category
+CREATE OR REPLACE VIEW v_product_summary AS
+SELECT p.product_id, c.category_name, p.product_name,
+       p.list_price, p.discount_percent,
+       p.list_price * (1 - p.discount_percent / 100) AS sale_price
+FROM products p
+    JOIN categories c ON p.category_id = c.category_id;
+
+SELECT * FROM v_product_summary ORDER BY sale_price DESC;
+
+-- Stored Procedure: Get orders by customer email
+DELIMITER //
+CREATE PROCEDURE sp_customer_orders(IN p_email VARCHAR(255))
+BEGIN
+    SELECT o.order_id, o.order_date, o.ship_date,
+           p.product_name, oi.item_price, oi.quantity
+    FROM customers c
+        JOIN orders o ON c.customer_id = o.customer_id
+        JOIN order_items oi ON o.order_id = oi.order_id
+        JOIN products p ON oi.product_id = p.product_id
+    WHERE c.email_address = p_email
+    ORDER BY o.order_date DESC;
+END //
+DELIMITER ;
+
+CALL sp_customer_orders('allan.sherwood@yahoo.com');
+
+
+------------------------------------------------------------
+Exercise 8: Database Design — E-Commerce Schema
+------------------------------------------------------------
+
+Entity-Relationship Design (Normalized to 3NF):
+
+Entities:
+  - customers (customer_id PK, email, password, first_name, last_name)
+  - addresses (address_id PK, customer_id FK, line1, city, state, zip_code)
+  - categories (category_id PK, category_name)
+  - products (product_id PK, category_id FK, product_code, product_name, list_price)
+  - orders (order_id PK, customer_id FK, order_date, ship_date)
+  - order_items (item_id PK, order_id FK, product_id FK, item_price, quantity)
+
+Relationships:
+  - customers 1:M addresses
+  - categories 1:M products
+  - customers 1:M orders
+  - orders 1:M order_items
+  - products 1:M order_items
+
+============================================================
+END OF CIS 233 COURSEWORK
+============================================================

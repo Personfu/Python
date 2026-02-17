@@ -1,0 +1,93 @@
+============================================================
+CIS 120 — Intro to Computing | Complete Coursework
+Author: Preston Furulie
+============================================================
+
+------------------------------------------------------------
+Assignment 1: Hardware & Software Fundamentals
+------------------------------------------------------------
+
+Computer Architecture Overview:
+Modern computers follow the Von Neumann architecture, consisting of five key components:
+  - CPU (Central Processing Unit) — executes instructions via the ALU and control unit
+  - RAM (Random Access Memory) — volatile storage for active processes
+  - Storage (SSD/HDD) — persistent data storage
+  - I/O Devices — keyboards, monitors, network interfaces
+  - System Bus — data highway connecting all components
+
+Software Layers:
+  - Firmware/BIOS — initializes hardware on boot
+  - Operating System — manages resources (Windows, Linux, macOS)
+  - Applications — user-facing software (browsers, IDEs, databases)
+
+Key Metrics:
+  - CPU speed measured in GHz (billions of cycles/second)
+  - RAM measured in GB (typical: 8-64GB for workstations)
+  - Storage latency: SSD ~0.1ms vs HDD ~10ms
+
+
+------------------------------------------------------------
+Assignment 2: Binary & Number Systems Converter
+------------------------------------------------------------
+
+# Binary & Number Systems Converter
+# CIS 120 — Intro to Computing | Preston Furulie
+
+def convert_number(decimal_num):
+    """Convert a decimal number to binary, octal, and hexadecimal."""
+    binary = bin(decimal_num)
+    octal = oct(decimal_num)
+    hexadecimal = hex(decimal_num)
+    return binary, octal, hexadecimal
+
+# Get input from user
+number = int(input("Enter a decimal number: "))
+
+binary, octal, hexadecimal = convert_number(number)
+
+print("Decimal:", number)
+print("Binary:", binary)
+print("Octal:", octal)
+print("Hexadecimal:", hexadecimal)
+print()
+
+# Reverse: binary string to decimal
+binary_input = input("Enter a binary number: ")
+decimal_result = int(binary_input, 2)
+print("Binary", binary_input, "= Decimal", decimal_result)
+
+Working Process:
+  1. Created a function convert_number() that uses Python built-ins bin(), oct(), hex()
+  2. Prompts user for decimal input, converts and displays all bases
+  3. Reverse direction: takes binary string and converts back to decimal using int(x, 2)
+
+
+------------------------------------------------------------
+Assignment 3: Introduction to Algorithms
+------------------------------------------------------------
+
+Linear Search Algorithm:
+  ALGORITHM LinearSearch(list, target):
+      FOR i = 0 TO length(list) - 1:
+          IF list[i] == target:
+              RETURN i
+      RETURN -1
+
+Bubble Sort Algorithm:
+  ALGORITHM BubbleSort(list):
+      n = length(list)
+      FOR i = 0 TO n - 1:
+          FOR j = 0 TO n - i - 2:
+              IF list[j] > list[j + 1]:
+                  SWAP list[j], list[j + 1]
+      RETURN list
+
+Complexity Analysis:
+  Algorithm        | Time     | Space
+  Linear Search    | O(n)     | O(1)
+  Bubble Sort      | O(n²)   | O(1)
+  Binary Search    | O(log n) | O(1)
+
+============================================================
+END OF CIS 120 COURSEWORK
+============================================================

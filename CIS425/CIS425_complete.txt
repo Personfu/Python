@@ -1,0 +1,129 @@
+============================================================
+CIS 425 — Capstone | Complete Coursework
+Author: Preston Furulie
+Project: Guitar Shop Enterprise Platform
+============================================================
+
+------------------------------------------------------------
+Assignment 1: Project Proposal
+------------------------------------------------------------
+File: capstone_proposal.md
+
+Problem: Small-to-medium music retailers lack affordable, integrated
+solutions for inventory, orders, and sales analytics.
+
+Solution: Full-stack web app with:
+  - Real-time inventory management
+  - Customer-facing e-commerce storefront
+  - Admin dashboard with analytics
+  - RESTful API for mobile and web
+
+Technology Stack:
+  Frontend: React 18, TailwindCSS
+  Backend: Node.js, Express
+  Database: MySQL 8.0, Redis
+  Infrastructure: AWS (ECS, RDS, ALB, CloudFront)
+  CI/CD: GitHub Actions, Docker
+
+Timeline: 12-week development cycle
+  Weeks 1-2: Requirements, database design
+  Weeks 3-5: Backend API development
+  Weeks 6-8: Frontend development
+  Weeks 9-10: Cloud deployment, CI/CD
+  Week 11: Load testing, security audit
+  Week 12: Final presentation
+
+
+------------------------------------------------------------
+Assignment 2: Production Database Schema
+------------------------------------------------------------
+File: schema.sql
+
+6 core tables (normalized to 3NF):
+  categories — product categorization
+  products — inventory items with pricing and stock
+  customers — user accounts with hashed passwords
+  addresses — customer shipping/billing addresses (1:M)
+  orders — order headers with status tracking
+  order_items — line items with quantity and pricing
+
+Key features:
+  - AUTO_INCREMENT primary keys on all tables
+  - CHECK constraints for price >= 0, discount 0-100, quantity > 0
+  - FOREIGN KEY with ON DELETE CASCADE where appropriate
+  - Performance indexes on FK columns and order_date
+
+
+------------------------------------------------------------
+Assignment 3: REST API Documentation
+------------------------------------------------------------
+File: api_documentation.md
+
+Base URL: https://api.example.com/v1
+
+Authentication: JWT access + refresh tokens
+  POST /auth/login, POST /auth/refresh
+
+Products API: Full CRUD with pagination, filtering, search
+  GET /products (paginated, filterable by category)
+  GET /products/:id
+  POST /products (Admin/Manager)
+  PUT /products/:id (Admin/Manager)
+  DELETE /products/:id (Admin, soft-delete)
+
+Inventory API: Stock tracking and adjustments
+  GET /inventory, POST /inventory/intake, POST /inventory/adjust
+
+Orders API: Order lifecycle management
+  GET /orders, POST /orders, PUT /orders/:id/ship
+
+Reports API: Business intelligence
+  GET /reports/inventory, /reports/sales, /reports/low-stock
+
+
+------------------------------------------------------------
+Assignment 4: Deployment Architecture
+------------------------------------------------------------
+File: deployment_architecture.md
+
+AWS Production Environment:
+  Frontend: React SPA on CDN (auto-deploy from main)
+  API: Node.js on ECS Fargate (auto-scaling 2-8 tasks)
+  Database: RDS MySQL 8.0 Multi-AZ (db.t3.medium, 50GB)
+  Cache: ElastiCache Redis (cache.t3.micro)
+  Storage: S3 for uploads and reports
+
+CI/CD: Push → Test → Build → Scan → Deploy (zero-downtime)
+
+Monitoring:
+  CloudWatch metrics + alarms
+  Centralized logging (90-day retention)
+  External uptime monitoring (60s intervals)
+
+Disaster Recovery:
+  RPO: 1 hour | RTO: 15 minutes
+  Multi-AZ RDS failover
+  S3 cross-region replication
+  Terraform enables full rebuild
+
+
+------------------------------------------------------------
+Final Presentation Summary
+------------------------------------------------------------
+File: final_presentation.md
+
+Key Metrics:
+  API Response Time: < 50ms (p95)
+  Page Load: < 1.2s (Lighthouse 95+)
+  Test Coverage: 87%
+  Uptime: 99.95% over 30 days
+
+Lessons Learned:
+  - IaC (Terraform) reduces deployment errors
+  - Database indexing improved reporting queries by 10x
+  - Docker multi-stage builds: 1.2GB → 180MB image size
+  - Implement RBAC early to avoid security retrofitting
+
+============================================================
+END OF CIS 425 COURSEWORK
+============================================================

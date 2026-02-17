@@ -1,0 +1,81 @@
+============================================================
+CIS 310 — Systems Analysis & Design | Complete Coursework
+Author: Preston Furulie
+============================================================
+
+------------------------------------------------------------
+Assignment 1: Software Requirements Specification
+------------------------------------------------------------
+File: requirements_document.md
+
+Project: Guitar Shop Inventory Tracker (v1.0)
+
+Functional Requirements:
+  FR-01: Track product quantities in real-time
+  FR-02: Generate low-stock alerts when below threshold
+  FR-03: Add, update, and remove products (CRUD)
+  FR-04: Generate monthly inventory reports (PDF/CSV)
+  FR-05: Support barcode scanning for stock intake
+
+Non-Functional Requirements:
+  NFR-01: Page load time under 2 seconds (95th percentile)
+  NFR-02: System availability 99.9% uptime
+  NFR-03: Support 50+ concurrent users
+  NFR-04: Data encrypted at rest (AES-256) and in transit (TLS 1.3)
+
+User Roles:
+  Admin — Full CRUD, user management, reports
+  Manager — Read/write inventory, view reports
+  Staff — Read-only, submit stock intake requests
+
+
+------------------------------------------------------------
+Assignment 2: Use Case Diagrams
+------------------------------------------------------------
+File: use_cases.md
+
+Use Case: Process Stock Intake
+  Actor: Warehouse Staff
+  Precondition: Authenticated and on intake screen
+  Main Flow:
+    1. Staff scans shipment barcode
+    2. System displays expected items from PO
+    3. Staff verifies and counts items
+    4. Staff confirms quantities
+    5. System updates inventory
+    6. System logs intake with timestamp and staff ID
+  Alternative: Quantity mismatch flags discrepancy, notifies manager
+
+Use Case: Generate Report
+  Actor: Manager
+  Flow: Select date range, report type, format → system generates download
+
+
+------------------------------------------------------------
+Assignment 3: System Architecture Proposal
+------------------------------------------------------------
+File: system_architecture.md
+
+Architecture: Three-Tier Design
+
+Presentation Layer:
+  - React.js SPA, deployed on CDN, JWT authentication
+
+Application Layer:
+  - Node.js + Express REST API
+  - Input validation, rate limiting (100 req/min)
+  - Deployed on AWS ECS with auto-scaling
+
+Data Layer:
+  - MySQL 8.0 on AWS RDS (Multi-AZ)
+  - Redis cache for sessions and hot queries
+  - Daily backups with 30-day retention
+
+Security:
+  - HTTPS/TLS 1.3 everywhere
+  - OWASP Top 10 mitigations
+  - RBAC and parameterized queries
+
+============================================================
+END OF CIS 310 COURSEWORK
+============================================================

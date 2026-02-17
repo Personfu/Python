@@ -1,0 +1,342 @@
+============================================================
+CIS 133 — Intro to Programming (Python) | Complete Coursework
+Author: Preston Furulie
+============================================================
+
+------------------------------------------------------------
+Assignment 1: Hello World & Basic Math
+------------------------------------------------------------
+
+# Prompt the user to enter their name and store it in a variable
+name = input("Preston: ")
+
+# Prompt the user to enter their yearly salary and convert the input to a float
+# so we can perform arithmetic on it
+yearly_salary = float(input("50000: "))
+
+# Calculate the monthly salary by dividing the yearly salary by 12 months
+monthly_salary = yearly_salary / 12
+
+# Display the greeting along with the calculated monthly salary,
+# formatted to two decimal places for proper currency display
+print("Hello", name, "your monthly salary is", format(monthly_salary, ".2f"))
+
+Working Process:
+  1. Used input() to capture name as string
+  2. Used float(input()) to capture yearly salary as a decimal number
+  3. Divided by 12 for monthly salary
+  4. Used format() with ".2f" for two decimal places
+
+
+------------------------------------------------------------
+Assignment 2: Variables & Types — Temperature Conversion
+------------------------------------------------------------
+
+# --- Fahrenheit to Celsius Conversion ---
+
+# Using float() to handle decimal temperature values (proper variable type)
+fahrenheit = float(input("Enter temperature in Fahrenheit: "))
+
+# Apply the Fahrenheit-to-Celsius conversion formula: C = (F - 32) * 5/9
+celsius = (fahrenheit - 32) * 5 / 9
+
+# Display the converted Celsius temperature
+print("Temperature in Celsius:", celsius)
+
+# Blank line for readability between the two conversions
+print()
+
+# --- Celsius to Fahrenheit Conversion ---
+
+# Prompt the user to enter a temperature in Celsius
+# Again using float() for proper decimal handling
+celsius = float(input("Enter temperature in Celsius: "))
+
+# Apply the Celsius-to-Fahrenheit conversion formula: F = (C * 9/5) + 32
+fahrenheit = (celsius * 9 / 5) + 32
+
+# Display the converted Fahrenheit temperature
+print("Temperature in Fahrenheit:", fahrenheit)
+
+Working Process:
+  1. Used float() for proper decimal variable types
+  2. Applied F-to-C formula: C = (F - 32) * 5/9
+  3. Applied C-to-F formula: F = (C * 9/5) + 32
+  4. Added print() blank line between conversions for readability
+
+
+------------------------------------------------------------
+Assignment 3: Strings & Things
+------------------------------------------------------------
+
+# Define the original word as a string variable
+word = "Supercalifragilisticexpialidocious"
+
+# --- 1. Count the letters and print the number ---
+# The len() function returns the total number of characters in the string
+letter_count = len(word)
+print("Number of letters:", letter_count)
+print()
+
+# --- 2. Print only the first 5 letters ---
+# String slicing with [:5] extracts characters from index 0 up to (not including) 5
+first_five = word[:5]
+print("First five letters:", first_five)
+print()
+
+# --- 3. Concatenate with another string ---
+# Using the + operator to join the original word with a new phrase
+phrase = " is something quite atrocious"
+combined = word + phrase
+print("Concatenated phrase:", combined)
+print()
+
+# --- 4. Break into a list of three elements, then concatenate back together ---
+# Create a list containing three parts of the original word
+word_list = ["Supercali", "fragilistic", "expialidocious"]
+
+# Use "".join() with an empty string separator to concatenate the list
+# elements back together with no white spaces
+rejoined_word = "".join(word_list)
+print("Rejoined word from list:", rejoined_word)
+print()
+
+# --- 5. Put your name into a list and print it ---
+# Store first and last name as elements in a list
+name_list = ["Preston", "Furulie"]
+print("Name list:", name_list)
+
+Working Process:
+  1. len() counts 34 letters in the word
+  2. Slicing word[:5] gives "Super"
+  3. Concatenation with + joins the word and phrase
+  4. Split into 3-element list, "".join() puts it back with no spaces
+  5. Name stored as a list of two strings
+
+
+------------------------------------------------------------
+Assignment 4: Movie Age Check
+------------------------------------------------------------
+
+# Define the standard movie ticket price
+ticket_price = 15  # Base ticket price in dollars
+
+# Define the senior citizen discount amount
+senior_discount = 10  # Discount in dollars for ages 65 and over
+
+# --- John's age check ---
+john_name = "John"
+john_age = 15
+
+if john_age < 18:
+    print(john_name, "is", john_age, "years old and cannot see the movie.")
+elif john_age >= 65:
+    john_price = ticket_price - senior_discount
+    print(john_name, "is", john_age, "years old and will be charged $" + str(john_price) + ".")
+else:
+    print(john_name, "is", john_age, "years old and will be charged $" + str(ticket_price) + ".")
+
+print()
+
+# --- Sam's age check ---
+sam_name = "Sam"
+sam_age = 18
+
+if sam_age < 18:
+    print(sam_name, "is", sam_age, "years old and cannot see the movie.")
+elif sam_age >= 65:
+    sam_price = ticket_price - senior_discount
+    print(sam_name, "is", sam_age, "years old and will be charged $" + str(sam_price) + ".")
+else:
+    print(sam_name, "is", sam_age, "years old and will be charged $" + str(ticket_price) + ".")
+
+print()
+
+# --- Bob's age check ---
+bob_name = "Bob"
+bob_age = 67
+
+if bob_age < 18:
+    print(bob_name, "is", bob_age, "years old and cannot see the movie.")
+elif bob_age >= 65:
+    bob_price = ticket_price - senior_discount
+    print(bob_name, "is", bob_age, "years old and will be charged $" + str(bob_price) + ".")
+else:
+    print(bob_name, "is", bob_age, "years old and will be charged $" + str(ticket_price) + ".")
+
+Working Process:
+  1. Set base ticket price $15 and senior discount $10
+  2. Used if/elif/else branching for each person
+  3. John (15) — under 18, cannot see movie
+  4. Sam (18) — adult, charged $15
+  5. Bob (67) — senior (65+), gets $10 discount, charged $5
+
+
+------------------------------------------------------------
+Assignment 5: Loops & Iteration
+------------------------------------------------------------
+
+# Multiplication table using nested for loops
+print("Multiplication Table (1-5):")
+print("-" * 30)
+
+for i in range(1, 6):
+    for j in range(1, 6):
+        print(f"{i * j:4}", end="")
+    print()
+
+print()
+
+# While loop: countdown
+count = 5
+print("Countdown:")
+while count > 0:
+    print(count)
+    count -= 1
+print("Liftoff!")
+
+print()
+
+# Sum of even numbers from 1 to 20
+total = 0
+for num in range(2, 21, 2):
+    total += num
+print("Sum of even numbers 1-20:", total)
+
+Working Process:
+  1. Nested for loops create a 5x5 multiplication table
+  2. While loop demonstrates countdown from 5 to 1
+  3. For loop with step=2 sums even numbers: 2+4+6+...+20 = 110
+
+
+------------------------------------------------------------
+Assignment 6: Functions
+------------------------------------------------------------
+
+def rectangle_area(length, width):
+    return length * width
+
+def circle_area(radius):
+    pi = 3.14159
+    return pi * radius ** 2
+
+def greet(name, greeting="Hello"):
+    return f"{greeting}, {name}!"
+
+def min_max(numbers):
+    return min(numbers), max(numbers)
+
+# Test all functions
+print(greet("Preston"))
+print(greet("Preston", "Welcome"))
+print()
+print("Rectangle (5x3):", rectangle_area(5, 3))
+print("Circle (r=7):", round(circle_area(7), 2))
+print()
+data = [34, 12, 89, 3, 56]
+lo, hi = min_max(data)
+print("Data:", data)
+print("Min:", lo, "Max:", hi)
+
+Working Process:
+  1. rectangle_area() takes length and width, returns product
+  2. circle_area() uses pi * r^2 formula
+  3. greet() uses default parameter for greeting
+  4. min_max() returns two values using tuple unpacking
+
+
+------------------------------------------------------------
+Assignment 7: File I/O
+------------------------------------------------------------
+
+employees = [
+    "John Smith, Manager, 75000",
+    "Jane Doe, Developer, 85000",
+    "Bob Wilson, Analyst, 65000"
+]
+
+with open("employees.txt", "w") as file:
+    for emp in employees:
+        file.write(emp + "\n")
+print("Data written to employees.txt")
+
+print()
+print("Employee Report:")
+print("-" * 40)
+
+with open("employees.txt", "r") as file:
+    for line in file:
+        parts = line.strip().split(", ")
+        name, title, salary = parts
+        print(f"{name:<20} {title:<12} ${salary}")
+
+with open("employees.txt", "a") as file:
+    file.write("Alice Brown, Designer, 70000\n")
+print("\nNew employee appended.")
+
+Working Process:
+  1. Write mode ("w") creates file with employee data
+  2. Read mode ("r") reads back and formats with f-strings
+  3. Append mode ("a") adds a new employee without overwriting
+  4. Used "with" statement for automatic file closing
+
+
+------------------------------------------------------------
+Assignment 8: Classes & OOP
+------------------------------------------------------------
+
+class Vehicle:
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.speed = 0
+
+    def accelerate(self, amount):
+        self.speed += amount
+
+    def brake(self, amount):
+        self.speed = max(0, self.speed - amount)
+
+    def __str__(self):
+        return f"{self.year} {self.make} {self.model} ({self.speed} mph)"
+
+
+class ElectricVehicle(Vehicle):
+    def __init__(self, make, model, year, battery_kwh):
+        super().__init__(make, model, year)
+        self.battery_kwh = battery_kwh
+        self.charge = 100
+
+    def drive(self, miles):
+        drain = miles * 0.3
+        self.charge = max(0, self.charge - drain)
+
+    def __str__(self):
+        base = super().__str__()
+        return f"{base} | Battery: {self.charge:.0f}%"
+
+
+car = Vehicle("Toyota", "Camry", 2024)
+car.accelerate(60)
+print(car)
+car.brake(20)
+print(car)
+print()
+
+ev = ElectricVehicle("Tesla", "Model 3", 2025, 75)
+ev.accelerate(80)
+ev.drive(50)
+print(ev)
+ev.drive(100)
+print(ev)
+
+Working Process:
+  1. Vehicle class: __init__ constructor, accelerate/brake methods, __str__ override
+  2. ElectricVehicle inherits from Vehicle using super().__init__()
+  3. Added battery_kwh and charge attributes, drive() method drains charge
+  4. Demonstrates inheritance, method overriding, and encapsulation
+
+============================================================
+END OF CIS 133 COURSEWORK
+============================================================

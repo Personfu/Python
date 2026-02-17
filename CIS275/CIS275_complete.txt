@@ -1,0 +1,139 @@
+============================================================
+CIS 275 — Data Structures | Complete Coursework
+Author: Preston Furulie
+============================================================
+
+------------------------------------------------------------
+Assignment 1: Singly Linked List
+------------------------------------------------------------
+File: linked_list.py
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        current = self.head
+        while current.next:
+            current = current.next
+        current.next = new_node
+
+    def delete(self, data):
+        if not self.head:
+            return
+        if self.head.data == data:
+            self.head = self.head.next
+            return
+        current = self.head
+        while current.next and current.next.data != data:
+            current = current.next
+        if current.next:
+            current.next = current.next.next
+
+    def display(self):
+        elements = []
+        current = self.head
+        while current:
+            elements.append(str(current.data))
+            current = current.next
+        return " -> ".join(elements) + " -> None"
+
+Working Process:
+  1. Node class holds data and a pointer to the next node
+  2. append() traverses to the end and links a new node
+  3. delete() handles head deletion and mid-list deletion
+  4. display() walks the list and formats as "10 -> 20 -> None"
+
+
+------------------------------------------------------------
+Assignment 2: Binary Search Tree
+------------------------------------------------------------
+File: binary_search_tree.py
+
+class BSTNode:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+
+def insert(root, val):
+    if not root:
+        return BSTNode(val)
+    if val < root.val:
+        root.left = insert(root.left, val)
+    else:
+        root.right = insert(root.right, val)
+    return root
+
+def inorder(root):
+    if root:
+        inorder(root.left)
+        print(root.val, end=" ")
+        inorder(root.right)
+
+def search(root, target):
+    if not root:
+        return False
+    if root.val == target:
+        return True
+    if target < root.val:
+        return search(root.left, target)
+    return search(root.right, target)
+
+Working Process:
+  1. Recursive insert places smaller values left, larger right
+  2. In-order traversal prints nodes in sorted ascending order
+  3. Search follows left/right path based on comparison — O(log n) average
+
+
+------------------------------------------------------------
+Assignment 3: Sorting Algorithm Comparison
+------------------------------------------------------------
+File: sorting_algorithms.py
+
+Bubble Sort: O(n²) — compares adjacent elements, swaps if out of order
+Quick Sort: O(n log n) average — partitions around a pivot recursively
+
+Benchmark (5000 elements):
+  Bubble Sort: ~2.5s
+  Quick Sort:  ~0.02s
+  Quick Sort is approximately 125x faster
+
+Working Process:
+  1. Bubble sort nested loops compare and swap adjacent pairs
+  2. Quick sort selects middle element as pivot, partitions into left/mid/right
+  3. Timed both with time.time() on 5000 random integers
+  4. Quick sort's O(n log n) dramatically outperforms O(n²) at scale
+
+
+------------------------------------------------------------
+Assignment 4: Graph Traversal — BFS & DFS
+------------------------------------------------------------
+File: graph_traversal.py
+
+BFS (Breadth-First Search):
+  Uses a queue (deque) — explores all neighbors before going deeper
+  Result from A: ['A', 'B', 'C', 'D', 'E', 'F']
+
+DFS (Depth-First Search):
+  Uses recursion (implicit stack) — goes as deep as possible first
+  Result from A: ['A', 'B', 'D', 'E', 'F', 'C']
+
+Working Process:
+  1. Graph represented as adjacency list (dictionary of lists)
+  2. BFS uses deque for FIFO ordering, visited set prevents cycles
+  3. DFS uses recursive calls, visited set shared across stack frames
+  4. Both produce valid traversal orderings of all reachable nodes
+
+============================================================
+END OF CIS 275 COURSEWORK
+============================================================

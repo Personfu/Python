@@ -1,0 +1,101 @@
+============================================================
+CIS 350 — Network & Cybersecurity | Complete Coursework
+Author: Preston Furulie
+============================================================
+
+------------------------------------------------------------
+Assignment 1: Network Topology Design
+------------------------------------------------------------
+File: network_topology.md
+
+Design: Hub-and-spoke with DMZ segmentation
+
+Network Segments:
+  VLAN 10 — Management: 10.0.10.0/24
+  VLAN 20 — Corporate: 10.0.20.0/24
+  VLAN 30 — Servers: 10.0.30.0/24
+  VLAN 40 — Guest: 10.0.40.0/24
+  DMZ: 172.16.0.0/24
+
+Core Equipment:
+  Cisco Catalyst 9300, Palo Alto PA-850, Meraki MR46 APs
+
+Security Zones:
+  Untrusted (Internet/DMZ), Semi-trusted (Corporate), Trusted (Servers/Mgmt)
+
+
+------------------------------------------------------------
+Assignment 2: Firewall Rules & ACLs
+------------------------------------------------------------
+File: firewall_rules.conf
+
+Rule 1: Allow HTTPS to DMZ web servers (untrust → dmz)
+Rule 2: Allow corporate to internal servers (vlan20 → vlan30)
+Rule 3: Block guest from all internal networks (vlan40 → any internal)
+Rule 4: Allow guest internet only (vlan40 → untrust, web/ssl/dns)
+Rule 5: Implicit deny all (any → any, deny + log)
+
+Working Process:
+  1. Followed principle of least privilege
+  2. Most specific rules first, implicit deny last
+  3. Logging enabled on all rules for audit trail
+
+
+------------------------------------------------------------
+Assignment 3: Vulnerability Assessment Report
+------------------------------------------------------------
+File: vulnerability_assessment.md
+
+Scan: Nessus Professional, 2026-01-15, scope 10.0.0.0/16
+
+Critical Findings:
+  CVE-2025-21391 (CVSS 9.8): RCE in Apache 2.4.58 → Update to 2.4.62+
+  CVE-2025-24989 (CVSS 8.1): SQLi in legacy PHP → Deploy WAF, patch app
+
+Summary:
+  Critical: 2 | High: 4 | Medium: 11 | Low: 23
+  MTTR target for critical: 48 hours
+
+
+------------------------------------------------------------
+Assignment 4: Encryption & Hashing Demo
+------------------------------------------------------------
+File: encryption_hashing.py
+
+import hashlib
+import secrets
+
+# SHA-256 hash
+password = "MySecurePass123!"
+hash_obj = hashlib.sha256(password.encode())
+print("SHA-256:", hash_obj.hexdigest())
+
+# Salted hashing (proper password storage)
+salt = secrets.token_hex(16)
+salted = salt + password
+salted_hash = hashlib.sha256(salted.encode()).hexdigest()
+print("Salt:", salt)
+print("Salted SHA-256:", salted_hash)
+
+# Verification function
+def verify(password, salt, expected_hash):
+    check = hashlib.sha256((salt + password).encode()).hexdigest()
+    return check == expected_hash
+
+print("Verify correct:", verify("MySecurePass123!", salt, salted_hash))
+print("Verify wrong:", verify("WrongPassword", salt, salted_hash))
+
+# Compare algorithms
+for algo in ["md5", "sha1", "sha256", "sha512"]:
+    h = hashlib.new(algo, password.encode()).hexdigest()
+    print(f"{algo:<8} ({len(h)*4:>3}-bit): {h[:40]}...")
+
+Working Process:
+  1. SHA-256 produces a 64-character hex digest (256 bits)
+  2. Salt (random 32-char hex) prepended to password before hashing
+  3. verify() recomputes hash and compares — returns True/False
+  4. Compared MD5 (128-bit), SHA-1 (160-bit), SHA-256, SHA-512
+
+============================================================
+END OF CIS 350 COURSEWORK
+============================================================
