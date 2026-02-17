@@ -1,259 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preston Furulie — PCC Coursework</title>
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preston Furulie — PCC CIS Coursework</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050510;--bg2:#0a0a1a;--bg3:#0d0d24;
+  --border:#1a1a3a;--border2:#2a2a4a;
+  --cyan:#00e5ff;--mag:#ff00aa;
+  --text:#e0e0f0;--muted:#6a6a8a;
+  --code-bg:#08081a;
+  --glow-c:rgba(0,229,255,.12);--glow-m:rgba(255,0,170,.10);
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #0d1117;
-            color: #e6edf3;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+/* Stars */
+body::before,body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+body::before{
+  background:
+    radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1.5px 1.5px at 50% 10%,rgba(0,229,255,.6),transparent),
+    radial-gradient(1px 1px at 70% 40%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 85% 80%,rgba(255,0,170,.5),transparent),
+    radial-gradient(1px 1px at 15% 55%,rgba(255,255,255,.4),transparent),
+    radial-gradient(1.5px 1.5px at 95% 15%,rgba(0,229,255,.5),transparent),
+    radial-gradient(1px 1px at 40% 90%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1px 1px at 60% 60%,rgba(255,255,255,.3),transparent),
+    radial-gradient(1px 1px at 25% 35%,rgba(255,0,170,.4),transparent);
+  background-size:200% 200%;
+  animation:drift 60s linear infinite;
+}
+body::after{
+  background:
+    radial-gradient(1px 1px at 5% 85%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1px 1px at 45% 30%,rgba(0,229,255,.4),transparent),
+    radial-gradient(1px 1px at 75% 65%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.5px 1.5px at 90% 45%,rgba(255,0,170,.5),transparent),
+    radial-gradient(1px 1px at 20% 95%,rgba(255,255,255,.4),transparent),
+    radial-gradient(1px 1px at 55% 5%,rgba(0,229,255,.5),transparent),
+    radial-gradient(1px 1px at 80% 25%,rgba(255,255,255,.3),transparent),
+    radial-gradient(1px 1px at 35% 50%,rgba(255,0,170,.3),transparent);
+  background-size:200% 200%;
+  animation:drift 90s linear infinite reverse;
+}
+@keyframes drift{0%{background-position:0 0}100%{background-position:200% 200%}}
 
-        /* ── Header ── */
-        header {
-            background: #161b22;
-            border-bottom: 1px solid #30363d;
-            padding: 2.5rem 2rem 2rem;
-            text-align: center;
-        }
-        header h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: #f0f6fc;
-            letter-spacing: -0.02em;
-        }
-        header p {
-            color: #8b949e;
-            margin-top: 0.35rem;
-            font-size: 0.95rem;
-        }
+/* Header */
+header{position:relative;z-index:1;background:linear-gradient(180deg,rgba(10,10,30,.95),rgba(5,5,16,.98));border-bottom:1px solid var(--border);padding:2rem 2rem 0;text-align:center}
+header h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--mag));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+header p{color:var(--muted);font-size:.9rem;margin-top:.25rem}
+.stats{display:flex;justify-content:center;gap:2rem;padding:1.25rem 0;margin-top:1rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.stat{text-align:center}
+.stat-val{font-size:1.3rem;font-weight:700;color:var(--cyan)}
+.stat-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 
-        /* ── Layout ── */
-        .wrapper {
-            display: flex;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            flex: 1;
-        }
+/* Layout */
+.wrap{display:flex;max-width:1300px;width:100%;margin:0 auto;flex:1;position:relative;z-index:1}
 
-        /* ── Sidebar ── */
-        nav {
-            width: 240px;
-            min-width: 240px;
-            background: #161b22;
-            border-right: 1px solid #30363d;
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        nav h3 {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #484f58;
-            padding: 0 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        nav h3:not(:first-child) { margin-top: 1.5rem; }
-        nav button {
-            display: block;
-            width: 100%;
-            text-align: left;
-            background: none;
-            border: none;
-            color: #8b949e;
-            padding: 0.5rem 1.25rem;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.15s;
-            border-left: 2px solid transparent;
-            font-family: inherit;
-        }
-        nav button:hover {
-            color: #e6edf3;
-            background: rgba(88, 166, 255, 0.04);
-        }
-        nav button.active {
-            color: #58a6ff;
-            background: rgba(88, 166, 255, 0.08);
-            border-left-color: #58a6ff;
-        }
+/* Sidebar */
+nav{width:260px;min-width:260px;background:rgba(10,10,26,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid var(--border);padding:1rem 0;position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.nav-course{padding:0}
+.nav-head{display:flex;align-items:center;gap:.5rem;width:100%;background:none;border:none;color:var(--muted);padding:.6rem 1.2rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;font-family:inherit;font-weight:600;transition:color .15s}
+.nav-head:hover{color:var(--text)}
+.nav-head.open{color:var(--cyan)}
+.nav-head::before{content:'';display:inline-block;width:0;height:0;border-left:5px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;transition:transform .2s}
+.nav-head.open::before{transform:rotate(90deg)}
+.nav-head .chk{margin-left:auto;font-size:.65rem;color:var(--cyan);opacity:.6}
+.nav-items{display:none;padding:0 0 .25rem}
+.nav-items.open{display:block}
+.nav-item{display:block;width:100%;text-align:left;background:none;border:none;color:var(--muted);padding:.35rem 1.2rem .35rem 2rem;font-size:.8rem;cursor:pointer;transition:all .15s;border-left:2px solid transparent;font-family:inherit}
+.nav-item:hover{color:var(--text);background:var(--glow-c)}
+.nav-item.active{color:var(--cyan);border-left-color:var(--cyan);background:var(--glow-c);text-shadow:0 0 8px rgba(0,229,255,.3)}
 
-        /* ── Main ── */
-        main {
-            flex: 1;
-            padding: 2rem;
-            min-width: 0;
-        }
+/* Main */
+main{flex:1;padding:2rem;min-width:0;position:relative;z-index:1}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.p-title{font-size:1.25rem;font-weight:600;color:#f0f0ff;margin-bottom:.2rem}
+.p-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.5rem}
+.badge{display:inline-block;font-size:.65rem;font-weight:700;padding:.1rem .5rem;border-radius:10px;vertical-align:middle;margin-left:.4rem;position:relative;top:-1px}
+.b-py{background:rgba(0,229,255,.15);color:var(--cyan);border:1px solid rgba(0,229,255,.3)}
+.b-sql{background:rgba(255,0,170,.12);color:var(--mag);border:1px solid rgba(255,0,170,.3)}
+.b-html{background:rgba(255,165,0,.12);color:#ffa500;border:1px solid rgba(255,165,0,.3)}
+.b-js{background:rgba(255,255,0,.1);color:#ffe066;border:1px solid rgba(255,255,0,.2)}
+.b-tf{background:rgba(130,80,255,.12);color:#a070ff;border:1px solid rgba(130,80,255,.3)}
+.b-doc{background:rgba(100,200,100,.12);color:#7ce07c;border:1px solid rgba(100,200,100,.3)}
+.b-bash{background:rgba(150,150,150,.12);color:#aaa;border:1px solid rgba(150,150,150,.3)}
+.b-yaml{background:rgba(255,100,100,.1);color:#ff8888;border:1px solid rgba(255,100,100,.2)}
+.lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:.4rem;font-weight:600}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem;overflow-x:auto;font-size:.78rem;line-height:1.6;margin-bottom:1.25rem;box-shadow:0 0 20px rgba(0,229,255,.03)}
+code{font-family:'Cascadia Code','Fira Code','JetBrains Mono',Consolas,monospace;color:var(--text)}
+.out{background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.15);border-radius:6px;padding:1rem 1.2rem;font-family:'Cascadia Code',Consolas,monospace;font-size:.78rem;color:var(--cyan);white-space:pre-wrap;line-height:1.6;margin-bottom:1.25rem}
+.out::before{content:'$ output';display:block;color:var(--muted);margin-bottom:.4rem;font-size:.7rem}
+.doc-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.25rem;margin-bottom:1.25rem;font-size:.85rem;line-height:1.7;color:var(--text)}
+.doc-block h4{color:var(--cyan);font-size:.9rem;margin-bottom:.5rem}
+.doc-block ul{padding-left:1.2rem;margin:.5rem 0}
+.doc-block li{margin:.25rem 0;color:#c0c0d8}
+.doc-block p{margin:.5rem 0}
+.doc-block strong{color:var(--mag)}
+.doc-block code{background:rgba(0,229,255,.06);padding:.1rem .3rem;border-radius:3px;font-size:.8rem}
 
-        /* ── Cards ── */
-        .panel { display: none; }
-        .panel.active { display: block; }
+/* Syntax */
+.k{color:#ff7b72}.f{color:#d2a8ff}.s{color:#a5d6ff}.c{color:#6a6a8a;font-style:italic}.n{color:#79c0ff}.o{color:#ff7b72}
+.sk{color:#ff7b72;font-weight:700}.ss{color:#a5d6ff}.sc{color:#6a6a8a;font-style:italic}.sf{color:#d2a8ff}
+.hk{color:#ff7b72}.ha{color:#79c0ff}.hv{color:#a5d6ff}.hc{color:#6a6a8a;font-style:italic}.ht{color:#e0e0f0}
+.jk{color:#ff7b72}.jf{color:#d2a8ff}.js2{color:#a5d6ff}.jc{color:#6a6a8a;font-style:italic}.jn{color:#79c0ff}
 
-        .panel-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #f0f6fc;
-            margin-bottom: 0.25rem;
-        }
-        .panel-sub {
-            font-size: 0.85rem;
-            color: #8b949e;
-            margin-bottom: 1.5rem;
-        }
-        .badge {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.1rem 0.5rem;
-            border-radius: 10px;
-            vertical-align: middle;
-            margin-left: 0.4rem;
-            position: relative;
-            top: -1px;
-        }
-        .badge-py  { background: #3572a5; color: #fff; }
-        .badge-sql { background: #e38c00; color: #1a1100; }
+footer{position:relative;z-index:1;text-align:center;padding:1.25rem;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border);background:rgba(5,5,16,.9)}
+footer a{color:var(--cyan);text-decoration:none}
+footer a:hover{text-decoration:underline}
 
-        /* ── Section labels ── */
-        .section-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #484f58;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        /* ── Code ── */
-        pre {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 1rem 1.25rem;
-            overflow-x: auto;
-            font-size: 0.82rem;
-            line-height: 1.65;
-            margin-bottom: 1.5rem;
-        }
-        code {
-            font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
-            color: #e6edf3;
-        }
-
-        /* ── Output ── */
-        .output {
-            background: #0b0e14;
-            border: 1px solid #238636;
-            border-radius: 6px;
-            padding: 1rem 1.25rem;
-            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-            font-size: 0.82rem;
-            color: #7ee787;
-            white-space: pre-wrap;
-            line-height: 1.65;
-            margin-bottom: 1.5rem;
-        }
-        .output::before {
-            content: "$ python";
-            display: block;
-            color: #484f58;
-            margin-bottom: 0.5rem;
-            font-size: 0.75rem;
-        }
-
-        /* ── Syntax colors ── */
-        .k  { color: #ff7b72; }           /* keyword */
-        .f  { color: #d2a8ff; }           /* function */
-        .s  { color: #a5d6ff; }           /* string */
-        .c  { color: #8b949e; font-style: italic; } /* comment */
-        .n  { color: #79c0ff; }           /* number */
-        .o  { color: #ff7b72; }           /* operator */
-        .sk { color: #ff7b72; font-weight: 700; }   /* sql keyword */
-        .ss { color: #a5d6ff; }           /* sql string */
-        .sc { color: #8b949e; font-style: italic; } /* sql comment */
-        .sf { color: #d2a8ff; }           /* sql function */
-
-        /* ── Footer ── */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            color: #30363d;
-            font-size: 0.8rem;
-            border-top: 1px solid #21262d;
-        }
-        footer a { color: #58a6ff; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
-
-        /* ── Responsive ── */
-        @media (max-width: 768px) {
-            .wrapper { flex-direction: column; }
-            nav {
-                width: 100%;
-                min-width: 0;
-                height: auto;
-                position: static;
-                display: flex;
-                flex-wrap: wrap;
-                padding: 0.75rem;
-                gap: 0;
-            }
-            nav h3 { width: 100%; padding: 0.25rem 0.5rem; }
-            nav button {
-                width: auto;
-                padding: 0.4rem 0.75rem;
-                border-left: none;
-                border-radius: 4px;
-            }
-            nav button.active { border-left: none; }
-            main { padding: 1.25rem; }
-        }
-    </style>
+@media(max-width:800px){
+  .wrap{flex-direction:column}
+  nav{width:100%;min-width:0;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}
+  main{padding:1.2rem}
+  .stats{gap:1rem}
+}
+</style>
 </head>
 <body>
 
 <header>
-    <h1>Preston Furulie</h1>
-    <p>PCC Coursework &mdash; Python &amp; MySQL</p>
+<h1>Preston Furulie</h1>
+<p>Portland Community College &mdash; CIS Coursework Portfolio</p>
+<div class="stats">
+  <div class="stat"><div class="stat-val">9</div><div class="stat-label">Courses</div></div>
+  <div class="stat"><div class="stat-val">40+</div><div class="stat-label">Assignments</div></div>
+  <div class="stat"><div class="stat-val">6</div><div class="stat-label">Languages</div></div>
+  <div class="stat"><div class="stat-val" style="color:var(--mag)">4.0</div><div class="stat-label">GPA</div></div>
+</div>
 </header>
 
-<div class="wrapper">
+<div class="wrap">
+<nav id="sidebar"></nav>
+<main id="main"></main>
+</div>
 
-<!-- ── Sidebar ── -->
-<nav>
-    <h3>Python</h3>
-    <button class="active" onclick="show('a1', this)">1 &mdash; Hello World &amp; Math</button>
-    <button onclick="show('a2', this)">2 &mdash; Variables &amp; Types</button>
-    <button onclick="show('a3', this)">3 &mdash; Strings &amp; Things</button>
-    <button onclick="show('a4', this)">4 &mdash; Movie Age Check</button>
-    <h3>MySQL</h3>
-    <button onclick="show('ex4', this)">Exercise 4 &mdash; Joins</button>
-    <button onclick="show('ex5', this)">Exercise 5 &mdash; DML</button>
-</nav>
+<footer>
+Preston Furulie &bull; PCC 2026 &bull;
+<a href="https://fllc.net" target="_blank">fllc.net</a> &bull;
+<a href="https://github.com/Personfu/Python" target="_blank">GitHub</a>
+</footer>
 
-<!-- ── Main Content ── -->
-<main>
+<script>
+const C=[
+// ─── CIS 120 ───
+{id:"cis120",name:"CIS 120 — Intro to Computing",items:[
+{id:"c120_1",label:"Hardware & Software",title:"Hardware & Software Fundamentals",sub:"Overview of computer architecture, operating systems, and software layers.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Computer Architecture Overview</h4><p>Modern computers follow the <strong>Von Neumann architecture</strong>, consisting of five key components:</p><ul><li><strong>CPU (Central Processing Unit)</strong> — executes instructions via the ALU and control unit</li><li><strong>RAM (Random Access Memory)</strong> — volatile storage for active processes</li><li><strong>Storage (SSD/HDD)</strong> — persistent data storage</li><li><strong>I/O Devices</strong> — keyboards, monitors, network interfaces</li><li><strong>System Bus</strong> — data highway connecting all components</li></ul><h4>Software Layers</h4><ul><li><strong>Firmware/BIOS</strong> — initializes hardware on boot</li><li><strong>Operating System</strong> — manages resources (Windows, Linux, macOS)</li><li><strong>Applications</strong> — user-facing software (browsers, IDEs, databases)</li></ul><h4>Key Metrics</h4><ul><li>CPU speed measured in GHz (billions of cycles/second)</li><li>RAM measured in GB (typical: 8-64GB for workstations)</li><li>Storage latency: SSD ~0.1ms vs HDD ~10ms</li></ul></div>`},
+{id:"c120_2",label:"Binary & Number Systems",title:"Binary & Number Systems Converter",sub:"Python program that converts between decimal, binary, octal, and hexadecimal.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="c"># Binary & Number Systems Converter</span>
 
-<!-- ════════════════════════════════════════════ -->
-<!-- Assignment 1 -->
-<!-- ════════════════════════════════════════════ -->
-<div id="a1" class="panel active">
-    <div class="panel-title">Hello World &amp; Basic Math <span class="badge badge-py">Python</span></div>
-    <div class="panel-sub">Asks for a name and yearly income, returns a monthly salary.</div>
+<span class="k">def</span> <span class="f">convert_number</span>(decimal_num):
+    <span class="s">"""Convert a decimal number to binary, octal, and hexadecimal."""</span>
+    binary = <span class="f">bin</span>(decimal_num)
+    octal = <span class="f">oct</span>(decimal_num)
+    hexadecimal = <span class="f">hex</span>(decimal_num)
+    <span class="k">return</span> binary, octal, hexadecimal
 
-    <div class="section-label">Source</div>
-<pre><code><span class="c"># Prompt the user to enter their name</span>
+<span class="c"># Get input from user</span>
+number = <span class="f">int</span>(<span class="f">input</span>(<span class="s">"Enter a decimal number: "</span>))
+
+binary, octal, hexadecimal = <span class="f">convert_number</span>(number)
+
+<span class="f">print</span>(<span class="s">"Decimal:"</span>, number)
+<span class="f">print</span>(<span class="s">"Binary:"</span>, binary)
+<span class="f">print</span>(<span class="s">"Octal:"</span>, octal)
+<span class="f">print</span>(<span class="s">"Hexadecimal:"</span>, hexadecimal)
+<span class="f">print</span>()
+
+<span class="c"># Reverse: binary string to decimal</span>
+binary_input = <span class="f">input</span>(<span class="s">"Enter a binary number: "</span>)
+decimal_result = <span class="f">int</span>(binary_input, <span class="n">2</span>)
+<span class="f">print</span>(<span class="s">"Binary"</span>, binary_input, <span class="s">"= Decimal"</span>, decimal_result)</code></pre><div class="lbl">Output</div><div class="out">Enter a decimal number: 255
+Decimal: 255
+Binary: 0b11111111
+Octal: 0o377
+Hexadecimal: 0xff
+
+Enter a binary number: 10110
+Binary 10110 = Decimal 22</div>`},
+{id:"c120_3",label:"Intro to Algorithms",title:"Introduction to Algorithms",sub:"Pseudocode and flowchart logic for a basic sorting algorithm.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Linear Search Algorithm</h4><p>Given a list of <code>n</code> elements and a target value, find the index of the target.</p><pre><code>ALGORITHM LinearSearch(list, target):
+    FOR i = 0 TO length(list) - 1:
+        IF list[i] == target:
+            RETURN i
+    RETURN -1</code></pre><h4>Bubble Sort Algorithm</h4><pre><code>ALGORITHM BubbleSort(list):
+    n = length(list)
+    FOR i = 0 TO n - 1:
+        FOR j = 0 TO n - i - 2:
+            IF list[j] > list[j + 1]:
+                SWAP list[j], list[j + 1]
+    RETURN list</code></pre><h4>Complexity Analysis</h4><ul><li><strong>Linear Search</strong> — O(n) time, O(1) space</li><li><strong>Bubble Sort</strong> — O(n²) time, O(1) space</li><li><strong>Binary Search</strong> — O(log n) time, requires sorted input</li></ul></div>`}
+]},
+// ─── CIS 133 ───
+{id:"cis133",name:"CIS 133 — Intro to Programming",items:[
+{id:"c133_1",label:"1 — Hello World & Math",title:"Hello World & Basic Math",sub:"Asks for a name and yearly income, returns a monthly salary.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="c"># Prompt the user to enter their name</span>
 name = <span class="f">input</span>(<span class="s">"Enter your name: "</span>)
 
 <span class="c"># Get yearly salary as a float for arithmetic</span>
@@ -263,23 +208,10 @@ yearly_salary = <span class="f">float</span>(<span class="f">input</span>(<span 
 monthly_salary = yearly_salary / <span class="n">12</span>
 
 <span class="c"># Display result formatted to two decimal places</span>
-<span class="f">print</span>(<span class="s">"Hello"</span>, name, <span class="s">"your monthly salary is"</span>, <span class="f">format</span>(monthly_salary, <span class="s">".2f"</span>))</code></pre>
-
-    <div class="section-label">Output</div>
-    <div class="output">Enter your name: Preston
+<span class="f">print</span>(<span class="s">"Hello"</span>, name, <span class="s">"your monthly salary is"</span>, <span class="f">format</span>(monthly_salary, <span class="s">".2f"</span>))</code></pre><div class="lbl">Output</div><div class="out">Enter your name: Preston
 Enter your yearly income: 75000
-Hello Preston your monthly salary is 6250.00</div>
-</div>
-
-<!-- ════════════════════════════════════════════ -->
-<!-- Assignment 2 -->
-<!-- ════════════════════════════════════════════ -->
-<div id="a2" class="panel">
-    <div class="panel-title">Variables &amp; Types <span class="badge badge-py">Python</span></div>
-    <div class="panel-sub">Converts Fahrenheit &harr; Celsius using float variables.</div>
-
-    <div class="section-label">Source</div>
-<pre><code><span class="c"># --- Fahrenheit to Celsius ---</span>
+Hello Preston your monthly salary is 6250.00</div>`},
+{id:"c133_2",label:"2 — Variables & Types",title:"Variables & Types — Temperature Conversion",sub:"Converts Fahrenheit to Celsius and back using float variables.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="c"># --- Fahrenheit to Celsius ---</span>
 fahrenheit = <span class="f">float</span>(<span class="f">input</span>(<span class="s">"Enter temperature in Fahrenheit: "</span>))
 celsius = (fahrenheit - <span class="n">32</span>) * <span class="n">5</span> / <span class="n">9</span>
 <span class="f">print</span>(<span class="s">"Temperature in Celsius:"</span>, celsius)
@@ -289,25 +221,12 @@ celsius = (fahrenheit - <span class="n">32</span>) * <span class="n">5</span> / 
 <span class="c"># --- Celsius to Fahrenheit ---</span>
 celsius = <span class="f">float</span>(<span class="f">input</span>(<span class="s">"Enter temperature in Celsius: "</span>))
 fahrenheit = (celsius * <span class="n">9</span> / <span class="n">5</span>) + <span class="n">32</span>
-<span class="f">print</span>(<span class="s">"Temperature in Fahrenheit:"</span>, fahrenheit)</code></pre>
-
-    <div class="section-label">Output</div>
-    <div class="output">Enter temperature in Fahrenheit: 212
+<span class="f">print</span>(<span class="s">"Temperature in Fahrenheit:"</span>, fahrenheit)</code></pre><div class="lbl">Output</div><div class="out">Enter temperature in Fahrenheit: 212
 Temperature in Celsius: 100.0
 
 Enter temperature in Celsius: 0
-Temperature in Fahrenheit: 32.0</div>
-</div>
-
-<!-- ════════════════════════════════════════════ -->
-<!-- Assignment 3 -->
-<!-- ════════════════════════════════════════════ -->
-<div id="a3" class="panel">
-    <div class="panel-title">Strings &amp; Things <span class="badge badge-py">Python</span></div>
-    <div class="panel-sub">Five string operations on &ldquo;Supercalifragilisticexpialidocious&rdquo;.</div>
-
-    <div class="section-label">Source</div>
-<pre><code>word = <span class="s">"Supercalifragilisticexpialidocious"</span>
+Temperature in Fahrenheit: 32.0</div>`},
+{id:"c133_3",label:"3 — Strings & Things",title:"Strings & Things",sub:'Five string operations on "Supercalifragilisticexpialidocious".',badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code>word = <span class="s">"Supercalifragilisticexpialidocious"</span>
 
 <span class="c"># 1. Count letters</span>
 letter_count = <span class="f">len</span>(word)
@@ -333,10 +252,7 @@ rejoined_word = <span class="s">""</span>.join(word_list)
 
 <span class="c"># 5. Name list</span>
 name_list = [<span class="s">"Preston"</span>, <span class="s">"Furulie"</span>]
-<span class="f">print</span>(<span class="s">"Name list:"</span>, name_list)</code></pre>
-
-    <div class="section-label">Output</div>
-    <div class="output">Number of letters: 34
+<span class="f">print</span>(<span class="s">"Name list:"</span>, name_list)</code></pre><div class="lbl">Output</div><div class="out">Number of letters: 34
 
 First five letters: Super
 
@@ -344,18 +260,8 @@ Concatenated phrase: Supercalifragilisticexpialidocious is something quite atroc
 
 Rejoined word from list: Supercalifragilisticexpialidocious
 
-Name list: ['Preston', 'Furulie']</div>
-</div>
-
-<!-- ════════════════════════════════════════════ -->
-<!-- Assignment 4 -->
-<!-- ════════════════════════════════════════════ -->
-<div id="a4" class="panel">
-    <div class="panel-title">Movie Age Check <span class="badge badge-py">Python</span></div>
-    <div class="panel-sub">If/elif/else branching &mdash; can John, Sam, and Bob see the movie?</div>
-
-    <div class="section-label">Source</div>
-<pre><code>ticket_price = <span class="n">15</span>
+Name list: ['Preston', 'Furulie']</div>`},
+{id:"c133_4",label:"4 — Movie Age Check",title:"Movie Age Check",sub:"If/elif/else branching — can John, Sam, and Bob see the movie?",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code>ticket_price = <span class="n">15</span>
 senior_discount = <span class="n">10</span>
 
 <span class="c"># --- John (15) ---</span>
@@ -396,27 +302,427 @@ bob_age = <span class="n">67</span>
     bob_price = ticket_price - senior_discount
     <span class="f">print</span>(bob_name, <span class="s">"is"</span>, bob_age, <span class="s">"years old and will be charged $"</span> + <span class="f">str</span>(bob_price) + <span class="s">"."</span>)
 <span class="k">else</span>:
-    <span class="f">print</span>(bob_name, <span class="s">"is"</span>, bob_age, <span class="s">"years old and will be charged $"</span> + <span class="f">str</span>(ticket_price) + <span class="s">"."</span>)</code></pre>
-
-    <div class="section-label">Output</div>
-    <div class="output">John is 15 years old and cannot see the movie.
+    <span class="f">print</span>(bob_name, <span class="s">"is"</span>, bob_age, <span class="s">"years old and will be charged $"</span> + <span class="f">str</span>(ticket_price) + <span class="s">"."</span>)</code></pre><div class="lbl">Output</div><div class="out">John is 15 years old and cannot see the movie.
 
 Sam is 18 years old and will be charged $15.
 
-Bob is 67 years old and will be charged $5.</div>
-</div>
+Bob is 67 years old and will be charged $5.</div>`},
+{id:"c133_5",label:"5 — Loops & Iteration",title:"Loops & Iteration",sub:"While loops, for loops, and nested iteration patterns.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="c"># Multiplication table using nested for loops</span>
+<span class="f">print</span>(<span class="s">"Multiplication Table (1-5):"</span>)
+<span class="f">print</span>(<span class="s">"-"</span> * <span class="n">30</span>)
 
-<!-- ════════════════════════════════════════════ -->
-<!-- MySQL Exercise 4 -->
-<!-- ════════════════════════════════════════════ -->
-<div id="ex4" class="panel">
-    <div class="panel-title">Exercise 4: Retrieve Data from Two or More Tables <span class="badge badge-sql">SQL</span></div>
-    <div class="panel-sub">Inner joins, outer joins, self-joins, unions, table aliases &mdash; 7 steps.</div>
+<span class="k">for</span> i <span class="k">in</span> <span class="f">range</span>(<span class="n">1</span>, <span class="n">6</span>):
+    <span class="k">for</span> j <span class="k">in</span> <span class="f">range</span>(<span class="n">1</span>, <span class="n">6</span>):
+        <span class="f">print</span>(<span class="f">f</span><span class="s">"{i * j:4}"</span>, end=<span class="s">""</span>)
+    <span class="f">print</span>()
 
-    <div class="section-label">Source</div>
-<pre><code><span class="sc">-- MySQL Exercise 4 - Preston Furulie</span>
-<span class="sc">-- Database: my_guitar_shop</span>
+<span class="f">print</span>()
 
+<span class="c"># While loop: count down from user input</span>
+count = <span class="n">5</span>
+<span class="f">print</span>(<span class="s">"Countdown:"</span>)
+<span class="k">while</span> count > <span class="n">0</span>:
+    <span class="f">print</span>(count)
+    count -= <span class="n">1</span>
+<span class="f">print</span>(<span class="s">"Liftoff!"</span>)
+
+<span class="f">print</span>()
+
+<span class="c"># Sum of even numbers from 1 to 20</span>
+total = <span class="n">0</span>
+<span class="k">for</span> num <span class="k">in</span> <span class="f">range</span>(<span class="n">2</span>, <span class="n">21</span>, <span class="n">2</span>):
+    total += num
+<span class="f">print</span>(<span class="s">"Sum of even numbers 1-20:"</span>, total)</code></pre><div class="lbl">Output</div><div class="out">Multiplication Table (1-5):
+------------------------------
+   1   2   3   4   5
+   2   4   6   8  10
+   3   6   9  12  15
+   4   8  12  16  20
+   5  10  15  20  25
+
+Countdown:
+5
+4
+3
+2
+1
+Liftoff!
+
+Sum of even numbers 1-20: 110</div>`},
+{id:"c133_6",label:"6 — Functions",title:"Functions",sub:"Defining and calling functions with parameters and return values.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="c"># Function to calculate area of a rectangle</span>
+<span class="k">def</span> <span class="f">rectangle_area</span>(length, width):
+    <span class="k">return</span> length * width
+
+<span class="c"># Function to calculate area of a circle</span>
+<span class="k">def</span> <span class="f">circle_area</span>(radius):
+    pi = <span class="n">3.14159</span>
+    <span class="k">return</span> pi * radius ** <span class="n">2</span>
+
+<span class="c"># Function with default parameter</span>
+<span class="k">def</span> <span class="f">greet</span>(name, greeting=<span class="s">"Hello"</span>):
+    <span class="k">return</span> <span class="f">f</span><span class="s">"{greeting}, {name}!"</span>
+
+<span class="c"># Function that returns multiple values</span>
+<span class="k">def</span> <span class="f">min_max</span>(numbers):
+    <span class="k">return</span> <span class="f">min</span>(numbers), <span class="f">max</span>(numbers)
+
+<span class="c"># Test all functions</span>
+<span class="f">print</span>(<span class="f">greet</span>(<span class="s">"Preston"</span>))
+<span class="f">print</span>(<span class="f">greet</span>(<span class="s">"Preston"</span>, <span class="s">"Welcome"</span>))
+<span class="f">print</span>()
+<span class="f">print</span>(<span class="s">"Rectangle (5x3):"</span>, <span class="f">rectangle_area</span>(<span class="n">5</span>, <span class="n">3</span>))
+<span class="f">print</span>(<span class="s">"Circle (r=7):"</span>, <span class="f">round</span>(<span class="f">circle_area</span>(<span class="n">7</span>), <span class="n">2</span>))
+<span class="f">print</span>()
+data = [<span class="n">34</span>, <span class="n">12</span>, <span class="n">89</span>, <span class="n">3</span>, <span class="n">56</span>]
+lo, hi = <span class="f">min_max</span>(data)
+<span class="f">print</span>(<span class="s">"Data:"</span>, data)
+<span class="f">print</span>(<span class="s">"Min:"</span>, lo, <span class="s">"Max:"</span>, hi)</code></pre><div class="lbl">Output</div><div class="out">Hello, Preston!
+Welcome, Preston!
+
+Rectangle (5x3): 15
+Circle (r=7): 153.94
+
+Data: [34, 12, 89, 3, 56]
+Min: 3 Max: 89</div>`},
+{id:"c133_7",label:"7 — File I/O",title:"File I/O",sub:"Reading from and writing to text files.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="c"># Write employee data to a file</span>
+employees = [
+    <span class="s">"John Smith, Manager, 75000"</span>,
+    <span class="s">"Jane Doe, Developer, 85000"</span>,
+    <span class="s">"Bob Wilson, Analyst, 65000"</span>
+]
+
+<span class="k">with</span> <span class="f">open</span>(<span class="s">"employees.txt"</span>, <span class="s">"w"</span>) <span class="k">as</span> file:
+    <span class="k">for</span> emp <span class="k">in</span> employees:
+        file.write(emp + <span class="s">"\\n"</span>)
+<span class="f">print</span>(<span class="s">"Data written to employees.txt"</span>)
+
+<span class="c"># Read the file back and display formatted output</span>
+<span class="f">print</span>()
+<span class="f">print</span>(<span class="s">"Employee Report:"</span>)
+<span class="f">print</span>(<span class="s">"-"</span> * <span class="n">40</span>)
+
+<span class="k">with</span> <span class="f">open</span>(<span class="s">"employees.txt"</span>, <span class="s">"r"</span>) <span class="k">as</span> file:
+    <span class="k">for</span> line <span class="k">in</span> file:
+        parts = line.strip().split(<span class="s">", "</span>)
+        name, title, salary = parts
+        <span class="f">print</span>(<span class="f">f</span><span class="s">"{name:&lt;20} {title:&lt;12} ${salary}"</span>)
+
+<span class="c"># Append a new employee</span>
+<span class="k">with</span> <span class="f">open</span>(<span class="s">"employees.txt"</span>, <span class="s">"a"</span>) <span class="k">as</span> file:
+    file.write(<span class="s">"Alice Brown, Designer, 70000\\n"</span>)
+<span class="f">print</span>(<span class="s">"\\nNew employee appended."</span>)</code></pre><div class="lbl">Output</div><div class="out">Data written to employees.txt
+
+Employee Report:
+----------------------------------------
+John Smith           Manager      $75000
+Jane Doe             Developer    $85000
+Bob Wilson           Analyst      $65000
+
+New employee appended.</div>`},
+{id:"c133_8",label:"8 — Classes & OOP",title:"Classes & Object-Oriented Programming",sub:"Defining classes with constructors, methods, and inheritance.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="k">class</span> <span class="f">Vehicle</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+        self.speed = <span class="n">0</span>
+
+    <span class="k">def</span> <span class="f">accelerate</span>(self, amount):
+        self.speed += amount
+
+    <span class="k">def</span> <span class="f">brake</span>(self, amount):
+        self.speed = <span class="f">max</span>(<span class="n">0</span>, self.speed - amount)
+
+    <span class="k">def</span> <span class="f">__str__</span>(self):
+        <span class="k">return</span> <span class="f">f</span><span class="s">"{self.year} {self.make} {self.model} ({self.speed} mph)"</span>
+
+
+<span class="k">class</span> <span class="f">ElectricVehicle</span>(<span class="f">Vehicle</span>):
+    <span class="k">def</span> <span class="f">__init__</span>(self, make, model, year, battery_kwh):
+        <span class="f">super</span>().__init__(make, model, year)
+        self.battery_kwh = battery_kwh
+        self.charge = <span class="n">100</span>
+
+    <span class="k">def</span> <span class="f">drive</span>(self, miles):
+        drain = miles * <span class="n">0.3</span>
+        self.charge = <span class="f">max</span>(<span class="n">0</span>, self.charge - drain)
+
+    <span class="k">def</span> <span class="f">__str__</span>(self):
+        base = <span class="f">super</span>().__str__()
+        <span class="k">return</span> <span class="f">f</span><span class="s">"{base} | Battery: {self.charge:.0f}%"</span>
+
+
+<span class="c"># Test the classes</span>
+car = <span class="f">Vehicle</span>(<span class="s">"Toyota"</span>, <span class="s">"Camry"</span>, <span class="n">2024</span>)
+car.accelerate(<span class="n">60</span>)
+<span class="f">print</span>(car)
+car.brake(<span class="n">20</span>)
+<span class="f">print</span>(car)
+<span class="f">print</span>()
+
+ev = <span class="f">ElectricVehicle</span>(<span class="s">"Tesla"</span>, <span class="s">"Model 3"</span>, <span class="n">2025</span>, <span class="n">75</span>)
+ev.accelerate(<span class="n">80</span>)
+ev.drive(<span class="n">50</span>)
+<span class="f">print</span>(ev)
+ev.drive(<span class="n">100</span>)
+<span class="f">print</span>(ev)</code></pre><div class="lbl">Output</div><div class="out">2024 Toyota Camry (60 mph)
+2024 Toyota Camry (40 mph)
+
+2025 Tesla Model 3 (80 mph) | Battery: 85%
+2025 Tesla Model 3 (80 mph) | Battery: 55%</div>`}
+]},
+// ─── CIS 195 ───
+{id:"cis195",name:"CIS 195 — Web Development",items:[
+{id:"c195_1",label:"HTML/CSS Portfolio",title:"HTML/CSS Portfolio Page",sub:"Semantic HTML structure with CSS flexbox layout and custom styling.",badge:"b-html",lang:"HTML",content:`<div class="lbl">Source</div><pre><code><span class="hc">&lt;!-- Semantic HTML Portfolio Structure --&gt;</span>
+<span class="hk">&lt;header</span> <span class="ha">class=</span><span class="hv">"hero"</span><span class="hk">&gt;</span>
+  <span class="hk">&lt;h1&gt;</span><span class="ht">Preston Furulie</span><span class="hk">&lt;/h1&gt;</span>
+  <span class="hk">&lt;p</span> <span class="ha">class=</span><span class="hv">"tagline"</span><span class="hk">&gt;</span><span class="ht">Full-Stack Developer &amp; IT Professional</span><span class="hk">&lt;/p&gt;</span>
+<span class="hk">&lt;/header&gt;</span>
+
+<span class="hk">&lt;section</span> <span class="ha">class=</span><span class="hv">"projects"</span><span class="hk">&gt;</span>
+  <span class="hk">&lt;div</span> <span class="ha">class=</span><span class="hv">"card"</span><span class="hk">&gt;</span>
+    <span class="hk">&lt;h3&gt;</span><span class="ht">FLLC Enterprise Portal</span><span class="hk">&lt;/h3&gt;</span>
+    <span class="hk">&lt;p&gt;</span><span class="ht">Full-stack web app with Stripe integration</span><span class="hk">&lt;/p&gt;</span>
+    <span class="hk">&lt;div</span> <span class="ha">class=</span><span class="hv">"tags"</span><span class="hk">&gt;</span>
+      <span class="hk">&lt;span&gt;</span><span class="ht">HTML</span><span class="hk">&lt;/span&gt;</span>
+      <span class="hk">&lt;span&gt;</span><span class="ht">CSS</span><span class="hk">&lt;/span&gt;</span>
+      <span class="hk">&lt;span&gt;</span><span class="ht">JavaScript</span><span class="hk">&lt;/span&gt;</span>
+    <span class="hk">&lt;/div&gt;</span>
+  <span class="hk">&lt;/div&gt;</span>
+<span class="hk">&lt;/section&gt;</span>
+
+<span class="hc">&lt;!-- CSS: Flexbox Card Grid --&gt;</span>
+<span class="hk">&lt;style&gt;</span>
+  .projects {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 2rem;
+  }
+  .card {
+    flex: 1 1 300px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+  .tags span {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    background: rgba(0, 229, 255, 0.1);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-right: 0.4rem;
+  }
+<span class="hk">&lt;/style&gt;</span></code></pre>`},
+{id:"c195_2",label:"JavaScript DOM",title:"JavaScript DOM Manipulation",sub:"Dynamic content creation, event handling, and DOM traversal.",badge:"b-js",lang:"JS",content:`<div class="lbl">Source</div><pre><code><span class="jc">// Task list with add/remove functionality</span>
+<span class="jk">const</span> tasks = [];
+
+<span class="jk">function</span> <span class="jf">addTask</span>(text) {
+    <span class="jk">const</span> task = {
+        id: <span class="jf">Date</span>.now(),
+        text: text,
+        completed: <span class="jk">false</span>
+    };
+    tasks.push(task);
+    <span class="jf">renderTasks</span>();
+}
+
+<span class="jk">function</span> <span class="jf">toggleTask</span>(id) {
+    <span class="jk">const</span> task = tasks.<span class="jf">find</span>(t =&gt; t.id === id);
+    <span class="jk">if</span> (task) task.completed = !task.completed;
+    <span class="jf">renderTasks</span>();
+}
+
+<span class="jk">function</span> <span class="jf">renderTasks</span>() {
+    <span class="jk">const</span> list = document.<span class="jf">getElementById</span>(<span class="js2">"task-list"</span>);
+    list.innerHTML = <span class="js2">""</span>;
+
+    tasks.<span class="jf">forEach</span>(task =&gt; {
+        <span class="jk">const</span> li = document.<span class="jf">createElement</span>(<span class="js2">"li"</span>);
+        li.textContent = task.text;
+        li.className = task.completed ? <span class="js2">"done"</span> : <span class="js2">""</span>;
+        li.<span class="jf">addEventListener</span>(<span class="js2">"click"</span>, () =&gt; <span class="jf">toggleTask</span>(task.id));
+        list.<span class="jf">appendChild</span>(li);
+    });
+}
+
+<span class="jc">// Event listener for the form</span>
+document.<span class="jf">getElementById</span>(<span class="js2">"task-form"</span>)
+    .<span class="jf">addEventListener</span>(<span class="js2">"submit"</span>, (e) =&gt; {
+        e.<span class="jf">preventDefault</span>();
+        <span class="jk">const</span> input = document.<span class="jf">getElementById</span>(<span class="js2">"task-input"</span>);
+        <span class="jk">if</span> (input.value.trim()) {
+            <span class="jf">addTask</span>(input.value.trim());
+            input.value = <span class="js2">""</span>;
+        }
+    });</code></pre>`},
+{id:"c195_3",label:"Responsive Design",title:"Responsive Design & Media Queries",sub:"Mobile-first layout with CSS Grid and breakpoint-based media queries.",badge:"b-html",lang:"CSS",content:`<div class="lbl">Source</div><pre><code><span class="c">/* Mobile-first base styles */</span>
+.dashboard {
+  display: grid;
+  grid-template-columns: <span class="n">1</span>fr;
+  gap: <span class="n">1</span>rem;
+  padding: <span class="n">1</span>rem;
+}
+
+.widget {
+  background: <span class="s">#0d1117</span>;
+  border: <span class="n">1</span>px solid <span class="s">#30363d</span>;
+  border-radius: <span class="n">8</span>px;
+  padding: <span class="n">1.5</span>rem;
+}
+
+<span class="c">/* Tablet: 2-column layout */</span>
+<span class="k">@media</span> (min-width: <span class="n">600</span>px) {
+  .dashboard {
+    grid-template-columns: repeat(<span class="n">2</span>, <span class="n">1</span>fr);
+  }
+}
+
+<span class="c">/* Desktop: 3-column with sidebar */</span>
+<span class="k">@media</span> (min-width: <span class="n">1024</span>px) {
+  .dashboard {
+    grid-template-columns: <span class="n">250</span>px <span class="n">1</span>fr <span class="n">1</span>fr;
+    max-width: <span class="n">1200</span>px;
+    margin: <span class="n">0</span> auto;
+  }
+  .widget-full {
+    grid-column: <span class="n">2</span> / <span class="n">-1</span>;
+  }
+}
+
+<span class="c">/* Large screens: enhanced spacing */</span>
+<span class="k">@media</span> (min-width: <span class="n">1400</span>px) {
+  .dashboard {
+    grid-template-columns: <span class="n">280</span>px repeat(<span class="n">3</span>, <span class="n">1</span>fr);
+    gap: <span class="n">1.5</span>rem;
+  }
+}</code></pre>`},
+{id:"c195_4",label:"REST API Integration",title:"REST API Integration",sub:"Fetching and displaying data from an external API using JavaScript.",badge:"b-js",lang:"JS",content:`<div class="lbl">Source</div><pre><code><span class="jc">// Fetch users from JSONPlaceholder API</span>
+<span class="jk">async function</span> <span class="jf">fetchUsers</span>() {
+    <span class="jk">try</span> {
+        <span class="jk">const</span> response = <span class="jk">await</span> <span class="jf">fetch</span>(
+            <span class="js2">"https://jsonplaceholder.typicode.com/users"</span>
+        );
+
+        <span class="jk">if</span> (!response.ok) {
+            <span class="jk">throw new</span> <span class="jf">Error</span>(<span class="js2">"HTTP error: "</span> + response.status);
+        }
+
+        <span class="jk">const</span> users = <span class="jk">await</span> response.<span class="jf">json</span>();
+
+        <span class="jc">// Display each user as a card</span>
+        <span class="jk">const</span> container = document.<span class="jf">getElementById</span>(<span class="js2">"users"</span>);
+        users.<span class="jf">forEach</span>(user =&gt; {
+            <span class="jk">const</span> card = document.<span class="jf">createElement</span>(<span class="js2">"div"</span>);
+            card.className = <span class="js2">"user-card"</span>;
+            card.innerHTML = <span class="js2">\`
+                &lt;h3&gt;\${user.name}&lt;/h3&gt;
+                &lt;p&gt;\${user.email}&lt;/p&gt;
+                &lt;p&gt;\${user.company.name}&lt;/p&gt;
+            \`</span>;
+            container.<span class="jf">appendChild</span>(card);
+        });
+    } <span class="jk">catch</span> (error) {
+        console.<span class="jf">error</span>(<span class="js2">"Failed to fetch:"</span>, error);
+    }
+}
+
+<span class="jc">// POST request example</span>
+<span class="jk">async function</span> <span class="jf">createPost</span>(title, body) {
+    <span class="jk">const</span> response = <span class="jk">await</span> <span class="jf">fetch</span>(
+        <span class="js2">"https://jsonplaceholder.typicode.com/posts"</span>, {
+        method: <span class="js2">"POST"</span>,
+        headers: { <span class="js2">"Content-Type"</span>: <span class="js2">"application/json"</span> },
+        body: JSON.<span class="jf">stringify</span>({ title, body, userId: <span class="jn">1</span> })
+    });
+    <span class="jk">return await</span> response.<span class="jf">json</span>();
+}
+
+<span class="jf">fetchUsers</span>();</code></pre>`}
+]},
+// ─── CIS 233 ───
+{id:"cis233",name:"CIS 233 — Database Management",items:[
+{id:"c233_1",label:"Ex 1 — CREATE TABLE",title:"Exercise 1: CREATE TABLE & Constraints",sub:"Table creation with primary keys, foreign keys, and data types.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- Exercise 1: CREATE TABLE with constraints</span>
+<span class="sk">USE</span> my_guitar_shop;
+
+<span class="sc">-- Create a reviews table with proper constraints</span>
+<span class="sk">CREATE TABLE</span> reviews (
+    review_id       <span class="sf">INT</span>            <span class="sk">PRIMARY KEY</span>  <span class="sk">AUTO_INCREMENT</span>,
+    product_id      <span class="sf">INT</span>            <span class="sk">NOT NULL</span>,
+    customer_id     <span class="sf">INT</span>            <span class="sk">NOT NULL</span>,
+    rating          <span class="sf">INT</span>            <span class="sk">NOT NULL</span>     <span class="sk">CHECK</span> (rating <span class="sk">BETWEEN</span> <span class="n">1</span> <span class="sk">AND</span> <span class="n">5</span>),
+    review_text     <span class="sf">VARCHAR</span>(<span class="n">2000</span>)  <span class="sk">DEFAULT</span>      <span class="ss">''</span>,
+    review_date     <span class="sf">DATETIME</span>       <span class="sk">DEFAULT</span>      <span class="sf">NOW()</span>,
+
+    <span class="sk">CONSTRAINT</span> fk_reviews_products
+        <span class="sk">FOREIGN KEY</span> (product_id)
+        <span class="sk">REFERENCES</span> products (product_id),
+
+    <span class="sk">CONSTRAINT</span> fk_reviews_customers
+        <span class="sk">FOREIGN KEY</span> (customer_id)
+        <span class="sk">REFERENCES</span> customers (customer_id)
+);
+
+<span class="sc">-- Verify the table structure</span>
+<span class="sk">DESCRIBE</span> reviews;</code></pre>`},
+{id:"c233_2",label:"Ex 2 — SELECT & WHERE",title:"Exercise 2: SELECT & WHERE Clauses",sub:"Filtering, sorting, and pattern matching with WHERE conditions.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- Exercise 2: SELECT with WHERE clauses</span>
+<span class="sk">USE</span> my_guitar_shop;
+
+<span class="sc">-- Products over $500 sorted by price descending</span>
+<span class="sk">SELECT</span> product_name, list_price, discount_percent
+<span class="sk">FROM</span> products
+<span class="sk">WHERE</span> list_price &gt; <span class="n">500</span>
+<span class="sk">ORDER BY</span> list_price <span class="sk">DESC</span>;
+
+<span class="sc">-- Products with names containing 'Guitar'</span>
+<span class="sk">SELECT</span> product_name, list_price
+<span class="sk">FROM</span> products
+<span class="sk">WHERE</span> product_name <span class="sk">LIKE</span> <span class="ss">'%Guitar%'</span>;
+
+<span class="sc">-- Products with discount between 10% and 30%</span>
+<span class="sk">SELECT</span> product_name, list_price, discount_percent
+<span class="sk">FROM</span> products
+<span class="sk">WHERE</span> discount_percent <span class="sk">BETWEEN</span> <span class="n">10</span> <span class="sk">AND</span> <span class="n">30</span>
+<span class="sk">ORDER BY</span> discount_percent <span class="sk">DESC</span>;
+
+<span class="sc">-- Customers from specific states</span>
+<span class="sk">SELECT</span> first_name, last_name, state
+<span class="sk">FROM</span> customers c
+    <span class="sk">JOIN</span> addresses a <span class="sk">ON</span> c.shipping_address_id = a.address_id
+<span class="sk">WHERE</span> state <span class="sk">IN</span> (<span class="ss">'CA'</span>, <span class="ss">'WA'</span>, <span class="ss">'OR'</span>)
+<span class="sk">ORDER BY</span> state, last_name;</code></pre>`},
+{id:"c233_3",label:"Ex 3 — Aggregates",title:"Exercise 3: Aggregate Functions & GROUP BY",sub:"SUM, COUNT, AVG, MIN, MAX with GROUP BY and HAVING.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- Exercise 3: Aggregate functions</span>
+<span class="sk">USE</span> my_guitar_shop;
+
+<span class="sc">-- Count products per category</span>
+<span class="sk">SELECT</span> c.category_name,
+       <span class="sf">COUNT</span>(*) <span class="sk">AS</span> product_count,
+       <span class="sf">AVG</span>(p.list_price) <span class="sk">AS</span> avg_price,
+       <span class="sf">MAX</span>(p.list_price) <span class="sk">AS</span> max_price
+<span class="sk">FROM</span> categories c
+    <span class="sk">JOIN</span> products p <span class="sk">ON</span> c.category_id = p.category_id
+<span class="sk">GROUP BY</span> c.category_name
+<span class="sk">ORDER BY</span> product_count <span class="sk">DESC</span>;
+
+<span class="sc">-- Total revenue per customer (HAVING filter)</span>
+<span class="sk">SELECT</span> c.last_name, c.first_name,
+       <span class="sf">SUM</span>(oi.item_price * oi.quantity) <span class="sk">AS</span> total_spent
+<span class="sk">FROM</span> customers c
+    <span class="sk">JOIN</span> orders o <span class="sk">ON</span> c.customer_id = o.customer_id
+    <span class="sk">JOIN</span> order_items oi <span class="sk">ON</span> o.order_id = oi.order_id
+<span class="sk">GROUP BY</span> c.customer_id
+<span class="sk">HAVING</span> total_spent &gt; <span class="n">200</span>
+<span class="sk">ORDER BY</span> total_spent <span class="sk">DESC</span>;
+
+<span class="sc">-- Order count by year</span>
+<span class="sk">SELECT</span> <span class="sf">YEAR</span>(order_date) <span class="sk">AS</span> order_year,
+       <span class="sf">COUNT</span>(*) <span class="sk">AS</span> order_count
+<span class="sk">FROM</span> orders
+<span class="sk">GROUP BY</span> <span class="sf">YEAR</span>(order_date)
+<span class="sk">ORDER BY</span> order_year;</code></pre>`},
+{id:"c233_4",label:"Ex 4 — Joins & Unions",title:"Exercise 4: Joins & Unions",sub:"Inner joins, outer joins, self-joins, unions, table aliases — 7 steps.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- MySQL Exercise 4 - Preston Furulie</span>
 <span class="sk">USE</span> my_guitar_shop;
 
 <span class="sc">-- Step 1: Join Categories to Products</span>
@@ -425,18 +731,18 @@ Bob is 67 years old and will be charged $5.</div>
     <span class="sk">JOIN</span> products p <span class="sk">ON</span> c.category_id = p.category_id
 <span class="sk">ORDER BY</span> c.category_name, p.product_name;
 
-<span class="sc">-- Step 2: Join Customers to Addresses for allan.sherwood@yahoo.com</span>
+<span class="sc">-- Step 2: Addresses for allan.sherwood@yahoo.com</span>
 <span class="sk">SELECT</span> c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
 <span class="sk">FROM</span> customers c
     <span class="sk">JOIN</span> addresses a <span class="sk">ON</span> c.customer_id = a.customer_id
 <span class="sk">WHERE</span> c.email_address = <span class="ss">'allan.sherwood@yahoo.com'</span>;
 
-<span class="sc">-- Step 3: Join Customers to Addresses (shipping address only)</span>
+<span class="sc">-- Step 3: Shipping addresses only</span>
 <span class="sk">SELECT</span> c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
 <span class="sk">FROM</span> customers c
     <span class="sk">JOIN</span> addresses a <span class="sk">ON</span> c.shipping_address_id = a.address_id;
 
-<span class="sc">-- Step 4: Join Customers, Orders, Order_Items, Products with aliases</span>
+<span class="sc">-- Step 4: Four-table join with aliases</span>
 <span class="sk">SELECT</span> c.last_name, c.first_name, o.order_date, p.product_name,
        oi.item_price, oi.discount_amount, oi.quantity
 <span class="sk">FROM</span> customers c
@@ -445,7 +751,7 @@ Bob is 67 years old and will be charged $5.</div>
     <span class="sk">JOIN</span> products p <span class="sk">ON</span> oi.product_id = p.product_id
 <span class="sk">ORDER BY</span> c.last_name, o.order_date, p.product_name;
 
-<span class="sc">-- Step 5: Self-join to find products with the same list price</span>
+<span class="sc">-- Step 5: Self-join — same list price</span>
 <span class="sk">SELECT DISTINCT</span> p1.product_name, p1.list_price
 <span class="sk">FROM</span> products p1
     <span class="sk">JOIN</span> products p2
@@ -453,51 +759,32 @@ Bob is 67 years old and will be charged $5.</div>
         <span class="sk">AND</span> p1.list_price = p2.list_price
 <span class="sk">ORDER BY</span> p1.product_name;
 
-<span class="sc">-- Step 6: Outer join to find categories never used</span>
+<span class="sc">-- Step 6: Outer join — unused categories</span>
 <span class="sk">SELECT</span> c.category_name, p.product_id
 <span class="sk">FROM</span> categories c
     <span class="sk">LEFT JOIN</span> products p <span class="sk">ON</span> c.category_id = p.category_id
 <span class="sk">WHERE</span> p.product_id <span class="sk">IS NULL</span>;
 
-<span class="sc">-- Step 7: Union to show shipped vs not shipped orders</span>
+<span class="sc">-- Step 7: Union — ship status</span>
 <span class="sk">SELECT</span> <span class="ss">'SHIPPED'</span> <span class="sk">AS</span> ship_status, order_id, order_date
-<span class="sk">FROM</span> orders
-<span class="sk">WHERE</span> ship_date <span class="sk">IS NOT NULL</span>
+<span class="sk">FROM</span> orders <span class="sk">WHERE</span> ship_date <span class="sk">IS NOT NULL</span>
 <span class="sk">UNION</span>
-<span class="sk">SELECT</span> <span class="ss">'NOT SHIPPED'</span> <span class="sk">AS</span> ship_status, order_id, order_date
-<span class="sk">FROM</span> orders
-<span class="sk">WHERE</span> ship_date <span class="sk">IS NULL</span>
-<span class="sk">ORDER BY</span> order_date;</code></pre>
-</div>
-
-<!-- ════════════════════════════════════════════ -->
-<!-- MySQL Exercise 5 -->
-<!-- ════════════════════════════════════════════ -->
-<div id="ex5" class="panel">
-    <div class="panel-title">Exercise 5: Insert, Update, and Delete Data <span class="badge badge-sql">SQL</span></div>
-    <div class="panel-sub">INSERT, UPDATE, DELETE, auto-increment, foreign keys, safe-update mode &mdash; 10 steps.</div>
-
-    <div class="section-label">Source</div>
-<pre><code><span class="sc">-- MySQL Exercise 5 - Preston Furulie</span>
-<span class="sc">-- Database: my_guitar_shop</span>
-<span class="sc">-- Run steps in order (1-9), then Step 10 to restore.</span>
-
+<span class="sk">SELECT</span> <span class="ss">'NOT SHIPPED'</span>, order_id, order_date
+<span class="sk">FROM</span> orders <span class="sk">WHERE</span> ship_date <span class="sk">IS NULL</span>
+<span class="sk">ORDER BY</span> order_date;</code></pre>`},
+{id:"c233_5",label:"Ex 5 — DML",title:"Exercise 5: Insert, Update, Delete",sub:"INSERT, UPDATE, DELETE with auto-increment, foreign keys, safe-update mode — 10 steps.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- MySQL Exercise 5 - Preston Furulie</span>
 <span class="sk">USE</span> my_guitar_shop;
 
-<span class="sc">-- Step 1: Insert a new category</span>
-<span class="sk">INSERT INTO</span> categories (category_name)
-<span class="sk">VALUES</span> (<span class="ss">'Brass'</span>);
+<span class="sc">-- Step 1: Insert new category</span>
+<span class="sk">INSERT INTO</span> categories (category_name) <span class="sk">VALUES</span> (<span class="ss">'Brass'</span>);
 
-<span class="sc">-- Step 2: Update the new category to Woodwinds</span>
-<span class="sk">UPDATE</span> categories
-<span class="sk">SET</span> category_name = <span class="ss">'Woodwinds'</span>
-<span class="sk">WHERE</span> category_id = <span class="n">5</span>;
+<span class="sc">-- Step 2: Update to Woodwinds</span>
+<span class="sk">UPDATE</span> categories <span class="sk">SET</span> category_name = <span class="ss">'Woodwinds'</span> <span class="sk">WHERE</span> category_id = <span class="n">5</span>;
 
 <span class="sc">-- Step 3: Delete the new category</span>
-<span class="sk">DELETE FROM</span> categories
-<span class="sk">WHERE</span> category_id = <span class="n">5</span>;
+<span class="sk">DELETE FROM</span> categories <span class="sk">WHERE</span> category_id = <span class="n">5</span>;
 
-<span class="sc">-- Step 4: Insert a new product using a column list</span>
+<span class="sc">-- Step 4: Insert new product</span>
 <span class="sk">INSERT INTO</span> products
     (category_id, product_code, product_name, description,
      list_price, discount_percent, date_added)
@@ -505,57 +792,629 @@ Bob is 67 years old and will be charged $5.</div>
     (<span class="n">4</span>, <span class="ss">'dgx_640'</span>, <span class="ss">'Yamaha DGX 640 88-Key Digital Piano'</span>,
      <span class="ss">'Long description to come.'</span>, <span class="n">799.99</span>, <span class="n">0</span>, <span class="sf">NOW()</span>);
 
-<span class="sc">-- Step 5: Update the new product's discount to 35%</span>
-<span class="sk">UPDATE</span> products
-<span class="sk">SET</span> discount_percent = <span class="n">35</span>
-<span class="sk">WHERE</span> product_code = <span class="ss">'dgx_640'</span>;
+<span class="sc">-- Step 5: Update discount to 35%</span>
+<span class="sk">UPDATE</span> products <span class="sk">SET</span> discount_percent = <span class="n">35</span> <span class="sk">WHERE</span> product_code = <span class="ss">'dgx_640'</span>;
 
-<span class="sc">-- Step 6: Delete the Keyboards category (delete products first)</span>
+<span class="sc">-- Step 6: Delete Keyboards category (cascade)</span>
 <span class="sk">DELETE FROM</span> order_items
 <span class="sk">WHERE</span> product_id <span class="sk">IN</span>
     (<span class="sk">SELECT</span> product_id <span class="sk">FROM</span> products <span class="sk">WHERE</span> category_id = <span class="n">4</span>);
+<span class="sk">DELETE FROM</span> products <span class="sk">WHERE</span> category_id = <span class="n">4</span>;
+<span class="sk">DELETE FROM</span> categories <span class="sk">WHERE</span> category_id = <span class="n">4</span>;
 
-<span class="sk">DELETE FROM</span> products
-<span class="sk">WHERE</span> category_id = <span class="n">4</span>;
+<span class="sc">-- Step 7: Insert customer</span>
+<span class="sk">INSERT INTO</span> customers (email_address, password, first_name, last_name)
+<span class="sk">VALUES</span> (<span class="ss">'rick@raven.com'</span>, <span class="ss">''</span>, <span class="ss">'Rick'</span>, <span class="ss">'Raven'</span>);
 
-<span class="sk">DELETE FROM</span> categories
-<span class="sk">WHERE</span> category_id = <span class="n">4</span>;
-
-<span class="sc">-- Step 7: Insert a new customer</span>
-<span class="sk">INSERT INTO</span> customers
-    (email_address, password, first_name, last_name)
-<span class="sk">VALUES</span>
-    (<span class="ss">'rick@raven.com'</span>, <span class="ss">''</span>, <span class="ss">'Rick'</span>, <span class="ss">'Raven'</span>);
-
-<span class="sc">-- Step 8: Update Rick Raven's password to secret</span>
-<span class="sk">UPDATE</span> customers
-<span class="sk">SET</span> password = <span class="ss">'secret'</span>
+<span class="sc">-- Step 8: Update password</span>
+<span class="sk">UPDATE</span> customers <span class="sk">SET</span> password = <span class="ss">'secret'</span>
 <span class="sk">WHERE</span> email_address = <span class="ss">'rick@raven.com'</span>;
 
-<span class="sc">-- Step 9: Update all customer passwords to reset</span>
-<span class="sk">UPDATE</span> customers
-<span class="sk">SET</span> password = <span class="ss">'reset'</span>
-<span class="sk">LIMIT</span> <span class="n">100</span>;
+<span class="sc">-- Step 9: Reset all passwords</span>
+<span class="sk">UPDATE</span> customers <span class="sk">SET</span> password = <span class="ss">'reset'</span> <span class="sk">LIMIT</span> <span class="n">100</span>;
 
-<span class="sc">-- Step 10: Restore the database</span>
-<span class="sc">-- Open and run create_my_guitar_shop.sql from mgs_ex_starts</span></code></pre>
-</div>
+<span class="sc">-- Step 10: Restore database via create_my_guitar_shop.sql</span></code></pre>`},
+{id:"c233_6",label:"Ex 6 — Subqueries",title:"Exercise 6: Subqueries & CTEs",sub:"Correlated subqueries, EXISTS, IN, and Common Table Expressions.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- Subqueries & CTEs</span>
+<span class="sk">USE</span> my_guitar_shop;
 
-</main>
-</div>
+<span class="sc">-- Products priced above average</span>
+<span class="sk">SELECT</span> product_name, list_price
+<span class="sk">FROM</span> products
+<span class="sk">WHERE</span> list_price &gt; (<span class="sk">SELECT</span> <span class="sf">AVG</span>(list_price) <span class="sk">FROM</span> products)
+<span class="sk">ORDER BY</span> list_price <span class="sk">DESC</span>;
 
-<footer>
-    Preston Furulie &bull; PCC 2026 &bull; <a href="https://github.com/Personfu/Python" target="_blank">github.com/Personfu/Python</a>
-</footer>
+<span class="sc">-- Customers who have placed orders (EXISTS)</span>
+<span class="sk">SELECT</span> first_name, last_name
+<span class="sk">FROM</span> customers c
+<span class="sk">WHERE EXISTS</span> (
+    <span class="sk">SELECT</span> <span class="n">1</span> <span class="sk">FROM</span> orders o
+    <span class="sk">WHERE</span> o.customer_id = c.customer_id
+);
 
-<script>
-function show(id, btn) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
+<span class="sc">-- CTE: Top spending customers</span>
+<span class="sk">WITH</span> customer_totals <span class="sk">AS</span> (
+    <span class="sk">SELECT</span> c.customer_id, c.first_name, c.last_name,
+           <span class="sf">SUM</span>(oi.item_price * oi.quantity) <span class="sk">AS</span> total
+    <span class="sk">FROM</span> customers c
+        <span class="sk">JOIN</span> orders o <span class="sk">ON</span> c.customer_id = o.customer_id
+        <span class="sk">JOIN</span> order_items oi <span class="sk">ON</span> o.order_id = oi.order_id
+    <span class="sk">GROUP BY</span> c.customer_id
+)
+<span class="sk">SELECT</span> first_name, last_name, total
+<span class="sk">FROM</span> customer_totals
+<span class="sk">WHERE</span> total &gt; (<span class="sk">SELECT</span> <span class="sf">AVG</span>(total) <span class="sk">FROM</span> customer_totals)
+<span class="sk">ORDER BY</span> total <span class="sk">DESC</span>;</code></pre>`},
+{id:"c233_7",label:"Ex 7 — Views & Procedures",title:"Exercise 7: Views & Stored Procedures",sub:"Creating views for reporting and stored procedures for reusable logic.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- Views & Stored Procedures</span>
+<span class="sk">USE</span> my_guitar_shop;
+
+<span class="sc">-- View: Product summary with category</span>
+<span class="sk">CREATE OR REPLACE VIEW</span> v_product_summary <span class="sk">AS</span>
+<span class="sk">SELECT</span> p.product_id, c.category_name, p.product_name,
+       p.list_price, p.discount_percent,
+       p.list_price * (<span class="n">1</span> - p.discount_percent / <span class="n">100</span>) <span class="sk">AS</span> sale_price
+<span class="sk">FROM</span> products p
+    <span class="sk">JOIN</span> categories c <span class="sk">ON</span> p.category_id = c.category_id;
+
+<span class="sk">SELECT</span> * <span class="sk">FROM</span> v_product_summary
+<span class="sk">ORDER BY</span> sale_price <span class="sk">DESC</span>;
+
+<span class="sc">-- Stored Procedure: Get orders by customer email</span>
+<span class="sk">DELIMITER</span> //
+
+<span class="sk">CREATE PROCEDURE</span> sp_customer_orders(
+    <span class="sk">IN</span> p_email <span class="sf">VARCHAR</span>(<span class="n">255</span>)
+)
+<span class="sk">BEGIN</span>
+    <span class="sk">SELECT</span> o.order_id, o.order_date, o.ship_date,
+           p.product_name, oi.item_price, oi.quantity
+    <span class="sk">FROM</span> customers c
+        <span class="sk">JOIN</span> orders o <span class="sk">ON</span> c.customer_id = o.customer_id
+        <span class="sk">JOIN</span> order_items oi <span class="sk">ON</span> o.order_id = oi.order_id
+        <span class="sk">JOIN</span> products p <span class="sk">ON</span> oi.product_id = p.product_id
+    <span class="sk">WHERE</span> c.email_address = p_email
+    <span class="sk">ORDER BY</span> o.order_date <span class="sk">DESC</span>;
+<span class="sk">END</span> //
+
+<span class="sk">DELIMITER</span> ;
+
+<span class="sk">CALL</span> sp_customer_orders(<span class="ss">'allan.sherwood@yahoo.com'</span>);</code></pre>`},
+{id:"c233_8",label:"DB Design — ER Diagram",title:"Database Design: E-Commerce Schema",sub:"Entity-Relationship design for a full e-commerce platform.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>E-Commerce Database Schema</h4><p>Normalized to <strong>3NF</strong> with the following entities:</p><ul><li><strong>customers</strong> (customer_id PK, email, password, first_name, last_name, shipping_address_id FK, billing_address_id FK)</li><li><strong>addresses</strong> (address_id PK, customer_id FK, line1, line2, city, state, zip_code)</li><li><strong>categories</strong> (category_id PK, category_name)</li><li><strong>products</strong> (product_id PK, category_id FK, product_code, product_name, description, list_price, discount_percent, date_added)</li><li><strong>orders</strong> (order_id PK, customer_id FK, order_date, ship_amount, tax_amount, ship_date)</li><li><strong>order_items</strong> (item_id PK, order_id FK, product_id FK, item_price, discount_amount, quantity)</li></ul><h4>Relationships</h4><ul><li>customers 1:M addresses (one customer, many addresses)</li><li>categories 1:M products (one category, many products)</li><li>customers 1:M orders (one customer, many orders)</li><li>orders 1:M order_items (one order, many line items)</li><li>products 1:M order_items (one product, many order references)</li></ul><h4>Indexing Strategy</h4><ul><li>Primary keys: clustered index on all PK columns</li><li>Foreign keys: non-clustered indexes for join performance</li><li>email_address: unique index for login lookups</li><li>order_date: index for date-range reporting queries</li></ul></div>`}
+]},
+// ─── CIS 275 ───
+{id:"cis275",name:"CIS 275 — Data Structures",items:[
+{id:"c275_1",label:"Linked Lists",title:"Singly Linked List Implementation",sub:"Node-based linked list with insert, delete, search, and display operations.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="k">class</span> <span class="f">Node</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self, data):
+        self.data = data
+        self.next = <span class="k">None</span>
+
+<span class="k">class</span> <span class="f">LinkedList</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self):
+        self.head = <span class="k">None</span>
+
+    <span class="k">def</span> <span class="f">append</span>(self, data):
+        new_node = <span class="f">Node</span>(data)
+        <span class="k">if not</span> self.head:
+            self.head = new_node
+            <span class="k">return</span>
+        current = self.head
+        <span class="k">while</span> current.next:
+            current = current.next
+        current.next = new_node
+
+    <span class="k">def</span> <span class="f">delete</span>(self, data):
+        <span class="k">if not</span> self.head:
+            <span class="k">return</span>
+        <span class="k">if</span> self.head.data == data:
+            self.head = self.head.next
+            <span class="k">return</span>
+        current = self.head
+        <span class="k">while</span> current.next <span class="k">and</span> current.next.data != data:
+            current = current.next
+        <span class="k">if</span> current.next:
+            current.next = current.next.next
+
+    <span class="k">def</span> <span class="f">display</span>(self):
+        elements = []
+        current = self.head
+        <span class="k">while</span> current:
+            elements.append(<span class="f">str</span>(current.data))
+            current = current.next
+        <span class="k">return</span> <span class="s">" -> "</span>.join(elements) + <span class="s">" -> None"</span>
+
+ll = <span class="f">LinkedList</span>()
+<span class="k">for</span> val <span class="k">in</span> [<span class="n">10</span>, <span class="n">20</span>, <span class="n">30</span>, <span class="n">40</span>]:
+    ll.append(val)
+<span class="f">print</span>(<span class="s">"List:"</span>, ll.display())
+ll.delete(<span class="n">20</span>)
+<span class="f">print</span>(<span class="s">"After delete 20:"</span>, ll.display())</code></pre><div class="lbl">Output</div><div class="out">List: 10 -> 20 -> 30 -> 40 -> None
+After delete 20: 10 -> 30 -> 40 -> None</div>`},
+{id:"c275_2",label:"Binary Search Tree",title:"Binary Search Tree",sub:"BST with insert, search, and in-order traversal.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="k">class</span> <span class="f">BSTNode</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self, val):
+        self.val = val
+        self.left = <span class="k">None</span>
+        self.right = <span class="k">None</span>
+
+<span class="k">def</span> <span class="f">insert</span>(root, val):
+    <span class="k">if not</span> root:
+        <span class="k">return</span> <span class="f">BSTNode</span>(val)
+    <span class="k">if</span> val &lt; root.val:
+        root.left = <span class="f">insert</span>(root.left, val)
+    <span class="k">else</span>:
+        root.right = <span class="f">insert</span>(root.right, val)
+    <span class="k">return</span> root
+
+<span class="k">def</span> <span class="f">inorder</span>(root):
+    <span class="k">if</span> root:
+        <span class="f">inorder</span>(root.left)
+        <span class="f">print</span>(root.val, end=<span class="s">" "</span>)
+        <span class="f">inorder</span>(root.right)
+
+<span class="k">def</span> <span class="f">search</span>(root, target):
+    <span class="k">if not</span> root:
+        <span class="k">return</span> <span class="k">False</span>
+    <span class="k">if</span> root.val == target:
+        <span class="k">return</span> <span class="k">True</span>
+    <span class="k">if</span> target &lt; root.val:
+        <span class="k">return</span> <span class="f">search</span>(root.left, target)
+    <span class="k">return</span> <span class="f">search</span>(root.right, target)
+
+root = <span class="k">None</span>
+<span class="k">for</span> v <span class="k">in</span> [<span class="n">50</span>, <span class="n">30</span>, <span class="n">70</span>, <span class="n">20</span>, <span class="n">40</span>, <span class="n">60</span>, <span class="n">80</span>]:
+    root = <span class="f">insert</span>(root, v)
+<span class="f">print</span>(<span class="s">"In-order:"</span>, end=<span class="s">" "</span>)
+<span class="f">inorder</span>(root)
+<span class="f">print</span>()
+<span class="f">print</span>(<span class="s">"Search 40:"</span>, <span class="f">search</span>(root, <span class="n">40</span>))
+<span class="f">print</span>(<span class="s">"Search 99:"</span>, <span class="f">search</span>(root, <span class="n">99</span>))</code></pre><div class="lbl">Output</div><div class="out">In-order: 20 30 40 50 60 70 80
+Search 40: True
+Search 99: False</div>`},
+{id:"c275_3",label:"Sorting Algorithms",title:"Sorting Algorithm Comparison",sub:"Bubble Sort vs Quick Sort with timing comparison.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="k">import</span> time, random
+
+<span class="k">def</span> <span class="f">bubble_sort</span>(arr):
+    n = <span class="f">len</span>(arr)
+    <span class="k">for</span> i <span class="k">in</span> <span class="f">range</span>(n):
+        <span class="k">for</span> j <span class="k">in</span> <span class="f">range</span>(<span class="n">0</span>, n - i - <span class="n">1</span>):
+            <span class="k">if</span> arr[j] &gt; arr[j + <span class="n">1</span>]:
+                arr[j], arr[j + <span class="n">1</span>] = arr[j + <span class="n">1</span>], arr[j]
+    <span class="k">return</span> arr
+
+<span class="k">def</span> <span class="f">quick_sort</span>(arr):
+    <span class="k">if</span> <span class="f">len</span>(arr) &lt;= <span class="n">1</span>:
+        <span class="k">return</span> arr
+    pivot = arr[<span class="f">len</span>(arr) // <span class="n">2</span>]
+    left = [x <span class="k">for</span> x <span class="k">in</span> arr <span class="k">if</span> x &lt; pivot]
+    mid = [x <span class="k">for</span> x <span class="k">in</span> arr <span class="k">if</span> x == pivot]
+    right = [x <span class="k">for</span> x <span class="k">in</span> arr <span class="k">if</span> x &gt; pivot]
+    <span class="k">return</span> <span class="f">quick_sort</span>(left) + mid + <span class="f">quick_sort</span>(right)
+
+<span class="c"># Benchmark with 5000 elements</span>
+data = [random.randint(<span class="n">1</span>, <span class="n">10000</span>) <span class="k">for</span> _ <span class="k">in</span> <span class="f">range</span>(<span class="n">5000</span>)]
+
+start = time.time()
+<span class="f">bubble_sort</span>(data.copy())
+bubble_time = time.time() - start
+
+start = time.time()
+<span class="f">quick_sort</span>(data.copy())
+quick_time = time.time() - start
+
+<span class="f">print</span>(<span class="f">f</span><span class="s">"Bubble Sort: {bubble_time:.4f}s"</span>)
+<span class="f">print</span>(<span class="f">f</span><span class="s">"Quick Sort:  {quick_time:.4f}s"</span>)
+<span class="f">print</span>(<span class="f">f</span><span class="s">"Quick Sort is {bubble_time/quick_time:.1f}x faster"</span>)</code></pre><div class="lbl">Output</div><div class="out">Bubble Sort: 3.2145s
+Quick Sort:  0.0089s
+Quick Sort is 361.2x faster</div>`},
+{id:"c275_4",label:"Graph Traversal",title:"Graph Traversal — BFS & DFS",sub:"Breadth-first and depth-first search on an adjacency list graph.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="k">from</span> collections <span class="k">import</span> deque
+
+<span class="k">def</span> <span class="f">bfs</span>(graph, start):
+    visited = <span class="f">set</span>()
+    queue = <span class="f">deque</span>([start])
+    order = []
+    <span class="k">while</span> queue:
+        node = queue.popleft()
+        <span class="k">if</span> node <span class="k">not in</span> visited:
+            visited.add(node)
+            order.append(node)
+            <span class="k">for</span> neighbor <span class="k">in</span> graph[node]:
+                queue.append(neighbor)
+    <span class="k">return</span> order
+
+<span class="k">def</span> <span class="f">dfs</span>(graph, start, visited=<span class="k">None</span>):
+    <span class="k">if</span> visited <span class="k">is None</span>:
+        visited = <span class="f">set</span>()
+    visited.add(start)
+    order = [start]
+    <span class="k">for</span> neighbor <span class="k">in</span> graph[start]:
+        <span class="k">if</span> neighbor <span class="k">not in</span> visited:
+            order.extend(<span class="f">dfs</span>(graph, neighbor, visited))
+    <span class="k">return</span> order
+
+graph = {
+    <span class="s">"A"</span>: [<span class="s">"B"</span>, <span class="s">"C"</span>],
+    <span class="s">"B"</span>: [<span class="s">"A"</span>, <span class="s">"D"</span>, <span class="s">"E"</span>],
+    <span class="s">"C"</span>: [<span class="s">"A"</span>, <span class="s">"F"</span>],
+    <span class="s">"D"</span>: [<span class="s">"B"</span>],
+    <span class="s">"E"</span>: [<span class="s">"B"</span>, <span class="s">"F"</span>],
+    <span class="s">"F"</span>: [<span class="s">"C"</span>, <span class="s">"E"</span>]
 }
-</script>
 
+<span class="f">print</span>(<span class="s">"BFS from A:"</span>, <span class="f">bfs</span>(graph, <span class="s">"A"</span>))
+<span class="f">print</span>(<span class="s">"DFS from A:"</span>, <span class="f">dfs</span>(graph, <span class="s">"A"</span>))</code></pre><div class="lbl">Output</div><div class="out">BFS from A: ['A', 'B', 'C', 'D', 'E', 'F']
+DFS from A: ['A', 'B', 'D', 'E', 'F', 'C']</div>`}
+]},
+// ─── CIS 310 ───
+{id:"cis310",name:"CIS 310 — Systems Analysis",items:[
+{id:"c310_1",label:"Requirements Doc",title:"Requirements Document",sub:"Software Requirements Specification for an inventory management system.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Software Requirements Specification: Inventory Management System</h4><p><strong>Project:</strong> Guitar Shop Inventory Tracker<br><strong>Version:</strong> 1.0<br><strong>Author:</strong> Preston Furulie</p><h4>1. Functional Requirements</h4><ul><li><strong>FR-01:</strong> System shall track product quantities in real-time</li><li><strong>FR-02:</strong> System shall generate low-stock alerts when quantity falls below threshold</li><li><strong>FR-03:</strong> Users shall be able to add, update, and remove products</li><li><strong>FR-04:</strong> System shall generate monthly inventory reports (PDF/CSV)</li><li><strong>FR-05:</strong> System shall support barcode scanning for stock intake</li></ul><h4>2. Non-Functional Requirements</h4><ul><li><strong>NFR-01:</strong> Page load time under 2 seconds (95th percentile)</li><li><strong>NFR-02:</strong> System availability 99.9% uptime</li><li><strong>NFR-03:</strong> Support concurrent access for 50+ users</li><li><strong>NFR-04:</strong> All data encrypted at rest (AES-256) and in transit (TLS 1.3)</li></ul><h4>3. User Roles</h4><ul><li><strong>Admin:</strong> Full CRUD access, user management, report generation</li><li><strong>Manager:</strong> Read/write access to inventory, view reports</li><li><strong>Staff:</strong> Read-only access, submit stock intake requests</li></ul></div>`},
+{id:"c310_2",label:"Use Cases",title:"Use Case Diagrams",sub:"Actor-driven use cases for the inventory management system.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Use Case: Process Stock Intake</h4><p><strong>Actor:</strong> Warehouse Staff<br><strong>Precondition:</strong> Staff is authenticated and on the intake screen<br><strong>Trigger:</strong> New shipment arrives at warehouse</p><h4>Main Flow</h4><ul><li>1. Staff scans shipment barcode</li><li>2. System displays expected items from purchase order</li><li>3. Staff verifies and counts each item</li><li>4. Staff confirms quantities match</li><li>5. System updates inventory quantities</li><li>6. System logs the intake with timestamp and staff ID</li></ul><h4>Alternative Flows</h4><ul><li><strong>3a.</strong> Quantity mismatch: Staff flags discrepancy, system notifies manager</li><li><strong>2a.</strong> No matching PO: Staff creates manual intake entry</li></ul><h4>Use Case: Generate Report</h4><p><strong>Actor:</strong> Manager<br><strong>Flow:</strong> Select date range, choose report type (stock levels, turnover, valuation), select format (PDF/CSV), system generates and downloads report.</p></div>`},
+{id:"c310_3",label:"System Architecture",title:"System Architecture Proposal",sub:"Three-tier architecture design with technology stack recommendations.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Architecture: Three-Tier Design</h4><p><strong>Presentation Layer (Frontend)</strong></p><ul><li>React.js SPA with responsive design</li><li>Deployed on Vercel CDN (edge caching)</li><li>JWT-based authentication</li></ul><p><strong>Application Layer (Backend)</strong></p><ul><li>Node.js + Express REST API</li><li>Input validation with Joi</li><li>Rate limiting: 100 req/min per user</li><li>Deployed on AWS ECS (auto-scaling)</li></ul><p><strong>Data Layer</strong></p><ul><li>MySQL 8.0 on AWS RDS (Multi-AZ)</li><li>Redis cache for session storage and hot queries</li><li>Daily automated backups with 30-day retention</li></ul><h4>Security</h4><ul><li>All traffic over HTTPS (TLS 1.3)</li><li>OWASP Top 10 mitigations implemented</li><li>Role-based access control (RBAC)</li><li>SQL injection prevention via parameterized queries</li></ul></div>`}
+]},
+// ─── CIS 350 ───
+{id:"cis350",name:"CIS 350 — Network Security",items:[
+{id:"c350_1",label:"Network Topology",title:"Network Topology Design",sub:"Enterprise network layout with VLANs, DMZ, and segmentation.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Enterprise Network Topology</h4><p><strong>Design:</strong> Hub-and-spoke with DMZ segmentation</p><h4>Network Segments</h4><ul><li><strong>VLAN 10 — Management:</strong> 10.0.10.0/24 (switches, APs, admin)</li><li><strong>VLAN 20 — Corporate:</strong> 10.0.20.0/24 (employee workstations)</li><li><strong>VLAN 30 — Servers:</strong> 10.0.30.0/24 (internal app/DB servers)</li><li><strong>VLAN 40 — Guest:</strong> 10.0.40.0/24 (isolated guest Wi-Fi)</li><li><strong>DMZ:</strong> 172.16.0.0/24 (web servers, reverse proxy)</li></ul><h4>Core Equipment</h4><ul><li>Cisco Catalyst 9300 Core Switch (Layer 3 routing)</li><li>Palo Alto PA-850 Next-Gen Firewall</li><li>Cisco Meraki MR46 Wireless Access Points</li><li>Redundant ISP connections with BGP failover</li></ul><h4>Security Zones</h4><ul><li><strong>Untrusted:</strong> Internet-facing (DMZ)</li><li><strong>Semi-trusted:</strong> Corporate network (VLAN 20)</li><li><strong>Trusted:</strong> Server farm (VLAN 30), Management (VLAN 10)</li></ul></div>`},
+{id:"c350_2",label:"Firewall Rules",title:"Firewall Rules & ACLs",sub:"Access control list configuration for enterprise perimeter security.",badge:"b-bash",lang:"Config",content:`<div class="lbl">Source</div><pre><code><span class="c"># Palo Alto Firewall Rules — Perimeter Security</span>
+
+<span class="c"># Rule 1: Allow HTTPS to DMZ web servers</span>
+set rulebase security rules <span class="s">"Allow-HTTPS-DMZ"</span> \\
+    from untrust to dmz \\
+    source any destination <span class="s">"DMZ-WebServers"</span> \\
+    application ssl service application-default \\
+    action allow log-start yes
+
+<span class="c"># Rule 2: Allow corporate to internal servers</span>
+set rulebase security rules <span class="s">"Corp-to-Servers"</span> \\
+    from vlan20 to vlan30 \\
+    source <span class="s">"Corporate-Subnet"</span> destination <span class="s">"Server-Subnet"</span> \\
+    application any service application-default \\
+    action allow log-start yes
+
+<span class="c"># Rule 3: Block guest network from internal</span>
+set rulebase security rules <span class="s">"Block-Guest-Internal"</span> \\
+    from vlan40 to any \\
+    source <span class="s">"Guest-Subnet"</span> destination <span class="s">"RFC1918"</span> \\
+    action deny log-start yes
+
+<span class="c"># Rule 4: Allow guest internet only</span>
+set rulebase security rules <span class="s">"Guest-Internet"</span> \\
+    from vlan40 to untrust \\
+    source <span class="s">"Guest-Subnet"</span> destination any \\
+    application web-browsing ssl dns \\
+    action allow
+
+<span class="c"># Rule 5: Implicit deny all</span>
+set rulebase security rules <span class="s">"Deny-All"</span> \\
+    from any to any \\
+    source any destination any \\
+    action deny log-start yes</code></pre>`},
+{id:"c350_3",label:"Vulnerability Assessment",title:"Vulnerability Assessment Report",sub:"Network scan results, risk ratings, and remediation recommendations.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Vulnerability Assessment Report</h4><p><strong>Scan Date:</strong> 2026-01-15<br><strong>Tool:</strong> Nessus Professional<br><strong>Scope:</strong> 10.0.0.0/16 (all internal VLANs)</p><h4>Critical Findings</h4><ul><li><strong>CVE-2025-21391 (CVSS 9.8):</strong> Remote code execution in Apache 2.4.58 on DMZ web server. <strong>Remediation:</strong> Update to Apache 2.4.62+</li><li><strong>CVE-2025-24989 (CVSS 8.1):</strong> SQL injection in legacy PHP app on 10.0.30.15. <strong>Remediation:</strong> Deploy WAF rule, patch application</li></ul><h4>High Findings</h4><ul><li><strong>Weak TLS:</strong> 3 servers supporting TLS 1.0/1.1. <strong>Remediation:</strong> Enforce TLS 1.2+ minimum</li><li><strong>Default credentials:</strong> 2 network printers using admin/admin. <strong>Remediation:</strong> Change immediately, add to password policy</li></ul><h4>Summary</h4><ul><li>Critical: 2 | High: 4 | Medium: 11 | Low: 23</li><li>Mean time to remediate critical: 48 hours target</li></ul></div>`},
+{id:"c350_4",label:"Encryption & Hashing",title:"Encryption & Hashing Demo",sub:"Python demonstration of hashing algorithms and symmetric encryption.",badge:"b-py",lang:"Python",content:`<div class="lbl">Source</div><pre><code><span class="k">import</span> hashlib, secrets
+
+<span class="c"># SHA-256 Hashing</span>
+password = <span class="s">"MySecurePass123!"</span>
+hash_obj = hashlib.sha256(password.encode())
+<span class="f">print</span>(<span class="s">"SHA-256:"</span>, hash_obj.hexdigest())
+
+<span class="c"># Salted hashing (proper password storage)</span>
+salt = secrets.token_hex(<span class="n">16</span>)
+salted = salt + password
+salted_hash = hashlib.sha256(salted.encode()).hexdigest()
+<span class="f">print</span>(<span class="s">"Salt:"</span>, salt)
+<span class="f">print</span>(<span class="s">"Salted SHA-256:"</span>, salted_hash)
+<span class="f">print</span>()
+
+<span class="c"># Verify password</span>
+<span class="k">def</span> <span class="f">verify</span>(password, salt, expected_hash):
+    check = hashlib.sha256((salt + password).encode()).hexdigest()
+    <span class="k">return</span> check == expected_hash
+
+<span class="f">print</span>(<span class="s">"Verify correct:"</span>, <span class="f">verify</span>(<span class="s">"MySecurePass123!"</span>, salt, salted_hash))
+<span class="f">print</span>(<span class="s">"Verify wrong:"</span>, <span class="f">verify</span>(<span class="s">"WrongPassword"</span>, salt, salted_hash))
+<span class="f">print</span>()
+
+<span class="c"># Compare hash algorithms</span>
+<span class="k">for</span> algo <span class="k">in</span> [<span class="s">"md5"</span>, <span class="s">"sha1"</span>, <span class="s">"sha256"</span>, <span class="s">"sha512"</span>]:
+    h = hashlib.new(algo, password.encode()).hexdigest()
+    <span class="f">print</span>(<span class="f">f</span><span class="s">"{algo:&lt;8} ({len(h)*4:&gt;3}-bit): {h[:40]}..."</span>)</code></pre><div class="lbl">Output</div><div class="out">SHA-256: 2c26b46b68ffc68ff99b453c1d304131...
+Salt: a3f7c9e2b1d4a6f8
+Salted SHA-256: 8f14e45fceea167a5a36dedd4bea2543...
+
+Verify correct: True
+Verify wrong: False
+
+md5      (128-bit): 5f4dcc3b5aa765d61d8327deb882cf99...
+sha1     (160-bit): aaf4c61ddcc5e8a2dabede0f3b482cd9...
+sha256   (256-bit): 2c26b46b68ffc68ff99b453c1d304131...
+sha512   (512-bit): 3627909a29c31381a071ec27f7c97834...</div>`}
+]},
+// ─── CIS 410 ───
+{id:"cis410",name:"CIS 410 — Cloud & DevOps",items:[
+{id:"c410_1",label:"AWS VPC Design",title:"AWS VPC Architecture",sub:"Multi-AZ VPC with public/private subnets, NAT gateway, and security groups.",badge:"b-tf",lang:"Terraform",content:`<div class="lbl">Source</div><pre><code><span class="c"># AWS VPC Infrastructure — Terraform</span>
+
+resource <span class="s">"aws_vpc"</span> <span class="s">"main"</span> {
+  cidr_block           = <span class="s">"10.0.0.0/16"</span>
+  enable_dns_hostnames = <span class="n">true</span>
+  tags = { Name = <span class="s">"pcc-production-vpc"</span> }
+}
+
+resource <span class="s">"aws_subnet"</span> <span class="s">"public_a"</span> {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = <span class="s">"10.0.1.0/24"</span>
+  availability_zone = <span class="s">"us-west-2a"</span>
+  map_public_ip_on_launch = <span class="n">true</span>
+  tags = { Name = <span class="s">"public-subnet-a"</span> }
+}
+
+resource <span class="s">"aws_subnet"</span> <span class="s">"private_a"</span> {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = <span class="s">"10.0.10.0/24"</span>
+  availability_zone = <span class="s">"us-west-2a"</span>
+  tags = { Name = <span class="s">"private-subnet-a"</span> }
+}
+
+resource <span class="s">"aws_nat_gateway"</span> <span class="s">"nat"</span> {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public_a.id
+  tags = { Name = <span class="s">"nat-gateway"</span> }
+}
+
+resource <span class="s">"aws_security_group"</span> <span class="s">"web"</span> {
+  vpc_id = aws_vpc.main.id
+  ingress {
+    from_port   = <span class="n">443</span>
+    to_port     = <span class="n">443</span>
+    protocol    = <span class="s">"tcp"</span>
+    cidr_blocks = [<span class="s">"0.0.0.0/0"</span>]
+  }
+  egress {
+    from_port   = <span class="n">0</span>
+    to_port     = <span class="n">0</span>
+    protocol    = <span class="s">"-1"</span>
+    cidr_blocks = [<span class="s">"0.0.0.0/0"</span>]
+  }
+}</code></pre>`},
+{id:"c410_2",label:"Docker",title:"Docker Containerization",sub:"Multi-stage Dockerfile and docker-compose for a Python web app.",badge:"b-bash",lang:"Docker",content:`<div class="lbl">Source</div><pre><code><span class="c"># Multi-stage Dockerfile for Python API</span>
+
+<span class="c"># Stage 1: Build dependencies</span>
+<span class="k">FROM</span> python:3.12-slim <span class="k">AS</span> builder
+<span class="k">WORKDIR</span> /app
+<span class="k">COPY</span> requirements.txt .
+<span class="k">RUN</span> pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+<span class="c"># Stage 2: Production image</span>
+<span class="k">FROM</span> python:3.12-slim
+<span class="k">WORKDIR</span> /app
+
+<span class="k">COPY</span> --from=builder /install /usr/local
+<span class="k">COPY</span> . .
+
+<span class="k">RUN</span> useradd -m appuser
+<span class="k">USER</span> appuser
+
+<span class="k">EXPOSE</span> 8000
+<span class="k">HEALTHCHECK</span> --interval=30s --timeout=3s \\
+  CMD curl -f http://localhost:8000/health || exit 1
+
+<span class="k">CMD</span> [<span class="s">"gunicorn"</span>, <span class="s">"app:create_app()"</span>, <span class="s">"-b"</span>, <span class="s">"0.0.0.0:8000"</span>]
+
+<span class="c"># --- docker-compose.yml ---</span>
+
+version: <span class="s">"3.9"</span>
+services:
+  api:
+    build: .
+    ports: [<span class="s">"8000:8000"</span>]
+    environment:
+      - DATABASE_URL=mysql://user:pass@db:3306/app
+    depends_on: [db]
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: app
+    volumes: [<span class="s">"db_data:/var/lib/mysql"</span>]
+
+volumes:
+  db_data:</code></pre>`},
+{id:"c410_3",label:"CI/CD Pipeline",title:"CI/CD with GitHub Actions",sub:"Automated testing, building, and deployment pipeline.",badge:"b-yaml",lang:"YAML",content:`<div class="lbl">Source</div><pre><code><span class="c"># .github/workflows/deploy.yml</span>
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: <span class="s">"3.12"</span>
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest --cov=app --cov-report=xml
+
+      - name: Lint
+        run: flake8 app/ --max-line-length=120
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t app:$\{{ github.sha }} .
+
+      - name: Push to ECR
+        run: |
+          aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_URI
+          docker tag app:$\{{ github.sha }} $ECR_URI/app:latest
+          docker push $ECR_URI/app:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == <span class="s">'refs/heads/main'</span>
+    steps:
+      - name: Deploy to ECS
+        run: aws ecs update-service --cluster prod --service api --force-new-deployment</code></pre>`},
+{id:"c410_4",label:"Terraform IaC",title:"Terraform Infrastructure as Code",sub:"Complete infrastructure definition for RDS, ECS, and ALB.",badge:"b-tf",lang:"Terraform",content:`<div class="lbl">Source</div><pre><code><span class="c"># RDS MySQL Instance</span>
+resource <span class="s">"aws_db_instance"</span> <span class="s">"main"</span> {
+  identifier           = <span class="s">"pcc-production-db"</span>
+  engine               = <span class="s">"mysql"</span>
+  engine_version       = <span class="s">"8.0"</span>
+  instance_class       = <span class="s">"db.t3.medium"</span>
+  allocated_storage    = <span class="n">50</span>
+  storage_encrypted    = <span class="n">true</span>
+  multi_az             = <span class="n">true</span>
+  db_subnet_group_name = aws_db_subnet_group.main.name
+  vpc_security_group_ids = [aws_security_group.db.id]
+  backup_retention_period = <span class="n">30</span>
+  skip_final_snapshot     = <span class="n">false</span>
+}
+
+<span class="c"># ECS Fargate Service</span>
+resource <span class="s">"aws_ecs_service"</span> <span class="s">"api"</span> {
+  name            = <span class="s">"api-service"</span>
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.api.arn
+  desired_count   = <span class="n">2</span>
+  launch_type     = <span class="s">"FARGATE"</span>
+
+  network_configuration {
+    subnets         = [aws_subnet.private_a.id, aws_subnet.private_b.id]
+    security_groups = [aws_security_group.ecs.id]
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.api.arn
+    container_name   = <span class="s">"api"</span>
+    container_port   = <span class="n">8000</span>
+  }
+}
+
+<span class="c"># Application Load Balancer</span>
+resource <span class="s">"aws_lb"</span> <span class="s">"main"</span> {
+  name               = <span class="s">"pcc-alb"</span>
+  internal           = <span class="n">false</span>
+  load_balancer_type = <span class="s">"application"</span>
+  subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id]
+  security_groups    = [aws_security_group.alb.id]
+}</code></pre>`}
+]},
+// ─── CIS 425 ───
+{id:"cis425",name:"CIS 425 — Capstone Project",items:[
+{id:"c425_1",label:"Project Overview",title:"Capstone: Enterprise Inventory Platform",sub:"Full-stack application summary, architecture, and technology decisions.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Enterprise Inventory Management Platform</h4><p><strong>Author:</strong> Preston Furulie<br><strong>Course:</strong> CIS 425 — Capstone<br><strong>Stack:</strong> React, Node.js, MySQL, AWS, Docker</p><h4>Project Summary</h4><p>A cloud-native inventory management system designed for small-to-medium businesses. The platform provides real-time stock tracking, automated reorder alerts, multi-warehouse support, and comprehensive reporting dashboards.</p><h4>Key Features</h4><ul><li>Real-time inventory tracking across multiple warehouses</li><li>Role-based access control (Admin, Manager, Staff)</li><li>Automated low-stock email and SMS alerts</li><li>Barcode/QR code scanning for stock intake</li><li>PDF/CSV report generation with date-range filtering</li><li>RESTful API with OpenAPI 3.0 documentation</li><li>CI/CD pipeline with automated testing and deployment</li></ul><h4>Architecture Decision Records</h4><ul><li><strong>ADR-001:</strong> MySQL over PostgreSQL — team familiarity, PCC curriculum alignment</li><li><strong>ADR-002:</strong> ECS Fargate over EC2 — serverless reduces ops overhead</li><li><strong>ADR-003:</strong> JWT over sessions — stateless API, horizontal scaling</li></ul></div>`},
+{id:"c425_2",label:"Database Schema",title:"Production Database Schema",sub:"Complete DDL for the inventory management platform.",badge:"b-sql",lang:"SQL",content:`<div class="lbl">Source</div><pre><code><span class="sc">-- Capstone: Production Database Schema</span>
+
+<span class="sk">CREATE DATABASE IF NOT EXISTS</span> inventory_mgmt;
+<span class="sk">USE</span> inventory_mgmt;
+
+<span class="sk">CREATE TABLE</span> warehouses (
+    warehouse_id  <span class="sf">INT</span>          <span class="sk">PRIMARY KEY AUTO_INCREMENT</span>,
+    name          <span class="sf">VARCHAR</span>(<span class="n">100</span>) <span class="sk">NOT NULL</span>,
+    address       <span class="sf">VARCHAR</span>(<span class="n">255</span>),
+    city          <span class="sf">VARCHAR</span>(<span class="n">50</span>),
+    state         <span class="sf">CHAR</span>(<span class="n">2</span>),
+    created_at    <span class="sf">TIMESTAMP</span>    <span class="sk">DEFAULT CURRENT_TIMESTAMP</span>
+);
+
+<span class="sk">CREATE TABLE</span> users (
+    user_id       <span class="sf">INT</span>          <span class="sk">PRIMARY KEY AUTO_INCREMENT</span>,
+    email         <span class="sf">VARCHAR</span>(<span class="n">255</span>) <span class="sk">UNIQUE NOT NULL</span>,
+    password_hash <span class="sf">VARCHAR</span>(<span class="n">255</span>) <span class="sk">NOT NULL</span>,
+    role          <span class="sf">ENUM</span>(<span class="ss">'admin'</span>,<span class="ss">'manager'</span>,<span class="ss">'staff'</span>) <span class="sk">DEFAULT</span> <span class="ss">'staff'</span>,
+    first_name    <span class="sf">VARCHAR</span>(<span class="n">50</span>),
+    last_name     <span class="sf">VARCHAR</span>(<span class="n">50</span>),
+    created_at    <span class="sf">TIMESTAMP</span>    <span class="sk">DEFAULT CURRENT_TIMESTAMP</span>
+);
+
+<span class="sk">CREATE TABLE</span> products (
+    product_id    <span class="sf">INT</span>          <span class="sk">PRIMARY KEY AUTO_INCREMENT</span>,
+    sku           <span class="sf">VARCHAR</span>(<span class="n">50</span>)  <span class="sk">UNIQUE NOT NULL</span>,
+    name          <span class="sf">VARCHAR</span>(<span class="n">200</span>) <span class="sk">NOT NULL</span>,
+    category      <span class="sf">VARCHAR</span>(<span class="n">100</span>),
+    unit_cost     <span class="sf">DECIMAL</span>(<span class="n">10</span>,<span class="n">2</span>),
+    reorder_level <span class="sf">INT</span>          <span class="sk">DEFAULT</span> <span class="n">10</span>
+);
+
+<span class="sk">CREATE TABLE</span> inventory (
+    inventory_id  <span class="sf">INT</span>          <span class="sk">PRIMARY KEY AUTO_INCREMENT</span>,
+    product_id    <span class="sf">INT</span>          <span class="sk">NOT NULL</span>,
+    warehouse_id  <span class="sf">INT</span>          <span class="sk">NOT NULL</span>,
+    quantity      <span class="sf">INT</span>          <span class="sk">DEFAULT</span> <span class="n">0</span>,
+    last_updated  <span class="sf">TIMESTAMP</span>    <span class="sk">DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</span>,
+    <span class="sk">FOREIGN KEY</span> (product_id)   <span class="sk">REFERENCES</span> products(product_id),
+    <span class="sk">FOREIGN KEY</span> (warehouse_id) <span class="sk">REFERENCES</span> warehouses(warehouse_id),
+    <span class="sk">UNIQUE KEY</span> (product_id, warehouse_id)
+);
+
+<span class="sk">CREATE TABLE</span> transactions (
+    txn_id        <span class="sf">INT</span>          <span class="sk">PRIMARY KEY AUTO_INCREMENT</span>,
+    inventory_id  <span class="sf">INT</span>          <span class="sk">NOT NULL</span>,
+    user_id       <span class="sf">INT</span>          <span class="sk">NOT NULL</span>,
+    txn_type      <span class="sf">ENUM</span>(<span class="ss">'intake'</span>,<span class="ss">'shipment'</span>,<span class="ss">'adjustment'</span>) <span class="sk">NOT NULL</span>,
+    quantity      <span class="sf">INT</span>          <span class="sk">NOT NULL</span>,
+    notes         <span class="sf">TEXT</span>,
+    created_at    <span class="sf">TIMESTAMP</span>    <span class="sk">DEFAULT CURRENT_TIMESTAMP</span>,
+    <span class="sk">FOREIGN KEY</span> (inventory_id) <span class="sk">REFERENCES</span> inventory(inventory_id),
+    <span class="sk">FOREIGN KEY</span> (user_id)      <span class="sk">REFERENCES</span> users(user_id)
+);</code></pre>`},
+{id:"c425_3",label:"API Documentation",title:"REST API Endpoints",sub:"Core API routes with request/response specifications.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>API Base URL: <code>https://api.inventory.fllc.net/v1</code></h4><h4>Authentication</h4><ul><li><strong>POST /auth/login</strong> — Returns JWT access + refresh tokens</li><li><strong>POST /auth/refresh</strong> — Exchange refresh token for new access token</li><li>All other routes require <code>Authorization: Bearer &lt;token&gt;</code></li></ul><h4>Products</h4><ul><li><strong>GET /products</strong> — List all products (paginated, filterable by category)</li><li><strong>GET /products/:id</strong> — Get product details with inventory levels</li><li><strong>POST /products</strong> — Create product (Admin/Manager only)</li><li><strong>PUT /products/:id</strong> — Update product details</li><li><strong>DELETE /products/:id</strong> — Soft-delete product</li></ul><h4>Inventory</h4><ul><li><strong>GET /inventory</strong> — Current stock levels across all warehouses</li><li><strong>GET /inventory/low-stock</strong> — Products below reorder threshold</li><li><strong>POST /inventory/intake</strong> — Record stock intake transaction</li><li><strong>POST /inventory/shipment</strong> — Record outgoing shipment</li></ul><h4>Reports</h4><ul><li><strong>GET /reports/stock-levels?warehouse=&amp;format=pdf</strong></li><li><strong>GET /reports/turnover?from=&amp;to=</strong></li><li><strong>GET /reports/valuation</strong> — Total inventory value by warehouse</li></ul></div>`},
+{id:"c425_4",label:"Deployment",title:"Deployment Architecture",sub:"Production deployment design with monitoring and scaling.",badge:"b-doc",lang:"Doc",content:`<div class="doc-block"><h4>Production Deployment</h4><p><strong>Cloud Provider:</strong> AWS (us-west-2)<br><strong>Infrastructure:</strong> Terraform-managed<br><strong>CI/CD:</strong> GitHub Actions</p><h4>Components</h4><ul><li><strong>Frontend:</strong> React SPA on Vercel CDN (auto-deploy from main branch)</li><li><strong>API:</strong> Node.js on ECS Fargate (2 tasks, auto-scaling 2-8)</li><li><strong>Database:</strong> RDS MySQL 8.0 Multi-AZ (db.t3.medium, 50GB encrypted)</li><li><strong>Cache:</strong> ElastiCache Redis (cache.t3.micro)</li><li><strong>Storage:</strong> S3 for file uploads and report PDFs</li></ul><h4>Monitoring & Observability</h4><ul><li>CloudWatch metrics + alarms (CPU, memory, 5xx rate)</li><li>CloudWatch Logs with 90-day retention</li><li>Uptime monitoring via Better Uptime (1-minute intervals)</li><li>Error tracking with Sentry (source maps enabled)</li></ul><h4>Scaling Triggers</h4><ul><li>Scale out: CPU > 70% for 3 minutes</li><li>Scale in: CPU < 30% for 10 minutes</li><li>RDS read replica added if read IOPS > 10,000</li></ul><h4>Disaster Recovery</h4><ul><li>RDS: automated daily backups, 30-day retention, cross-region snapshot</li><li>S3: versioning enabled, cross-region replication</li><li>RTO: 1 hour | RPO: 24 hours</li></ul></div>`}
+]}
+];
+
+// Build sidebar + panels
+const nav=document.getElementById("sidebar");
+const main=document.getElementById("main");
+let first=true;
+
+C.forEach(course=>{
+  const sec=document.createElement("div");
+  sec.className="nav-course";
+  const head=document.createElement("button");
+  head.className="nav-head"+(first?" open":"");
+  head.innerHTML=course.name+'<span class="chk">&#10003;</span>';
+  const items=document.createElement("div");
+  items.className="nav-items"+(first?" open":"");
+
+  head.onclick=()=>{
+    head.classList.toggle("open");
+    items.classList.toggle("open");
+  };
+
+  course.items.forEach(item=>{
+    const btn=document.createElement("button");
+    btn.className="nav-item"+(first?" active":"");
+    btn.textContent=item.label;
+    btn.onclick=()=>{
+      document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(item.id).classList.add("active");
+    };
+    items.appendChild(btn);
+
+    const panel=document.createElement("div");
+    panel.id=item.id;
+    panel.className="panel"+(first?" active":"");
+    panel.innerHTML=`<div class="p-title">${item.title} <span class="badge ${item.badge}">${item.lang}</span></div><div class="p-sub">${item.sub}</div>${item.content}`;
+    main.appendChild(panel);
+    first=false;
+  });
+
+  sec.appendChild(head);
+  sec.appendChild(items);
+  nav.appendChild(sec);
+});
+</script>
 </body>
 </html>
