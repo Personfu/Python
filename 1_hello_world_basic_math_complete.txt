@@ -1,0 +1,51 @@
+================================================================================
+ Assignment 1: Hello World and Basic Math
+ Author: Preston Furulie
+ Course: PCC Python
+================================================================================
+
+OBJECTIVE:
+----------
+Write a program that asks for the user's name and yearly income, then
+calculates and displays their monthly salary.
+
+WORKING PROCESS:
+----------------
+1. Use input() to prompt the user for their name and store it in a variable.
+2. Use input() wrapped in float() to get the yearly income as a decimal number.
+3. Divide the yearly salary by 12 to get the monthly salary.
+4. Use format() with ".2f" to display the result with two decimal places
+   (standard currency formatting).
+
+================================================================================
+ PYTHON CODE
+================================================================================
+
+# =============================================================================
+# Assignment 1: Hello World and Basic Math
+# Author: Preston Furulie
+# Description: This program greets the user by name and calculates their
+#              monthly salary from a yearly income input.
+# =============================================================================
+
+# Prompt the user to enter their name and store it in a variable
+name = input("Enter your name: ")
+
+# Prompt the user to enter their yearly salary and convert the input to a float
+# so we can perform arithmetic on it
+yearly_salary = float(input("Enter your yearly income: "))
+
+# Calculate the monthly salary by dividing the yearly salary by 12 months
+monthly_salary = yearly_salary / 12
+
+# Display the greeting along with the calculated monthly salary,
+# formatted to two decimal places for proper currency display
+print("Hello", name, "your monthly salary is", format(monthly_salary, ".2f"))
+
+================================================================================
+ EXPECTED OUTPUT EXAMPLE
+================================================================================
+
+Enter your name: Preston
+Enter your yearly income: 75000
+Hello Preston your monthly salary is 6250.00

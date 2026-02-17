@@ -1,0 +1,105 @@
+================================================================================
+ Assignment 3: Strings and Things - Fun With Strings
+ Author: Preston Furulie
+ Course: PCC Python
+================================================================================
+
+OBJECTIVE:
+----------
+Using the word "Supercalifragilisticexpialidocious", demonstrate five
+different string operations: counting, slicing, concatenation, list
+splitting/joining, and creating a name list.
+
+WORKING PROCESS:
+----------------
+Task 1 - Count Letters:
+  - Use the built-in len() function on the string to get its length.
+  - Print the total character count.
+
+Task 2 - First 5 Letters:
+  - Use string slicing with [:5] to extract characters at index 0-4.
+  - This gives us "Super".
+
+Task 3 - Concatenate with Another String:
+  - Use the + operator to join the original word with a new phrase.
+  - No extra space needed since the phrase starts with a space.
+
+Task 4 - Split into List and Rejoin:
+  - Create a list with three string elements that make up the full word.
+  - Use "".join() with an empty string separator to concatenate them
+    back together with no white spaces.
+
+Task 5 - Name List:
+  - Create a list with first and last name as elements.
+  - Print the list.
+
+================================================================================
+ PYTHON CODE
+================================================================================
+
+# =============================================================================
+# Assignment 3: Strings and Things - Fun With Strings
+# Author: Preston Furulie
+# Description: This program demonstrates various string operations using
+#              the word "Supercalifragilisticexpialidocious", including
+#              counting, slicing, concatenation, list splitting, and more.
+# =============================================================================
+
+# Define the original word as a string variable
+word = "Supercalifragilisticexpialidocious"
+
+# --- 1. Count the letters and print the number ---
+# The len() function returns the total number of characters in the string
+letter_count = len(word)
+print("Number of letters:", letter_count)
+
+# Blank line for readability
+print()
+
+# --- 2. Print only the first 5 letters ---
+# String slicing with [:5] extracts characters from index 0 up to (not including) 5
+first_five = word[:5]
+print("First five letters:", first_five)
+
+# Blank line for readability
+print()
+
+# --- 3. Concatenate with another string ---
+# Using the + operator to join the original word with a new phrase
+phrase = " is something quite atrocious"
+combined = word + phrase
+print("Concatenated phrase:", combined)
+
+# Blank line for readability
+print()
+
+# --- 4. Break into a list of three elements, then concatenate back together ---
+# Create a list containing three parts of the original word
+word_list = ["Supercali", "fragilistic", "expialidocious"]
+
+# Use "".join() with an empty string separator to concatenate the list
+# elements back together with no white spaces
+rejoined_word = "".join(word_list)
+print("Rejoined word from list:", rejoined_word)
+
+# Blank line for readability
+print()
+
+# --- 5. Put your name into a list and print it ---
+# Store first and last name as elements in a list
+name_list = ["Preston", "Furulie"]
+print("Name list:", name_list)
+
+================================================================================
+ EXPECTED OUTPUT
+================================================================================
+
+Number of letters: 34
+
+First five letters: Super
+
+Concatenated phrase: Supercalifragilisticexpialidocious is something quite atrocious
+
+Rejoined word from list: Supercalifragilisticexpialidocious
+
+Name list: ['Preston', 'Furulie']

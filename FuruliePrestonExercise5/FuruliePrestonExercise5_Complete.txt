@@ -1,0 +1,362 @@
+================================================================================
+ MySQL Exercise 5: Insert, Update, and Delete Data
+ Author: Preston Furulie
+ Database: my_guitar_shop
+ Course: PCC MySQL
+================================================================================
+
+OBJECTIVE:
+----------
+Demonstrate INSERT, UPDATE, and DELETE statements. Handle null values,
+default values, auto-generated IDs, and foreign key constraints.
+
+NOTE: These steps must be run in order (1 through 10) because later
+steps depend on data changes made in earlier steps.
+
+
+================================================================================
+ STEP 1 - INSERT: Add a New Category
+================================================================================
+
+TASK:
+  Add a row to the Categories table with category_name = 'Brass'.
+  Let MySQL automatically generate the category_id.
+
+WORKING PROCESS:
+  - The category_id column is set to AUTO_INCREMENT in the table definition,
+    so we omit it from the INSERT column list.
+  - MySQL assigns the next available ID (which will be 5, since categories
+    1-4 already exist).
+  - A SELECT statement verifies the row was inserted.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Insert the new category; category_id is automatically generated
+INSERT INTO categories (category_name)
+VALUES ('Brass');
+
+-- Verify the insert was successful
+SELECT *
+FROM categories;
+--------------------------------------------------
+
+EXPECTED RESULT:
+  category_id | category_name
+  1           | Guitars
+  2           | Basses
+  3           | Drums
+  4           | Keyboards
+  5           | Brass          <-- newly inserted
+
+
+================================================================================
+ STEP 2 - UPDATE: Modify the New Category
+================================================================================
+
+TASK:
+  Change the category_name from 'Brass' to 'Woodwinds' for the row
+  added in Step 1. Use category_id to identify the row.
+
+WORKING PROCESS:
+  - Use UPDATE with SET to change the column value.
+  - The WHERE clause uses category_id = 5 (the auto-generated ID from
+    Step 1) to target only the specific row.
+  - A SELECT statement verifies the update.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Update the category name from 'Brass' to 'Woodwinds'
+UPDATE categories
+SET category_name = 'Woodwinds'
+WHERE category_id = 5;
+
+-- Verify the update was successful
+SELECT *
+FROM categories;
+--------------------------------------------------
+
+EXPECTED RESULT:
+  category_id | category_name
+  5           | Woodwinds      <-- updated from 'Brass'
+
+
+================================================================================
+ STEP 3 - DELETE: Remove the New Category
+================================================================================
+
+TASK:
+  Delete the row added in Step 1 from the Categories table.
+  Use category_id to identify the row.
+
+WORKING PROCESS:
+  - Use DELETE FROM with a WHERE clause targeting category_id = 5.
+  - This removes the single row we added and modified.
+  - A SELECT statement verifies the deletion.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Delete the category that was added in Step 1
+DELETE FROM categories
+WHERE category_id = 5;
+
+-- Verify the delete was successful
+SELECT *
+FROM categories;
+--------------------------------------------------
+
+EXPECTED RESULT:
+  The row with category_id = 5 is no longer in the table.
+
+
+================================================================================
+ STEP 4 - INSERT: Add a New Product
+================================================================================
+
+TASK:
+  Add a new product to the Products table with the specified values.
+  Use a column list. The product_id is auto-generated. Use NOW() for
+  the current date/time.
+
+WORKING PROCESS:
+  - List all columns being inserted (excluding product_id since it's
+    AUTO_INCREMENT).
+  - Use NOW() for the date_added column to capture today's date/time.
+  - The discount_percent is set to 0 as specified.
+  - A SELECT statement verifies the insert.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Insert the new product with a column list
+INSERT INTO products
+    (category_id, product_code, product_name, description,
+     list_price, discount_percent, date_added)
+VALUES
+    (4, 'dgx_640', 'Yamaha DGX 640 88-Key Digital Piano',
+     'Long description to come.', 799.99, 0, NOW());
+
+-- Verify the insert was successful
+SELECT *
+FROM products
+WHERE product_code = 'dgx_640';
+--------------------------------------------------
+
+EXPECTED RESULT:
+  A new row with product_code 'dgx_640', list_price 799.99,
+  discount_percent 0, and today's date in date_added.
+
+
+================================================================================
+ STEP 5 - UPDATE: Change Product Discount
+================================================================================
+
+TASK:
+  Update the product from Step 4 to change discount_percent from 0% to 35%.
+
+WORKING PROCESS:
+  - Use UPDATE with SET to change discount_percent to 35.
+  - Use WHERE product_code = 'dgx_640' to identify the specific product.
+  - A SELECT statement verifies the update.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Update the discount_percent for the Yamaha DGX 640
+UPDATE products
+SET discount_percent = 35
+WHERE product_code = 'dgx_640';
+
+-- Verify the update was successful
+SELECT product_name, discount_percent
+FROM products
+WHERE product_code = 'dgx_640';
+--------------------------------------------------
+
+EXPECTED RESULT:
+  product_name                          | discount_percent
+  Yamaha DGX 640 88-Key Digital Piano   | 35.00
+
+
+================================================================================
+ STEP 6 - DELETE: Remove Keyboards Category and Its Products
+================================================================================
+
+TASK:
+  Delete the Keyboards category. Since foreign key constraints prevent
+  deleting a category that has related products, first delete all
+  products in that category.
+
+WORKING PROCESS:
+  - Foreign key constraints enforce referential integrity. We cannot
+    delete a category if products reference it.
+  - Additionally, order_items may reference those products, so we must
+    delete in the correct order:
+      1. Delete order_items that reference Keyboards products
+      2. Delete products in category_id = 4 (Keyboards)
+      3. Delete the Keyboards category itself
+  - Each statement ends with a semicolon since we run multiple statements.
+  - SELECT statements verify the deletions.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- First, delete order_items referencing Keyboards products
+DELETE FROM order_items
+WHERE product_id IN
+    (SELECT product_id FROM products WHERE category_id = 4);
+
+-- Then, delete all products in the Keyboards category (category_id = 4)
+DELETE FROM products
+WHERE category_id = 4;
+
+-- Now delete the Keyboards category itself
+DELETE FROM categories
+WHERE category_id = 4;
+
+-- Verify both deletes were successful
+SELECT *
+FROM categories;
+
+SELECT *
+FROM products
+WHERE category_id = 4;
+--------------------------------------------------
+
+EXPECTED RESULT:
+  Categories table no longer contains category_id = 4 (Keyboards).
+  Products table no longer contains any rows with category_id = 4.
+
+
+================================================================================
+ STEP 7 - INSERT: Add a New Customer
+================================================================================
+
+TASK:
+  Add a new customer to the Customers table with an empty string for
+  the password. Use a column list.
+
+WORKING PROCESS:
+  - Use INSERT with a column list specifying only the required columns:
+    email_address, password, first_name, last_name.
+  - The password is an empty string (''), not NULL -- this is an
+    important distinction for handling default/null values.
+  - Other columns (like customer_id) are auto-generated.
+  - A SELECT statement verifies the insert.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Insert the new customer with a column list
+INSERT INTO customers
+    (email_address, password, first_name, last_name)
+VALUES
+    ('rick@raven.com', '', 'Rick', 'Raven');
+
+-- Verify the insert was successful
+SELECT *
+FROM customers
+WHERE email_address = 'rick@raven.com';
+--------------------------------------------------
+
+EXPECTED RESULT:
+  A new row for Rick Raven with an empty password string.
+
+
+================================================================================
+ STEP 8 - UPDATE: Change One Customer's Password
+================================================================================
+
+TASK:
+  Change the password to 'secret' for the customer with email
+  rick@raven.com.
+
+WORKING PROCESS:
+  - Use UPDATE with SET to change the password column.
+  - The WHERE clause filters by email_address to target only Rick Raven.
+  - This demonstrates updating a specific row based on a unique identifier.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Update the password for rick@raven.com
+UPDATE customers
+SET password = 'secret'
+WHERE email_address = 'rick@raven.com';
+
+-- Verify the update was successful
+SELECT customer_id, email_address, password, first_name, last_name
+FROM customers
+WHERE email_address = 'rick@raven.com';
+--------------------------------------------------
+
+EXPECTED RESULT:
+  Rick Raven's password column now shows 'secret'.
+
+
+================================================================================
+ STEP 9 - UPDATE: Change All Customer Passwords
+================================================================================
+
+TASK:
+  Change the password to 'reset' for every customer in the table.
+  Use LIMIT 100 to avoid safe-update mode errors.
+
+WORKING PROCESS:
+  - An UPDATE without a WHERE clause would normally update every row,
+    but MySQL's safe-update mode blocks this to prevent accidental
+    mass updates.
+  - Adding LIMIT 100 satisfies the safe-update requirement while still
+    updating all rows (since there are fewer than 100 customers).
+  - This demonstrates MySQL's default behavior for protecting data.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+-- Update the password to 'reset' for all customers in the table
+-- LIMIT 100 is included to handle MySQL safe-update mode
+UPDATE customers
+SET password = 'reset'
+LIMIT 100;
+
+-- Verify the update was successful
+SELECT customer_id, email_address, password, first_name, last_name
+FROM customers;
+--------------------------------------------------
+
+EXPECTED RESULT:
+  Every row in the Customers table now has password = 'reset'.
+
+
+================================================================================
+ STEP 10 - RESTORE DATABASE
+================================================================================
+
+TASK:
+  Run the create_my_guitar_shop.sql script to restore the database
+  to its original state.
+
+WORKING PROCESS:
+  1. Open MySQL Workbench.
+  2. Go to File > Open SQL Script.
+  3. Navigate to the mgs_ex_starts directory.
+  4. Open create_my_guitar_shop.sql.
+  5. Execute the entire script (Ctrl+Shift+Enter or lightning bolt icon).
+  6. This drops and recreates all tables with the original data,
+     undoing all INSERT, UPDATE, and DELETE changes from Steps 1-9.
+
+
+================================================================================
+ END OF EXERCISE 5
+================================================================================

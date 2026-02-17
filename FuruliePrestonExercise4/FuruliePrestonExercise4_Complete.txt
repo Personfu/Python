@@ -1,0 +1,226 @@
+================================================================================
+ MySQL Exercise 4: Retrieve Data from Two or More Tables
+ Author: Preston Furulie
+ Database: my_guitar_shop
+ Course: PCC MySQL
+================================================================================
+
+OBJECTIVE:
+----------
+Demonstrate INNER JOINs, OUTER JOINs, self-joins, UNION operations,
+table aliases, and qualified column names across 7 SQL exercises.
+
+
+================================================================================
+ STEP 1 - INNER JOIN: Categories to Products
+================================================================================
+
+TASK:
+  Join the Categories table to the Products table and return category_name,
+  product_name, and list_price. Sort by category_name then product_name
+  in ascending order.
+
+WORKING PROCESS:
+  - Use INNER JOIN to connect Categories and Products on category_id.
+  - The category_id column exists in both tables, so it must be qualified
+    with a table alias (c.category_id, p.category_id).
+  - ORDER BY with two columns for the required sort order.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+SELECT c.category_name, p.product_name, p.list_price
+FROM categories c
+    INNER JOIN products p
+        ON c.category_id = p.category_id
+ORDER BY c.category_name ASC, p.product_name ASC;
+--------------------------------------------------
+
+
+================================================================================
+ STEP 2 - INNER JOIN: Customers to Addresses (Filtered by Email)
+================================================================================
+
+TASK:
+  Join Customers to Addresses and return first_name, last_name, line1,
+  city, state, zip_code. Return one row for each address for the customer
+  with email allan.sherwood@yahoo.com.
+
+WORKING PROCESS:
+  - INNER JOIN Customers and Addresses on customer_id.
+  - Use a WHERE clause to filter by email_address.
+  - This returns all addresses associated with that one customer.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+FROM customers c
+    INNER JOIN addresses a
+        ON c.customer_id = a.customer_id
+WHERE c.email_address = 'allan.sherwood@yahoo.com';
+--------------------------------------------------
+
+
+================================================================================
+ STEP 3 - INNER JOIN: Customers to Addresses (Shipping Only)
+================================================================================
+
+TASK:
+  Join Customers to Addresses and return first_name, last_name, line1,
+  city, state, zip_code. Return one row per customer, but only return
+  addresses that are the shipping address.
+
+WORKING PROCESS:
+  - The Customers table has a shipping_address_id column that references
+    the address_id in the Addresses table.
+  - Join ON c.shipping_address_id = a.address_id to get only shipping
+    addresses (not billing or other address types).
+  - This ensures one row per customer since each customer has one
+    shipping_address_id.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+SELECT c.first_name, c.last_name, a.line1, a.city, a.state, a.zip_code
+FROM customers c
+    INNER JOIN addresses a
+        ON c.shipping_address_id = a.address_id;
+--------------------------------------------------
+
+
+================================================================================
+ STEP 4 - FOUR-TABLE JOIN WITH ALIASES
+================================================================================
+
+TASK:
+  Join Customers, Orders, Order_Items, and Products. Return last_name,
+  first_name, order_date, product_name, item_price, discount_amount,
+  and quantity. Use table aliases. Sort by last_name, order_date, product_name.
+
+WORKING PROCESS:
+  - Assign short aliases to each table: c, o, oi, p.
+  - Chain INNER JOINs through the relationship path:
+      Customers -> Orders (on customer_id)
+      Orders -> Order_Items (on order_id)
+      Order_Items -> Products (on product_id)
+  - Qualify all column names with their table alias to avoid ambiguity.
+  - ORDER BY three columns for the required sort.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+SELECT c.last_name, c.first_name, o.order_date, p.product_name,
+       oi.item_price, oi.discount_amount, oi.quantity
+FROM customers c
+    INNER JOIN orders o
+        ON c.customer_id = o.customer_id
+    INNER JOIN order_items oi
+        ON o.order_id = oi.order_id
+    INNER JOIN products p
+        ON oi.product_id = p.product_id
+ORDER BY c.last_name ASC, o.order_date ASC, p.product_name ASC;
+--------------------------------------------------
+
+
+================================================================================
+ STEP 5 - SELF-JOIN: Products with Same List Price
+================================================================================
+
+TASK:
+  Return product_name and list_price for each product that has the same
+  list price as another product. Use a self-join. Sort by product_name.
+
+WORKING PROCESS:
+  - A self-join joins the Products table to itself using two different
+    aliases (p1 and p2).
+  - The ON clause requires: product_id values must differ (so a product
+    doesn't match itself) AND list_price values must be equal.
+  - Use DISTINCT to eliminate duplicate rows (each matching pair would
+    otherwise appear twice).
+  - ORDER BY product_name for the required sort.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+SELECT DISTINCT p1.product_name, p1.list_price
+FROM products p1
+    INNER JOIN products p2
+        ON p1.product_id != p2.product_id
+        AND p1.list_price = p2.list_price
+ORDER BY p1.product_name ASC;
+--------------------------------------------------
+
+
+================================================================================
+ STEP 6 - LEFT OUTER JOIN: Unused Categories
+================================================================================
+
+TASK:
+  Return category_name and product_id. Return one row for each category
+  that has never been used. Use an outer join and filter where product_id
+  is NULL.
+
+WORKING PROCESS:
+  - A LEFT JOIN returns ALL rows from the left table (Categories) even
+    if there is no matching row in the right table (Products).
+  - When a category has no products, the product_id column will be NULL.
+  - The WHERE clause filters for only those NULL rows, giving us
+    categories that have never been assigned to any product.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+SELECT c.category_name, p.product_id
+FROM categories c
+    LEFT JOIN products p
+        ON c.category_id = p.category_id
+WHERE p.product_id IS NULL;
+--------------------------------------------------
+
+
+================================================================================
+ STEP 7 - UNION: Ship Status
+================================================================================
+
+TASK:
+  Use UNION to generate a result set with ship_status (calculated),
+  order_id, and order_date. If ship_date has a value, status is 'SHIPPED'.
+  Otherwise, status is 'NOT SHIPPED'. Sort by order_date.
+
+WORKING PROCESS:
+  - The UNION operator combines the results of two SELECT statements.
+  - First SELECT: retrieves orders where ship_date IS NOT NULL and labels
+    them as 'SHIPPED'.
+  - Second SELECT: retrieves orders where ship_date IS NULL and labels
+    them as 'NOT SHIPPED'.
+  - UNION combines both result sets into one.
+  - ORDER BY at the end applies to the combined result.
+
+SQL:
+--------------------------------------------------
+USE my_guitar_shop;
+
+    SELECT 'SHIPPED' AS ship_status, order_id, order_date
+    FROM orders
+    WHERE ship_date IS NOT NULL
+
+UNION
+
+    SELECT 'NOT SHIPPED' AS ship_status, order_id, order_date
+    FROM orders
+    WHERE ship_date IS NULL
+
+ORDER BY order_date ASC;
+--------------------------------------------------
+
+
+================================================================================
+ END OF EXERCISE 4
+================================================================================
