@@ -1,0 +1,164 @@
+============================================================
+FLLC Enterprise IT — Phase 11: Computer Networking
+CIS 270 — Computer Networking | Preston Furulie
+Spring 2026 | CompTIA Network+ (N10-009) Aligned
+Portland Community College | Network Engineering Dept.
+============================================================
+
+COURSE SUMMARY — CIS 270: Computer Networking
+----------------------------------------------
+
+This phase covers foundational and intermediate networking
+concepts aligned with the CompTIA Network+ N10-009 exam.
+All deliverables are designed for standalone execution,
+exam preparation, and enterprise reference use.
+
+============================================================
+DELIVERABLES
+============================================================
+
+1.  osi_tcp_model.py
+    ─────────────────────────────────────────────────────────
+    Concepts Covered:
+      • OSI 7-Layer Model — full descriptions, PDU names,
+        protocol assignments, and device types per layer
+      • TCP/IP 4-Layer Model — mapped to corresponding
+        OSI layers with protocol listings
+      • Side-by-side OSI vs TCP/IP comparison table
+      • PDU reference: Data, Segment, Packet, Frame, Bits
+      • Packet encapsulation simulation (Layer 7 → Layer 1)
+      • Packet decapsulation simulation (Layer 1 → Layer 7)
+      • TCP three-way handshake (SYN, SYN-ACK, ACK)
+    Network+ Objectives: 1.1, 1.5
+
+2.  ip_subnetting.py
+    ─────────────────────────────────────────────────────────
+    Concepts Covered:
+      • IPv4 address classes (A, B, C, D, E) with ranges,
+        default masks, and private address spaces
+      • Special addresses (loopback, APIPA, broadcast)
+      • Binary ↔ decimal conversion for IP addresses
+      • Subnet mask calculation and CIDR notation
+        (/24, /25, /26, /27, /28, /29, /30, /31, /32)
+      • Network address and broadcast address computation
+      • Usable host count per subnet
+      • Common subnet mask quick-reference table
+      • Subnetting practice problems with worked solutions
+      • VLSM (Variable Length Subnet Masking) methodology
+      • IPv6 overview: 128-bit format, address types,
+        shortening rules, special addresses, SLAAC,
+        key differences from IPv4
+    Network+ Objectives: 1.4, 1.6
+
+3.  network_protocols.py
+    ─────────────────────────────────────────────────────────
+    Concepts Covered:
+      • Well-known port numbers reference (30+ entries)
+      • Port ranges: well-known, registered, dynamic
+      • DHCP DORA process (Discover, Offer, Request, Ack)
+        — lease renewal, relay agents, reservations, scopes
+      • DNS resolution (recursive vs iterative)
+        — record types: A, AAAA, CNAME, MX, NS, PTR,
+          SOA, SRV, TXT
+        — DNS hierarchy: root → TLD → authoritative
+      • ARP: process flow, ARP table simulation,
+        ARP spoofing and mitigation (DAI)
+      • HTTP/HTTPS: methods (GET, POST, PUT, DELETE, etc.),
+        status codes (1xx–5xx), common headers, TLS
+      • Protocol deep dives: FTP (active/passive),
+        SSH/SCP/SFTP, SMTP (25/587/465), POP3 vs IMAP,
+        SNMP (GET/SET/TRAP), NTP, RDP
+    Network+ Objectives: 1.1, 1.5, 2.1
+
+4.  network_devices.md
+    ─────────────────────────────────────────────────────────
+    Concepts Covered:
+      • Hub vs Switch vs Router comparison table
+        — OSI layer, addressing, collision/broadcast domains
+      • Layer 2 vs Layer 3 switching differences
+      • Inter-VLAN routing methods (router-on-a-stick,
+        L3 switch SVIs, dedicated interfaces)
+      • Wireless standards: 802.11 a/b/g/n/ac/ax
+        — frequency, speed, year, features
+      • Wireless security: WEP, WPA, WPA2, WPA3
+      • Wireless concepts: SSID, BSS, ESS, site surveys
+      • Firewalls: stateful vs stateless comparison
+      • Next-Generation Firewall (NGFW) capabilities
+        — DPI, application awareness, IPS, SSL inspection
+      • Load balancers: Layer 4 vs Layer 7, algorithms
+      • Proxy servers: forward, reverse, transparent, caching
+      • ASCII enterprise network diagram (three-tier)
+      • Cisco three-tier architecture: Core, Distribution,
+        Access layer roles and device types
+    Network+ Objectives: 2.1, 2.2, 2.3, 2.4, 4.1, 4.3
+
+5.  network_troubleshooting.py
+    ─────────────────────────────────────────────────────────
+    Concepts Covered:
+      • CompTIA 7-step troubleshooting methodology
+        (identify, theorize, test, plan, implement,
+         verify, document)
+      • Common network issues: no connectivity, slow
+        performance, intermittent drops, DNS failures
+        — symptoms and probable causes for each
+      • CLI tool reference: ping, tracert/traceroute,
+        nslookup, ipconfig/ifconfig, netstat/ss, arp,
+        pathping/mtr — syntax for Windows and Linux
+      • Python connectivity checks: DNS resolution,
+        TCP port scanning, ping wrapper
+      • Cable types: Cat5e, Cat6, Cat6a, SMF, MMF,
+        coaxial — speed, distance, connectors, use cases
+      • Performance metrics: latency, jitter, bandwidth,
+        throughput, packet loss — definitions, acceptable
+        values, and measurement tools
+    Network+ Objectives: 5.1, 5.2, 5.3, 5.5
+
+============================================================
+NETWORK+ (N10-009) DOMAIN COVERAGE SUMMARY
+============================================================
+
+  Domain 1.0 — Networking Concepts (23%)
+    Covered in: osi_tcp_model.py, ip_subnetting.py,
+                network_protocols.py
+
+  Domain 2.0 — Network Implementation (19%)
+    Covered in: network_devices.md, network_protocols.py
+
+  Domain 3.0 — Network Operations (16%)
+    Covered in: network_protocols.py, network_devices.md
+
+  Domain 4.0 — Network Security (19%)
+    Covered in: network_devices.md, network_protocols.py
+
+  Domain 5.0 — Network Troubleshooting (23%)
+    Covered in: network_troubleshooting.py
+
+============================================================
+EXECUTION INSTRUCTIONS
+============================================================
+
+  All Python modules run standalone:
+
+    python osi_tcp_model.py
+    python ip_subnetting.py
+    python network_protocols.py
+    python network_troubleshooting.py
+
+  Each module prints formatted reference material to the
+  console covering its respective Network+ topic area.
+
+============================================================
+AUTHOR & ORGANIZATION
+============================================================
+
+  Author       : Preston Furulie
+  Organization : FLLC Enterprise
+  Institution  : Portland Community College
+  Department   : Network Engineering
+  Course       : CIS 270 — Computer Networking
+  Term         : Spring 2026
+  Certification: CompTIA Network+ (N10-009) Aligned
+
+============================================================
+END OF COURSE SUMMARY — Phase 11: Computer Networking
+============================================================

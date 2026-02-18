@@ -2,7 +2,7 @@
 
 **Architect & Lead Engineer:** Preston Furulie
 **Organization:** FLLC (Find You Person)
-**Status:** Active Development | 9 Phases Complete
+**Status:** Active Development | 9 Phases Complete + 6 Spring 2026 Courses
 **Repository:** [`github.com/Personfu/Python`](https://github.com/Personfu/Python)
 
 ---
@@ -26,6 +26,17 @@ Build and document FLLC's complete enterprise IT infrastructure from the ground 
 | **07** | Information Security | [`CIS350/`](CIS350/) | Encryption toolkit, network topology, vuln assessment, firewall | Complete |
 | **08** | Cloud & DevOps | [`CIS410/`](CIS410/) | Terraform IaC, Docker, CI/CD pipeline, AWS infrastructure | Complete |
 | **09** | Enterprise Platform | [`CIS425/`](CIS425/) | REST API, production schema, deployment architecture, capstone | Complete |
+
+### Spring 2026 — Current Semester
+
+| Phase | Department | Directory | Deliverables | Status | Cert Alignment |
+|-------|-----------|-----------|-------------|--------|---------------|
+| **10** | CS Foundations | [`CIS156/`](CIS156/) | Computational thinking, OS, networking, security, databases | In Progress | CompTIA ITF+ |
+| **11** | Network Engineering | [`CIS270/`](CIS270/) | OSI/TCP model, IP subnetting, protocols, devices, troubleshooting | In Progress | CompTIA Network+ |
+| **12** | Data Engineering | [`CIS276DA/`](CIS276DA/) | Advanced SQL, transactions, triggers, security, data analytics | In Progress | CompTIA Data+ |
+| **07** | Cybersecurity (cont.) | [`CIS350/`](CIS350/) | Encryption, network topology, vuln assessment, Security+ guide | In Progress | CompTIA Security+ |
+| **13** | Platform Engineering | [`CIS411/`](CIS411/) | Server admin, virtualization/cloud, DR/BCP, automation | In Progress | CompTIA Server+/Cloud+ |
+| **—** | Professional Dev | [`COM263/`](COM263/) | Communication theory, technical writing, presentation skills | In Progress | — |
 
 ---
 

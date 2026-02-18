@@ -1,0 +1,139 @@
+===============================================================================
+FLLC Enterprise — Course Completion Summary
+===============================================================================
+Organization:    FLLC Enterprise
+Department:      Platform Engineering
+Author:          Preston Furulie
+Course:          CIS 411 — Advanced Systems Administration
+Phase:           Phase 13 — Advanced Systems Administration
+Institution:     Portland Community College
+Term:            Spring 2026
+Certifications:  CompTIA Server+ (SK0-005), CompTIA Cloud+ (CV0-003)
+Status:          In Progress
+===============================================================================
+
+COURSE DESCRIPTION
+===============================================================================
+CIS 411 covers advanced systems administration concepts essential for managing
+enterprise IT infrastructure. Topics include server hardware and software
+configuration, virtualization platforms, cloud computing service models,
+disaster recovery planning, and automation scripting with Python. The course
+aligns with CompTIA Server+ and Cloud+ certification objectives.
+
+DELIVERABLES
+===============================================================================
+
+  File                          Status        Lines   Description
+  ----------------------------  ----------    -----   ---------------------------
+  README.md                     Complete      65+     Phase overview and metadata
+  server_administration.md      Complete      260+    Server hardware, roles, AD,
+                                                      monitoring, capacity planning
+  virtualization_cloud.md       Complete      270+    Hypervisors, VMs, cloud models,
+                                                      containers, serverless, security
+  disaster_recovery.md          Complete      260+    BCP/DR, backups, HA, incident
+                                                      response, FLLC DR plan
+  automation_scripting.py       Complete      290+    Python sysadmin automation
+                                                      toolkit (standalone executable)
+  CIS411_complete.txt           Complete      ---     This file
+
+TOPICS COVERED
+===============================================================================
+
+  1. Server Hardware Fundamentals
+     - Rack units, form factors, server-grade components
+     - RAID levels: 0, 1, 5, 6, 10
+     - Hot spare vs cold spare concepts
+     - Storage technologies: SAS, SATA, SSD, NVMe
+
+  2. Server Roles and Services
+     - File, print, web, database, mail servers
+     - DNS, DHCP, directory services
+     - Service dependencies and architecture
+
+  3. Windows Server vs Linux Server
+     - Feature comparison and administration commands
+     - File systems, remote management, scripting
+     - Market share and typical workload alignment
+
+  4. Active Directory
+     - Domains, forests, trees, organizational units
+     - Group Policy Objects (GPOs) and LSDOU processing
+     - FSMO roles and domain controller architecture
+     - AGDLP model for permission management
+
+  5. User and Group Management
+     - Account types and group scopes
+     - NTFS and share permission models
+     - Effective permissions calculation
+
+  6. Server Monitoring
+     - Windows performance counters and thresholds
+     - Event logs and severity levels
+     - SNMP components and versions
+
+  7. Capacity Planning and Baselining
+     - Baselining methodology and metrics
+     - Growth triggers and planning phases
+     - FLLC baseline report template
+
+  8. Virtualization
+     - Type 1 vs Type 2 hypervisors
+     - VM components: vCPU, vRAM, vNIC, virtual disk
+     - Virtual networking types
+
+  9. Cloud Computing
+     - IaaS, PaaS, SaaS service models
+     - Public, private, hybrid, multi-cloud deployment
+     - AWS / Azure / GCP service comparison
+     - Cloud migration strategies (6 R's)
+
+  10. Containers and Serverless
+      - Containers vs VMs architecture comparison
+      - Docker concepts and Kubernetes components
+      - Serverless computing characteristics and limitations
+
+  11. Cloud Security
+      - Shared responsibility model by service type
+      - IAM concepts and best practices
+      - Encryption, network segmentation, compliance
+
+  12. Disaster Recovery and Business Continuity
+      - BCP vs DR scope and lifecycle
+      - RPO, RTO, MTTR, MTBF with calculations
+      - Backup strategies: full, incremental, differential
+      - 3-2-1 and 3-2-1-1-0 backup rules
+      - High availability tiers and clustering
+      - Recovery site types: hot, warm, cold
+      - DR testing methodologies
+      - Incident response phases and severity levels
+
+  13. Automation Scripting (Python)
+      - System information gathering
+      - Disk usage monitoring with alerts
+      - Log file parsing and keyword alerting
+      - Backup simulation with manifests
+      - HTTP endpoint health checking
+      - CSV report generation
+      - Scheduled task concepts
+
+CERTIFICATION ALIGNMENT
+===============================================================================
+
+  CompTIA Server+ (SK0-005) Domains:
+    1.0  Server Hardware Installation and Management
+    2.0  Server Administration
+    3.0  Security and Disaster Recovery
+    4.0  Troubleshooting
+
+  CompTIA Cloud+ (CV0-003) Domains:
+    1.0  Cloud Architecture and Design
+    2.0  Security
+    3.0  Deployment
+    4.0  Operations and Support
+    5.0  Troubleshooting
+
+===============================================================================
+FLLC Enterprise — Platform Engineering Division
+Author: Preston Furulie
+Portland Community College — Spring 2026
+===============================================================================

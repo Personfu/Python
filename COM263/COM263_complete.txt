@@ -1,0 +1,143 @@
+===============================================================================
+FLLC Enterprise — Course Completion Summary
+===============================================================================
+Organization:    FLLC Enterprise
+Department:      Professional Development
+Author:          Preston Furulie
+Course:          COM 263 — Interpersonal Communication
+Phase:           Supporting Course — Interpersonal Communication
+Institution:     Portland Community College
+Term:            Spring 2026
+Status:          In Progress
+===============================================================================
+
+COURSE DESCRIPTION
+===============================================================================
+COM 263 develops interpersonal communication skills essential for IT
+professionals. The course covers communication theory, technical writing,
+and presentation skills with emphasis on applying these competencies in
+professional technology environments. Topics include communication models,
+listening styles, conflict management, documentation standards, and
+persuasive presentation techniques.
+
+DELIVERABLES
+===============================================================================
+
+  File                          Status        Lines   Description
+  ----------------------------  ----------    -----   ---------------------------
+  README.md                     Complete      60+     Course overview and metadata
+  communication_theory.md       Complete      280+    Models, listening, perception,
+                                                      culture, conflict management
+  technical_writing.md          Complete      260+    Documentation, SOPs, email,
+                                                      meetings, FLLC standards
+  presentation_skills.md        Complete      230+    Public speaking, visual aids,
+                                                      persuasion, elevator pitch
+  COM263_complete.txt           Complete      ---     This file
+
+TOPICS COVERED
+===============================================================================
+
+  1. Communication Models
+     - Linear Model (Shannon-Weaver): one-way sender-receiver
+     - Interactive Model (Schramm): feedback and fields of experience
+     - Transactional Model (Barnlund): simultaneous, continuous exchange
+     - Model comparison and application to IT scenarios
+
+  2. Communication Components
+     - Seven components: sender, receiver, message, channel, noise,
+       feedback, context
+     - Types of noise: physical, physiological, psychological,
+       semantic, cultural, technical
+
+  3. Verbal and Nonverbal Communication
+     - Denotation, connotation, jargon, register
+     - Kinesics, proxemics, haptics, chronemics, paralanguage
+     - Nonverbal challenges in virtual/remote communication
+
+  4. Listening Styles and Techniques
+     - Active, empathetic, critical, appreciative, informational
+     - Techniques: paraphrasing, reflecting, clarifying, summarizing
+     - Barriers to effective listening
+
+  5. Perception
+     - Process: selection, organization, interpretation, negotiation
+     - Influences: physiological, cultural, social, cognitive
+     - Common errors: attribution error, halo/horn effect, stereotyping
+
+  6. Self-Concept and Self-Disclosure
+     - Self-image, self-esteem, self-efficacy
+     - The Johari Window: open, blind, hidden, unknown quadrants
+     - Professional application in IT teams
+
+  7. Cultural Communication
+     - High-context vs low-context cultures (Hall)
+     - Hofstede's cultural dimensions applied to IT
+     - Strategies for cross-cultural communication
+
+  8. Conflict Management
+     - Thomas-Kilmann model: competing, collaborating, compromising,
+       avoiding, accommodating
+     - Constructive conflict resolution steps
+     - Application to IT workplace scenarios
+
+  9. Technical Writing
+     - Core principles: clarity, accuracy, consistency, completeness
+     - Document types: SOP, runbook, incident report, project proposal
+     - Templates for each document type
+
+  10. Professional Email Communication
+      - Email structure and etiquette
+      - Escalation email template
+      - Do's and don'ts for professional correspondence
+
+  11. Meeting Facilitation
+      - Agenda template and facilitation tips
+      - Meeting types in IT: standup, sprint planning, retrospective
+      - Action item tracking and follow-up
+
+  12. Presentation Design
+      - Slide design rules and color usage
+      - Technical diagrams and data visualization
+      - Live demo best practices
+
+  13. Public Speaking
+      - Monroe's Motivated Sequence
+      - Three-part structure: introduction, body, conclusion
+      - Handling Q&A sessions
+
+  14. Persuasion
+      - Aristotle's appeals: ethos, pathos, logos
+      - Cialdini's persuasion principles
+      - Data-driven persuasion for IT proposals
+
+  15. Audience Adaptation
+      - Writing for executives, peers, end users, auditors
+      - The inverted pyramid structure
+      - Adapting the same information for different stakeholders
+
+  16. FLLC Documentation Standards
+      - Required document elements and naming conventions
+      - Review and approval process
+      - Quality checklist for technical documentation
+
+PROFESSIONAL DEVELOPMENT OUTCOMES
+===============================================================================
+
+  Upon completion, students will be able to:
+
+  1. Apply appropriate communication models to workplace interactions
+  2. Demonstrate active listening in technical discussions
+  3. Navigate cultural communication differences in diverse teams
+  4. Resolve workplace conflicts using appropriate management styles
+  5. Write clear, audience-appropriate technical documentation
+  6. Design and deliver persuasive technical presentations
+  7. Conduct effective meetings with agendas and action items
+  8. Communicate the same technical information to different audiences
+  9. Apply FLLC Enterprise documentation standards consistently
+  10. Deliver a compelling elevator pitch for a technical proposal
+
+===============================================================================
+FLLC Enterprise — Professional Development Division
+Author: Preston Furulie
+Portland Community College — Spring 2026
+===============================================================================

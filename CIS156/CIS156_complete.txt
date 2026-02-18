@@ -1,0 +1,183 @@
+============================================================
+FLLC Enterprise IT — Phase 10: Computer Science Concepts
+CIS 156 — Computer Science Concepts | Preston Furulie
+Spring 2026 | CompTIA ITF+ Aligned
+============================================================
+
+COURSE OVERVIEW
+---------------
+This phase covers foundational computer science concepts aligned
+with the CompTIA IT Fundamentals+ (ITF+) certification exam.
+Every module is designed as a standalone Python program that
+teaches theory through working code demonstrations.
+
+Portland Community College — Computer Information Systems
+Organization: FLLC Enterprise
+Author: Preston Furulie
+Status: In Progress
+
+
+============================================================
+DELIVERABLES
+============================================================
+
+1. computational_thinking.py (271 lines)
+   ─────────────────────────────────────
+   • Problem decomposition — breaking complex problems into
+     manageable sub-problems (website-build example)
+   • Pattern recognition — statistical analysis of datasets,
+     identifying trends and arithmetic sequences
+   • Abstraction — hiding complexity behind clean interfaces
+     (Vehicle class demonstration)
+   • Algorithm design — step-by-step recipe algorithm
+   • ATM finite state machine — states, transitions, and a
+     simulated withdrawal workflow
+   • Search optimization — linear search O(n) vs binary search
+     O(log n) with timed performance comparison
+   ITF+ Domain: Software Development
+
+2. operating_systems.py (283 lines)
+   ──────────────────────────────────
+   • Process management — PID, state transitions (NEW, READY,
+     RUNNING, WAITING, TERMINATED), process table
+   • CPU scheduling — FCFS, SJF, and Round Robin algorithms
+     with average wait-time calculations
+   • Memory management — first-fit and best-fit allocation
+     strategies with partition simulation
+   • File system operations — directory listing, path parsing
+     using os and pathlib modules
+   • Threads vs processes — concept comparison table and a
+     threaded shared-counter demonstration with locking
+   ITF+ Domain: Infrastructure
+
+3. networking_fundamentals.py (340 lines)
+   ────────────────────────────────────────
+   • OSI 7-layer model — all layers with descriptions,
+     protocols, PDUs, and mnemonics
+   • TCP vs UDP — feature-by-feature comparison table
+   • IP addressing — IPv4 classes, CIDR notation, subnet mask
+     calculation, network/broadcast address derivation
+   • Socket programming — live TCP client-server echo demo
+     using Python's socket module and threading
+   • DNS resolution — simulated lookup table with caching
+     (cache hit vs fresh resolution vs NXDOMAIN)
+   • HTTP request/response cycle — full lifecycle walkthrough
+     with common status codes
+   • Network troubleshooting — ping, traceroute, nslookup,
+     ipconfig, netstat, nmap with methodology steps
+   ITF+ Domain: Infrastructure
+
+4. security_fundamentals.py (331 lines)
+   ──────────────────────────────────────
+   • CIA triad — confidentiality, integrity, availability with
+     controls and FLLC-specific examples
+   • Authentication vs authorization — identity verification
+     compared to permission enforcement, user directory demo
+   • Common threats — phishing, ransomware, virus, trojan,
+     worm, social engineering, MitM, DDoS with mitigations
+   • Password strength checker — evaluates length, complexity,
+     common patterns; displays best practices
+   • Basic encryption — Caesar cipher (encrypt/decrypt),
+     SHA-256 hashing, encryption-vs-hashing comparison
+   • Firewall concepts — types (packet filter, stateful,
+     application-layer, NGFW) and a sample rule set
+   • ITF+ security domain objectives mapping (6.1–6.7)
+   ITF+ Domain: Security
+
+5. database_concepts.py (317 lines)
+   ──────────────────────────────────
+   • Relational database concepts — tables, rows, columns,
+     keys, schema, index, normalization definitions
+   • SQL data types — INTEGER, REAL, TEXT, BLOB, BOOLEAN,
+     DATE, DATETIME with example columns
+   • CREATE TABLE — departments and employees schema with
+     primary key and foreign key constraints
+   • INSERT — parameterized queries inserting 4 departments
+     and 8 employees (SQL injection prevention)
+   • SELECT — basic queries, WHERE filtering, ORDER BY
+     sorting, COUNT/AVG aggregate functions
+   • JOIN — INNER JOIN and LEFT JOIN with GROUP BY; comparison
+     of all JOIN types
+   • UPDATE and DELETE — modifying and removing records with
+     safety warnings; full CRUD summary
+   • Relationships — one-to-one, one-to-many, many-to-many;
+     key types (PK, FK, composite, candidate)
+   ITF+ Domain: Software Development
+
+
+============================================================
+ENTERPRISE APPLICATION NOTES
+============================================================
+
+These modules integrate directly into the FLLC Enterprise IT
+infrastructure initiative:
+
+Computational Thinking
+  Applied when designing automation workflows, troubleshooting
+  procedures, and system integration architectures. The ATM
+  state machine pattern mirrors real state management in FLLC
+  service applications.
+
+Operating Systems
+  Process scheduling and memory management knowledge supports
+  FLLC server administration, container orchestration (Docker),
+  and workstation deployment. Thread vs process understanding
+  guides decisions in concurrent application design.
+
+Networking
+  OSI model fluency and TCP/IP stack knowledge map directly to
+  FLLC network topology, firewall configuration, and inter-
+  service communication. Socket programming skills enable
+  custom monitoring and integration tools.
+
+Security
+  CIA triad principles form the baseline security posture for
+  every FLLC system. Password policies, encryption standards,
+  and firewall rules demonstrated here reflect actual FLLC
+  security controls. Threat awareness training reduces the
+  organization's attack surface.
+
+Databases
+  SQL and relational design skills support FLLC's inventory
+  tracking, user management, and reporting systems. The SQLite
+  demonstrations translate directly to production PostgreSQL
+  and MySQL environments used across the enterprise.
+
+
+============================================================
+CompTIA ITF+ EXAM DOMAIN COVERAGE
+============================================================
+
+  Domain 1: IT Concepts & Terminology ......... Partial
+  Domain 2: Infrastructure .................... Covered
+    - Operating systems (processes, memory, file systems)
+    - Networking (OSI model, TCP/IP, DNS, HTTP)
+  Domain 3: Applications & Software ........... Partial
+  Domain 4: Software Development .............. Covered
+    - Computational thinking (4 pillars)
+    - Database concepts (SQL, CRUD, relationships)
+  Domain 5: Database Fundamentals ............. Covered
+    - Relational model, SQL, keys, joins
+  Domain 6: Security .......................... Covered
+    - CIA triad, auth, threats, encryption, firewalls
+
+
+============================================================
+RUNNING THE MODULES
+============================================================
+
+  All modules require Python 3.10+ (standard library only).
+  No external packages or installations needed.
+
+  python computational_thinking.py
+  python operating_systems.py
+  python networking_fundamentals.py
+  python security_fundamentals.py
+  python database_concepts.py
+
+
+============================================================
+FLLC Enterprise — Building infrastructure through education.
+CIS 156 — Computer Science Concepts | Spring 2026
+Preston Furulie | Portland Community College
+============================================================

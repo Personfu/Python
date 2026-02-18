@@ -1,0 +1,272 @@
+============================================================
+FLLC Enterprise IT — Phase 12: Advanced SQL & Data Analytics
+CIS 276DA — Advanced SQL & Data Analytics | Preston Furulie
+Database: my_guitar_shop
+============================================================
+
+PHASE SUMMARY
+─────────────
+6 deliverables covering advanced SQL and data analytics: complex
+multi-table queries with window functions and CTEs, transaction
+processing and concurrency control, database security and
+privilege management, triggers and event scheduling, and a
+Python-based data analytics pipeline with ETL, statistical
+analysis, and decision support.
+
+============================================================
+Deliverable 1: Advanced Queries
+File: advanced_queries.sql (260+ lines)
+============================================================
+
+Section 1 — Complex Multi-Table JOINs:
+  - 5-table JOIN: customers → orders → order_items → products → categories
+  - Customer shipping info with lifetime value aggregation
+  - LEFT JOIN chain to find products never ordered
+
+Section 2 — Correlated Subqueries:
+  - Products priced above their category average
+  - Per-customer most recent order and total spend
+  - Subquery references outer query (correlated)
+
+Section 3 — EXISTS and NOT EXISTS:
+  - Customers with at least one order (EXISTS)
+  - Customers who have never ordered (NOT EXISTS)
+  - Categories containing products over $1000
+
+Section 4 — CASE Expressions:
+  - Simple CASE (category ID → tier label mapping)
+  - Searched CASE (price range classification)
+  - CASE inside aggregate (conditional counting)
+  - Order shipping status with elapsed days
+
+Section 5 — Window Functions:
+  - ROW_NUMBER() with PARTITION BY category
+  - RANK() vs DENSE_RANK() on global price ranking
+  - LAG() and LEAD() for price neighbor comparison
+  - NTILE(4) for quartile distribution
+  - Running total with ROWS UNBOUNDED PRECEDING
+  - Percentage of category total per product
+
+Section 6 — Common Table Expressions (CTEs):
+  - Basic CTE: top customers by total spend with RANK()
+  - Multi-CTE: category performance dashboard with CROSS JOIN
+  - Recursive CTE: numeric sequence generator (1..20)
+  - Recursive CTE: price bracket histogram
+
+Section 7 — Pivot / Unpivot Techniques:
+  - Manual pivot: monthly revenue by category (CASE + SUM)
+  - Unpivot: billing/shipping addresses via UNION ALL
+  - Cross-tab: product count by category and price tier
+
+Section 8 — Combined Analytics:
+  - Customer RFM (Recency, Frequency, Monetary) with NTILE
+  - Year-over-year growth by category using LAG()
+
+============================================================
+Deliverable 2: Transactions & Concurrency Control
+File: transactions_concurrency.sql (200+ lines)
+============================================================
+
+Section 1 — Transaction Basics:
+  - START TRANSACTION / COMMIT (insert category)
+  - START TRANSACTION / ROLLBACK (undo mistaken delete)
+  - Multi-statement atomic transaction (category transfer)
+
+Section 2 — SAVEPOINTs:
+  - Named savepoints within a transaction
+  - ROLLBACK TO SAVEPOINT (partial undo)
+  - Demonstration: insert 3 rows, roll back only the last
+
+Section 3 — Isolation Levels:
+  - READ UNCOMMITTED (allows dirty reads)
+  - READ COMMITTED (prevents dirty reads)
+  - REPEATABLE READ (MySQL default, snapshot isolation)
+  - SERIALIZABLE (strictest, implicit locking)
+  - Comparison table of anomalies per level
+
+Section 4 — Locking Concepts:
+  - SELECT ... FOR SHARE (shared lock)
+  - SELECT ... FOR UPDATE (exclusive lock)
+  - innodb_lock_wait_timeout configuration
+
+Section 5 — Concurrency Anomalies:
+  - Dirty read demonstration (2-session scenario)
+  - Non-repeatable read demonstration
+  - Phantom read demonstration
+
+Section 6 — Deadlock Scenario:
+  - Two-session deadlock with cross-row updates
+  - InnoDB deadlock detection (ERROR 1213)
+  - SHOW ENGINE INNODB STATUS for diagnostics
+
+Section 7 — Best Practices:
+  - Stored procedure with error handling and ROLLBACK
+  - Consistent table access order to prevent deadlocks
+  - Isolation level selection by workload type
+
+============================================================
+Deliverable 3: Security & Privileges
+File: security_privileges.sql (170+ lines)
+============================================================
+
+Section 1 — User Management:
+  - CREATE USER with password (4 users: admin, analyst, app, readonly)
+  - Host restriction (localhost vs %)
+  - View existing users from mysql.user
+
+Section 2 — GRANT Privileges:
+  - ALL PRIVILEGES with GRANT OPTION (admin)
+  - SELECT + EXECUTE (analyst)
+  - Table-specific CRUD (application user)
+  - SELECT only from any host (readonly)
+  - Column-level GRANT (restrict sensitive fields)
+  - FLUSH PRIVILEGES and SHOW GRANTS verification
+
+Section 3 — REVOKE Privileges:
+  - Revoke DELETE from application user
+  - Revoke all and re-grant narrower access
+
+Section 4 — Role-Based Access Control (MySQL 8.0+):
+  - CREATE ROLE (role_read, role_write, role_admin)
+  - GRANT privileges to roles
+  - GRANT roles to users
+  - SET DEFAULT ROLE activation
+  - REVOKE role from user
+
+Section 5 — Views for Security:
+  - Column-level security (v_customer_public: hide email)
+  - Row-level security (v_shipped_orders: filter by ship_date)
+  - Aggregated view (v_category_summary: no individual records)
+
+Section 6 — SQL Injection Prevention:
+  - Vulnerable pattern (string concatenation)
+  - PREPARE / EXECUTE / DEALLOCATE (parameterized queries)
+  - Stored procedure with typed parameters (inherently safe)
+
+Section 7 — Password Management:
+  - ALTER USER ... IDENTIFIED BY (change password)
+  - PASSWORD EXPIRE (force reset on next login)
+  - Password policy settings (interval, attempts, lock time)
+  - ACCOUNT LOCK / UNLOCK
+
+============================================================
+Deliverable 4: Triggers & Event Scheduling
+File: triggers_events.sql (230+ lines)
+============================================================
+
+Section 0 — Supporting Tables:
+  - product_audit_log (tracks all product changes)
+  - order_status_log (tracks shipping status transitions)
+  - price_change_alerts (significant price change notifications)
+  - daily_revenue_snapshot (scheduled metric capture)
+
+Section 1 — BEFORE INSERT Trigger:
+  - Validate list_price >= 0
+  - Validate discount_percent 0-100
+  - Validate product_name not empty
+  - Auto-trim product_name, default date_added
+
+Section 2 — AFTER INSERT Trigger:
+  - Log INSERT action to product_audit_log
+  - Record CURRENT_USER() as changed_by
+
+Section 3 — BEFORE UPDATE Trigger:
+  - Re-validate price and discount constraints
+  - Prevent price increases > 50% per update
+
+Section 4 — AFTER UPDATE Trigger:
+  - Log UPDATE action to product_audit_log
+  - Compute price change percentage
+  - Generate alert (INFO / WARNING / CRITICAL) on price changes
+
+Section 5 — BEFORE DELETE Trigger:
+  - Check for existing order_items references
+  - SIGNAL error if product has been ordered
+
+Section 6 — AFTER DELETE Trigger:
+  - Log DELETE action to product_audit_log
+  - Record OLD values for audit trail
+
+Section 7 — Order Shipping Trigger:
+  - Detect ship_date transition (NULL → value)
+  - Log status change to order_status_log
+
+Section 8 — Trigger Testing:
+  - INSERT test product → verify audit log
+  - UPDATE price → verify audit + alert generation
+  - Negative price test (expected failure)
+  - Cleanup test data → verify DELETE logging
+
+Section 9 — Event Scheduler:
+  - Enable event_scheduler globally
+  - ev_daily_revenue_snapshot: runs nightly at midnight
+  - ev_purge_old_audit_logs: weekly cleanup of records > 90 days
+  - View scheduled events via information_schema
+
+============================================================
+Deliverable 5: Data Analytics Pipeline (Python)
+File: data_analytics.py (310+ lines)
+============================================================
+
+Section 0 — Sample Data Generation:
+  - Embedded CSV strings for products and orders
+  - parse_csv() function for string-to-dict conversion
+
+Section 1 — ETL Pipeline:
+  - Extract: parse raw CSV data
+  - Transform: compute sale_price, line_total, identify NULLs
+  - Load: write cleaned CSVs (or simulate)
+
+Section 2 — Statistical Analysis:
+  - mean(), median(), mode(), stdev() implementations
+  - statistical_summary() for labeled numeric datasets
+  - Applied to list prices, sale prices, order totals
+
+Section 3 — ASCII Data Visualization:
+  - horizontal_bar_chart() with configurable bar character
+  - histogram() with binning logic
+  - sparkline() single-line trend indicator
+  - Revenue by category bar chart
+  - Product price distribution histogram
+
+Section 4 — Aggregation & Grouping:
+  - group_by() utility function
+  - Products aggregated by category (count, avg, min, max)
+  - Orders aggregated by month (count, revenue)
+
+Section 5 — Trend Analysis:
+  - moving_average() with configurable window
+  - trend_analysis() with SMA table and directional arrows
+  - month_over_month_growth() with percentage changes
+
+Section 6 — Data Normalization:
+  - Min-max normalization to [0, 1]
+  - Z-score normalization (mean=0, stdev=1)
+  - Side-by-side comparison table
+
+Section 7 — Decision Support:
+  - Customer RFM analysis (Recency, Frequency, Monetary)
+  - Customer segmentation: VIP, Loyal, Regular, At Risk
+  - Product performance matrix: Star, Cash Cow, Volume Play, Niche
+
+Section 8 — CSV File Utilities:
+  - read_csv_file(), write_csv_file()
+  - csv_column_stats() for quick column profiling
+
+============================================================
+CCOG ALIGNMENT — PCC CIS 276 Advanced SQL
+============================================================
+
+Topic                        | Deliverable(s)
+-----------------------------|---------------------------
+Embedded SQL                 | data_analytics.py (ETL)
+Stored Procedures            | transactions_concurrency.sql (sp_place_order)
+Transaction Processing       | transactions_concurrency.sql (Sections 1-7)
+Security (GRANT/REVOKE)      | security_privileges.sql (Sections 1-4)
+Triggers                     | triggers_events.sql (Sections 1-8)
+Cascaded Deletes/Updates     | triggers_events.sql (Section 5, 7)
+Complex Queries              | advanced_queries.sql (Sections 1-8)
+
+============================================================
+END OF PHASE 12 — ADVANCED SQL & DATA ANALYTICS
+============================================================
